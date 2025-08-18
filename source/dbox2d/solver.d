@@ -872,7 +872,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 
 		// reset state deltas
 		state.deltaPosition = b2Vec2.zero();
-		state.deltaRotation = b2Rot_identity;
+		state.deltaRotation = b2Rot.identity();
 
 		sim.transform.p = b2Sub( sim.center, b2RotateVector( sim.transform.q, sim.localCenter ) );
 

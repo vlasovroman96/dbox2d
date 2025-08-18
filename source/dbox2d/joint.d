@@ -302,8 +302,8 @@ struct b2JointSim {
 private b2JointDef b2DefaultJointDef()
 {
 	b2JointDef def;
-	def.localFrameA.q = b2Rot_identity;
-	def.localFrameB.q = b2Rot_identity;
+	def.localFrameA.q = b2Rot.identity();
+	def.localFrameB.q = b2Rot.identity();
 	def.forceThreshold = float.max;
 	def.torqueThreshold = float.max;
 	def.constraintHertz = 60.0f;
@@ -328,7 +328,7 @@ b2MotorJointDef b2DefaultMotorJointDef()
 {
 	b2MotorJointDef def;
 	def.base = b2DefaultJointDef();
-	def.relativeTransform.q = b2Rot_identity;
+	def.relativeTransform.q = b2Rot.identity();
 	def.internalValue = B2_SECRET_COOKIE;
 	return def;
 }

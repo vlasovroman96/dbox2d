@@ -63,6 +63,10 @@ struct b2CosSin {
 struct b2Rot {
 	/// cosine and sine
 	float c = 0, s = 0;
+
+	static b2Rot identity() {
+		return b2Rot(1.0f, 0.0f);
+	}
 }
 
 /// A 2D rigid transform
@@ -89,7 +93,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-const(b2Rot) b2Rot_identity = { 1.0f, 0.0f };
 const(b2Transform) b2Transform_identity = { { 0.0f, 0.0f }, { 1.0f, 0.0f } };
 const(b2Mat22) b2Mat22_zero = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };
 

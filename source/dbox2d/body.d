@@ -464,7 +464,7 @@ b2BodyId b2CreateBody(b2WorldId worldId, const(b2BodyDef)* def)
 		*bodyState = b2BodyState();
 		bodyState.linearVelocity = def.linearVelocity;
 		bodyState.angularVelocity = def.angularVelocity;
-		bodyState.deltaRotation = b2Rot_identity;
+		bodyState.deltaRotation = b2Rot.identity();
 		bodyState.flags = lockFlags;
 	}
 
