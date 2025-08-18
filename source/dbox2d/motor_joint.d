@@ -113,7 +113,7 @@ float b2MotorJoint_GetAngularDampingRatio(b2JointId jointId)
 void b2MotorJoint_SetMaxSpringForce(b2JointId jointId, float maxForce)
 {
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_motorJoint );
-	joint.motorJoint.maxSpringForce = b2MaxFloat( 0.0f, maxForce );
+	joint.motorJoint.maxSpringForce = max( 0.0f, maxForce );
 }
 
 float b2MotorJoint_GetMaxSpringForce(b2JointId jointId)
@@ -125,7 +125,7 @@ float b2MotorJoint_GetMaxSpringForce(b2JointId jointId)
 void b2MotorJoint_SetMaxSpringTorque(b2JointId jointId, float maxTorque)
 {
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_motorJoint );
-	joint.motorJoint.maxSpringTorque = b2MaxFloat( 0.0f, maxTorque );
+	joint.motorJoint.maxSpringTorque = max( 0.0f, maxTorque );
 }
 
 float b2MotorJoint_GetMaxSpringTorque(b2JointId jointId)
@@ -298,7 +298,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		float maxImpulse = context.h * joint.maxSpringTorque;
 		float oldImpulse = joint.angularSpringImpulse;
 		float impulse = -massScale * joint.angularMass * ( cdot + bias ) - impulseScale * oldImpulse;
-		joint.angularSpringImpulse = b2ClampFloat( oldImpulse + impulse, -maxImpulse, maxImpulse );
+		joint.angularSpringImpulse = clamp( oldImpulse + impulse, -maxImpulse, maxImpulse );
 		impulse = joint.angularSpringImpulse - oldImpulse;
 
 		wA -= iA * impulse;
@@ -313,7 +313,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 
 		float maxImpulse = context.h * joint.maxVelocityTorque;
 		float oldImpulse = joint.angularVelocityImpulse;
-		joint.angularVelocityImpulse = b2ClampFloat( oldImpulse + impulse, -maxImpulse, maxImpulse );
+		joint.angularVelocityImpulse = clamp( oldImpulse + impulse, -maxImpulse, maxImpulse );
 		impulse = joint.angularVelocityImpulse - oldImpulse;
 
 		wA -= iA * impulse;

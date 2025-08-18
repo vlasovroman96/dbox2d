@@ -48,14 +48,14 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 		if ( dd1 >= epsSqr )
 		{
 			// Segment 2 is degenerate
-			result.fraction1 = b2ClampFloat( -rd1 / dd1, 0.0f, 1.0f );
+			result.fraction1 = clamp( -rd1 / dd1, 0.0f, 1.0f );
 			result.fraction2 = 0.0f;
 		}
 		else if ( dd2 >= epsSqr )
 		{
 			// Segment 1 is degenerate
 			result.fraction1 = 0.0f;
-			result.fraction2 = b2ClampFloat( rd2 / dd2, 0.0f, 1.0f );
+			result.fraction2 = clamp( rd2 / dd2, 0.0f, 1.0f );
 		}
 		else
 		{
@@ -75,7 +75,7 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 		if ( denominator != 0.0f )
 		{
 			// not parallel
-			f1 = b2ClampFloat( ( d12 * rd2 - rd1 * dd2 ) / denominator, 0.0f, 1.0f );
+			f1 = clamp( ( d12 * rd2 - rd1 * dd2 ) / denominator, 0.0f, 1.0f );
 		}
 
 		// Compute point on segment 2 closest to p1 + f1 * d1
@@ -85,12 +85,12 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 		if ( f2 < 0.0f )
 		{
 			f2 = 0.0f;
-			f1 = b2ClampFloat( -rd1 / dd1, 0.0f, 1.0f );
+			f1 = clamp( -rd1 / dd1, 0.0f, 1.0f );
 		}
 		else if ( f2 > 1.0f )
 		{
 			f2 = 1.0f;
-			f1 = b2ClampFloat( ( d12 - rd1 ) / dd1, 0.0f, 1.0f );
+			f1 = clamp( ( d12 - rd1 ) / dd1, 0.0f, 1.0f );
 		}
 
 		result.fraction1 = f1;
@@ -592,7 +592,7 @@ version (NDEBUG) {} else {
 	{
 		float radiusA = input.proxyA.radius;
 		float radiusB = input.proxyB.radius;
-		output.distance = b2MaxFloat( 0.0f, output.distance - radiusA - radiusB );
+		output.distance = max( 0.0f, output.distance - radiusA - radiusB );
 
 		// Keep closest points on perimeter even if overlapped, this way the points move smoothly.
 		output.pointA = b2MulAdd( output.pointA, radiusA, normal );
@@ -608,7 +608,7 @@ b2CastOutput b2ShapeCast(const(b2ShapeCastPairInput)* input)
 	// Compute tolerance
 	float linearSlop = B2_LINEAR_SLOP;
 	float totalRadius = input.proxyA.radius + input.proxyB.radius;
-	float target = b2MaxFloat( linearSlop, totalRadius - linearSlop );
+	float target = max( linearSlop, totalRadius - linearSlop );
 	float tolerance = 0.25f * linearSlop;
 
 	B2_ASSERT( target > tolerance );
@@ -776,7 +776,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 
 	// Sigma is the target distance between proxies
 	const(float) linearSlop = B2_LINEAR_SLOP;
-	const(float) sigma = b2MaxFloat( linearSlop, radius - linearSlop );
+	const(float) sigma = max( linearSlop, radius - linearSlop );
 	float tolerance = 0.5f * linearSlop;
 	float stolSquared = ( sigma + tolerance ) * ( sigma + tolerance );
 
@@ -1158,7 +1158,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 	float tMax = input.maxFraction;
 
 	float totalRadius = proxyA.radius + proxyB.radius;
-	float target = b2MaxFloat( B2_LINEAR_SLOP, totalRadius - B2_LINEAR_SLOP );
+	float target = max( B2_LINEAR_SLOP, totalRadius - B2_LINEAR_SLOP );
 	float tolerance = 0.25f * B2_LINEAR_SLOP;
 	B2_ASSERT( target > tolerance );
 
@@ -1197,7 +1197,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 		//	else
 		//	{
 		//		target = distanceOutput.distance - 1.5f * tolerance;
-		//		target = b2MaxFloat( target, 2.0f * tolerance );
+		//		target = max( target, 2.0f * tolerance );
 		//	}
 		//}
 
@@ -1354,7 +1354,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 
 				float s = b2EvaluateSeparation( &fcn, indexA, indexB, t );
 
-				if ( b2AbsFloat( s - target ) < tolerance )
+				if ( abs( s - target ) < tolerance )
 				{
 					// t2 holds a tentative value for t1
 					t2 = t;
@@ -1417,7 +1417,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 	b2_toiMaxDistanceIterations = max( b2_toiMaxDistanceIterations, distanceIterations );
 
 	float time = b2GetMilliseconds( ticks );
-	b2_toiMaxTime = b2MaxFloat( b2_toiMaxTime, time );
+	b2_toiMaxTime = max( b2_toiMaxTime, time );
 	b2_toiTime += time;
 }
 

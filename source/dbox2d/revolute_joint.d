@@ -141,8 +141,8 @@ void b2RevoluteJoint_SetLimits(b2JointId jointId, float lower, float upper)
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_revoluteJoint );
 	if ( lower != joint.revoluteJoint.lowerAngle || upper != joint.revoluteJoint.upperAngle )
 	{
-		joint.revoluteJoint.lowerAngle = b2MinFloat( lower, upper );
-		joint.revoluteJoint.upperAngle = b2MaxFloat( lower, upper );
+		joint.revoluteJoint.lowerAngle = min( lower, upper );
+		joint.revoluteJoint.upperAngle = max( lower, upper );
 		joint.revoluteJoint.lowerImpulse = 0.0f;
 		joint.revoluteJoint.upperImpulse = 0.0f;
 	}
@@ -356,7 +356,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		float impulse = -joint.axialMass * Cdot;
 		float oldImpulse = joint.motorImpulse;
 		float maxImpulse = context.h * joint.maxMotorTorque;
-		joint.motorImpulse = b2ClampFloat( joint.motorImpulse + impulse, -maxImpulse, maxImpulse );
+		joint.motorImpulse = clamp( joint.motorImpulse + impulse, -maxImpulse, maxImpulse );
 		impulse = joint.motorImpulse - oldImpulse;
 
 		wA -= iA * impulse;
@@ -388,7 +388,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			float Cdot = wB - wA;
 			float oldImpulse = joint.lowerImpulse;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * oldImpulse;
-			joint.lowerImpulse = b2MaxFloat( oldImpulse + impulse, 0.0f );
+			joint.lowerImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.lowerImpulse - oldImpulse;
 
 			wA -= iA * impulse;
@@ -419,7 +419,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			float Cdot = wA - wB;
 			float oldImpulse = joint.upperImpulse;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * oldImpulse;
-			joint.upperImpulse = b2MaxFloat( oldImpulse + impulse, 0.0f );
+			joint.upperImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.upperImpulse - oldImpulse;
 
 			// sign flipped on applied impulse

@@ -289,7 +289,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 			// 2. A descendent of child1 could be the sibling with the lower bound cost of
 			//       cost1 = inheritedCost + (directCost1 - area1) + areaD
 			// This minimum here leads to the minimum of these two costs.
-			lowerCost1 = inheritedCost + directCost1 + b2MinFloat( areaD - area1, 0.0f );
+			lowerCost1 = inheritedCost + directCost1 + min( areaD - area1, 0.0f );
 		}
 
 		// Cost of descending into child 2
@@ -310,7 +310,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		else
 		{
 			area2 = b2Perimeter( box2 );
-			lowerCost2 = inheritedCost + directCost2 + b2MinFloat( areaD - area2, 0.0f );
+			lowerCost2 = inheritedCost + directCost2 + min( areaD - area2, 0.0f );
 		}
 
 		if ( leaf1 && leaf2 )
@@ -1267,7 +1267,7 @@ b2TreeStats b2DynamicTree_RayCast(const(b2DynamicTree)* tree, const(b2RayCastInp
 		// radius extension is added to the node in this case
 		b2Vec2 c = b2AABB_Center( nodeAABB );
 		b2Vec2 h = b2AABB_Extents( nodeAABB );
-		float term1 = b2AbsFloat( b2Dot( v, b2Sub( p1, c ) ) );
+		float term1 = abs( b2Dot( v, b2Sub( p1, c ) ) );
 		float term2 = b2Dot( abs_v, h );
 		if ( term2 < term1 )
 		{
@@ -1396,7 +1396,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 		// radius extension is added to the node in this case
 		b2Vec2 c = b2AABB_Center( node.aabb );
 		b2Vec2 h = b2Add( b2AABB_Extents( node.aabb ), extension );
-		float term1 = b2AbsFloat( b2Dot( v, b2Sub( p1, c ) ) );
+		float term1 = abs( b2Dot( v, b2Sub( p1, c ) ) );
 		float term2 = b2Dot( abs_v, h );
 		if ( term2 < term1 )
 		{

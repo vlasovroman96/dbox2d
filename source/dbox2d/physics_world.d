@@ -285,7 +285,7 @@ float b2DefaultFrictionCallback(float frictionA, int materialA, float frictionB,
 float b2DefaultRestitutionCallback(float restitutionA, int materialA, float restitutionB, int materialB)
 {
 	// B2_UNUSED( materialA, materialB );
-	return b2MaxFloat( restitutionA, restitutionB );
+	return max( restitutionA, restitutionB );
 }
 
 b2WorldId b2CreateWorld(b2WorldDef* def)
@@ -949,7 +949,7 @@ void b2World_Step(b2WorldId worldId, float timeStep, int subStepCount)
 	world.inv_h = context.inv_h;
 
 	// Hertz values get reduced for large time steps
-	float contactHertz = b2MinFloat( world.contactHertz, 0.125f * context.inv_h );
+	float contactHertz = min( world.contactHertz, 0.125f * context.inv_h );
 	context.contactSoftness = b2MakeSoft( contactHertz, world.contactDampingRatio, context.h );
 	context.staticSoftness = b2MakeSoft( 2.0f * contactHertz, world.contactDampingRatio, context.h );
 
@@ -1715,7 +1715,7 @@ void b2World_SetRestitutionThreshold(b2WorldId worldId, float value)
 		return;
 	}
 
-	world.restitutionThreshold = b2ClampFloat( value, 0.0f, float.max );
+	world.restitutionThreshold = clamp( value, 0.0f, float.max );
 }
 
 float b2World_GetRestitutionThreshold(b2WorldId worldId)
@@ -1733,7 +1733,7 @@ void b2World_SetHitEventThreshold(b2WorldId worldId, float value)
 		return;
 	}
 
-	world.hitEventThreshold = b2ClampFloat( value, 0.0f, float.max );
+	world.hitEventThreshold = clamp( value, 0.0f, float.max );
 }
 
 float b2World_GetHitEventThreshold(b2WorldId worldId)
@@ -1751,9 +1751,9 @@ void b2World_SetContactTuning(b2WorldId worldId, float hertz, float dampingRatio
 		return;
 	}
 
-	world.contactHertz = b2ClampFloat( hertz, 0.0f, float.max );
-	world.contactDampingRatio = b2ClampFloat( dampingRatio, 0.0f, float.max );
-	world.contactSpeed = b2ClampFloat( pushSpeed, 0.0f, float.max );
+	world.contactHertz = clamp( hertz, 0.0f, float.max );
+	world.contactDampingRatio = clamp( dampingRatio, 0.0f, float.max );
+	world.contactSpeed = clamp( pushSpeed, 0.0f, float.max );
 }
 
 void b2World_SetMaximumLinearSpeed(b2WorldId worldId, float maximumLinearSpeed)
@@ -2609,7 +2609,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	float scale = 1.0f;
 	if ( output.distance > radius && falloff > 0.0f )
 	{
-		scale = b2ClampFloat( ( radius + falloff - output.distance ) / falloff, 0.0f, 1.0f );
+		scale = clamp( ( radius + falloff - output.distance ) / falloff, 0.0f, 1.0f );
 	}
 
 	float magnitude = explosionContext.impulsePerLength * perimeter * scale;

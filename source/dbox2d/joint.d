@@ -689,11 +689,11 @@ b2JointId b2CreateDistanceJoint(b2WorldId worldId, const(b2DistanceJointDef)* de
 
 	b2DistanceJoint empty;
 	joint.distanceJoint = empty;
-	joint.distanceJoint.length = b2MaxFloat( def.length, B2_LINEAR_SLOP );
+	joint.distanceJoint.length = max( def.length, B2_LINEAR_SLOP );
 	joint.distanceJoint.hertz = def.hertz;
 	joint.distanceJoint.dampingRatio = def.dampingRatio;
-	joint.distanceJoint.minLength = b2MaxFloat( def.minLength, B2_LINEAR_SLOP );
-	joint.distanceJoint.maxLength = b2MaxFloat( def.minLength, def.maxLength );
+	joint.distanceJoint.minLength = max( def.minLength, B2_LINEAR_SLOP );
+	joint.distanceJoint.maxLength = max( def.minLength, def.maxLength );
 	joint.distanceJoint.maxMotorForce = def.maxMotorForce;
 	joint.distanceJoint.motorSpeed = def.motorSpeed;
 	joint.distanceJoint.enableSpring = def.enableSpring;
@@ -845,7 +845,7 @@ b2JointId b2CreateRevoluteJoint(b2WorldId worldId, const(b2RevoluteJointDef)* de
 	b2RevoluteJoint empty;
 	joint.revoluteJoint = empty;
 
-	joint.revoluteJoint.targetAngle = b2ClampFloat( def.targetAngle, -PI, PI );
+	joint.revoluteJoint.targetAngle = clamp( def.targetAngle, -PI, PI );
 	joint.revoluteJoint.hertz = def.hertz;
 	joint.revoluteJoint.dampingRatio = def.dampingRatio;
 	joint.revoluteJoint.lowerAngle = def.lowerAngle;
@@ -1204,7 +1204,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		case b2_distanceJoint:
 		{
 			b2DistanceJoint* joint = &sim.distanceJoint;
-			linearImpulse = b2AbsFloat( joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse );
+			linearImpulse = abs( joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse );
 		}
 		break;
 
@@ -1212,7 +1212,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		{
 			b2MotorJoint* joint = &sim.motorJoint;
 			linearImpulse = b2Length( b2Add(joint.linearVelocityImpulse, joint.linearSpringImpulse) );
-			angularImpulse = b2AbsFloat( joint.angularVelocityImpulse + joint.angularSpringImpulse );
+			angularImpulse = abs( joint.angularVelocityImpulse + joint.angularSpringImpulse );
 		}
 		break;
 
@@ -1220,7 +1220,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		{
 			b2MouseJoint* joint = &sim.mouseJoint;
 			linearImpulse = b2Length( joint.linearImpulse );
-			angularImpulse = b2AbsFloat( joint.angularImpulse );
+			angularImpulse = abs( joint.angularImpulse );
 		}
 		break;
 
@@ -1230,7 +1230,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 			float perpImpulse = joint.impulse.x;
 			float axialImpulse = joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse;
 			linearImpulse = sqrt( perpImpulse * perpImpulse + axialImpulse * axialImpulse );
-			angularImpulse = b2AbsFloat( joint.impulse.y );
+			angularImpulse = abs( joint.impulse.y );
 		}
 		break;
 
@@ -1239,7 +1239,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 			b2RevoluteJoint* joint = &sim.revoluteJoint;
 
 			linearImpulse = b2Length( joint.linearImpulse );
-			angularImpulse = b2AbsFloat( joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse );
+			angularImpulse = abs( joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse );
 		}
 		break;
 
@@ -1247,7 +1247,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		{
 			b2WeldJoint* joint = &sim.weldJoint;
 			linearImpulse = b2Length( joint.linearImpulse );
-			angularImpulse = b2AbsFloat( joint.angularImpulse );
+			angularImpulse = abs( joint.angularImpulse );
 		}
 		break;
 
@@ -1257,7 +1257,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 			float perpImpulse = joint.perpImpulse;
 			float axialImpulse = joint.springImpulse + joint.lowerImpulse - joint.upperImpulse;
 			linearImpulse = sqrt( perpImpulse * perpImpulse + axialImpulse * axialImpulse );
-			angularImpulse = b2AbsFloat( joint.motorImpulse );
+			angularImpulse = abs( joint.motorImpulse );
 		}
 		break;
 
@@ -1394,7 +1394,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 				return 0.0f;
 			}
 
-			return b2AbsFloat( length - distanceJoint.length );
+			return abs( length - distanceJoint.length );
 		}
 
 		case b2_motorJoint:
@@ -1411,7 +1411,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 			b2PrismaticJoint* prismaticJoint = &base.prismaticJoint;
 			b2Vec2 axisA = b2RotateVector( xfA.q, b2Vec2( 1.0f, 0.0f ) );
 			b2Vec2 perpA = b2LeftPerp( axisA );
-			float perpendicularSeparation = b2AbsFloat( b2Dot( perpA, dp ) );
+			float perpendicularSeparation = abs( b2Dot( perpA, dp ) );
 			float limitSeparation = 0.0f;
 
 			if ( prismaticJoint.enableLimit )
@@ -1450,7 +1450,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 			b2WheelJoint* wheelJoint = &base.wheelJoint;
 			b2Vec2 axisA = b2RotateVector( xfA.q, b2Vec2( 1.0f, 0.0f ) );
 			b2Vec2 perpA = b2LeftPerp( axisA );
-			float perpendicularSeparation = b2AbsFloat( b2Dot( perpA, dp ) );
+			float perpendicularSeparation = abs( b2Dot( perpA, dp ) );
 			float limitSeparation = 0.0f;
 
 			if ( wheelJoint.enableLimit )
@@ -1605,7 +1605,7 @@ float b2Joint_GetTorqueThreshold(b2JointId jointId)
 void b2PrepareJoint(b2JointSim* joint, b2StepContext* context)
 {
 	// Clamp joint hertz based on the time step to reduce jitter.
-	float hertz = b2MinFloat( joint.constraintHertz, 0.25f * context.inv_h );
+	float hertz = min( joint.constraintHertz, 0.25f * context.inv_h );
 	joint.constraintSoftness = b2MakeSoft( hertz, joint.constraintDampingRatio, context.h );
 
 	switch ( joint.type )

@@ -32,12 +32,12 @@ b2PlaneSolverResult b2SolvePlanes(b2Vec2 targetDelta, b2CollisionPlane* planes, 
 
 			// Clamp accumulated push
 			float accumulatedPush = plane.push;
-			plane.push = b2ClampFloat( plane.push + push, 0.0f, plane.pushLimit );
+			plane.push = clamp( plane.push + push, 0.0f, plane.pushLimit );
 			push = plane.push - accumulatedPush;
 			delta = b2MulAdd( delta, push, plane.plane.normal );
 
 			// Track maximum push for convergence
-			totalPush += b2AbsFloat( push );
+			totalPush += abs( push );
 		}
 
 		if ( totalPush < tolerance )
@@ -64,7 +64,7 @@ b2Vec2 b2ClipVector(b2Vec2 vector, const(b2CollisionPlane)* planes, int count)
 			continue;
 		}
 
-		v = b2MulSub( v, b2MinFloat( 0.0f, b2Dot( v, plane.plane.normal ) ), plane.plane.normal );
+		v = b2MulSub( v, min( 0.0f, b2Dot( v, plane.plane.normal ) ), plane.plane.normal );
 	}
 
 	return v;

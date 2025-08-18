@@ -481,7 +481,7 @@ bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point)
 	// dot(point - p1 - t * d, d) = 0
 	// t = dot(point - p1, d) / dot(d, d)
 	float t = b2Dot( b2Sub( point, p1 ), d ) / dd;
-	t = b2ClampFloat( t, 0.0f, 1.0f );
+	t = clamp( t, 0.0f, 1.0f );
 	b2Vec2 c = b2MulAdd( p1, t, d );
 
 	// Is query point within radius around closest point?

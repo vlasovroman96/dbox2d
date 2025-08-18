@@ -306,7 +306,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			}
 			else if ( useBias )
 			{
-				velocityBias = b2MaxFloat( softness.massScale * softness.biasRate * s, -contactSpeed );
+				velocityBias = max( softness.massScale * softness.biasRate * s, -contactSpeed );
 				massScale = softness.massScale;
 				impulseScale = softness.impulseScale;
 			}
@@ -320,7 +320,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			float impulse = -cp.normalMass * ( massScale * vn + velocityBias ) - impulseScale * cp.normalImpulse;
 
 			// clamp the accumulated impulse
-			float newImpulse = b2MaxFloat( cp.normalImpulse + impulse, 0.0f );
+			float newImpulse = max( cp.normalImpulse + impulse, 0.0f );
 			impulse = newImpulse - cp.normalImpulse;
 			cp.normalImpulse = newImpulse;
 			cp.totalNormalImpulse += newImpulse;
@@ -359,7 +359,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 
 			// clamp the accumulated force
 			float maxFriction = friction * cp.normalImpulse;
-			float newImpulse = b2ClampFloat( cp.tangentImpulse + impulse, -maxFriction, maxFriction );
+			float newImpulse = clamp( cp.tangentImpulse + impulse, -maxFriction, maxFriction );
 			impulse = newImpulse - cp.tangentImpulse;
 			cp.tangentImpulse = newImpulse;
 
@@ -376,7 +376,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			float deltaLambda = -constraint.rollingMass * ( wB - wA );
 			float lambda = constraint.rollingImpulse;
 			float maxLambda = constraint.rollingResistance * totalNormalImpulse;
-			constraint.rollingImpulse = b2ClampFloat( lambda + deltaLambda, -maxLambda, maxLambda );
+			constraint.rollingImpulse = clamp( lambda + deltaLambda, -maxLambda, maxLambda );
 			deltaLambda = constraint.rollingImpulse - lambda;
 
 			wA -= iA * deltaLambda;
@@ -461,7 +461,7 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 
 				// clamp the accumulated impulse
 				// todo should this be stored?
-				float newImpulse = b2MaxFloat( cp.normalImpulse + impulse, 0.0f );
+				float newImpulse = max( cp.normalImpulse + impulse, 0.0f );
 				impulse = newImpulse - cp.normalImpulse;
 				cp.normalImpulse = newImpulse;
 
@@ -958,10 +958,10 @@ pragma(inline, true) private b2FloatW b2MaxW(b2FloatW a, b2FloatW b)
 pragma(inline, true) private b2FloatW b2SymClampW(b2FloatW a, b2FloatW b)
 {
 	b2FloatW r = void;
-	r.x = b2ClampFloat( a.x, -b.x, b.x );
-	r.y = b2ClampFloat( a.y, -b.y, b.y );
-	r.z = b2ClampFloat( a.z, -b.z, b.z );
-	r.w = b2ClampFloat( a.w, -b.w, b.w );
+	r.x = clamp( a.x, -b.x, b.x );
+	r.y = clamp( a.y, -b.y, b.y );
+	r.z = clamp( a.z, -b.z, b.z );
+	r.w = clamp( a.w, -b.w, b.w );
 	return r;
 }
 

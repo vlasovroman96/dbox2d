@@ -716,7 +716,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 			// 2. A descendent of child1 could be the sibling with the lower bound cost of
 			//       cost1 = inheritedCost + (directCost1 - area1) + areaD
 			// This minimum here leads to the minimum of these two costs.
-			lowerCost1 = inheritedCost + directCost1 + b2MinFloat( areaD - area1, 0.0f );
+			lowerCost1 = inheritedCost + directCost1 + min( areaD - area1, 0.0f );
 		}
 
 		// Cost of descending into child 2
@@ -737,7 +737,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		else
 		{
 			area2 = b2Perimeter( box2 );
-			lowerCost2 = inheritedCost + directCost2 + b2MinFloat( areaD - area2, 0.0f );
+			lowerCost2 = inheritedCost + directCost2 + min( areaD - area2, 0.0f );
 		}
 
 		if ( leaf1 && leaf2 )

@@ -626,8 +626,8 @@ bool b2UpdateContact(b2World* world, b2ContactSim* contactSim, b2Shape* shapeA, 
 	{
 		float radiusA = b2GetShapeRadius( shapeA );
 		float radiusB = b2GetShapeRadius( shapeB );
-		float maxRadius = b2MaxFloat( radiusA, radiusB );
-		contactSim.rollingResistance = b2MaxFloat( shapeA.rollingResistance, shapeB.rollingResistance ) * maxRadius;
+		float maxRadius = max( radiusA, radiusB );
+		contactSim.rollingResistance = max( shapeA.rollingResistance, shapeB.rollingResistance ) * maxRadius;
 	}
 	else
 	{

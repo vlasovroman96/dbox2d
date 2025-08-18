@@ -298,7 +298,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	if ( denom != 0.0f )
 	{
 		// not parallel
-		f1 = b2ClampFloat( ( d12 * rd2 - rd1 * dd2 ) / denom, 0.0f, 1.0f );
+		f1 = clamp( ( d12 * rd2 - rd1 * dd2 ) / denom, 0.0f, 1.0f );
 	}
 
 	// Compute point on segment 2 closest to p1 + f1 * d1
@@ -308,12 +308,12 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	if ( f2 < 0.0f )
 	{
 		f2 = 0.0f;
-		f1 = b2ClampFloat( -rd1 / dd1, 0.0f, 1.0f );
+		f1 = clamp( -rd1 / dd1, 0.0f, 1.0f );
 	}
 	else if ( f2 > 1.0f )
 	{
 		f2 = 1.0f;
-		f1 = b2ClampFloat( ( d12 - rd1 ) / dd1, 0.0f, 1.0f );
+		f1 = clamp( ( d12 - rd1 ) / dd1, 0.0f, 1.0f );
 	}
 
 	b2Vec2 closest1 = b2MulAdd( p1, f1, d1 );
@@ -862,7 +862,7 @@ static if (1) {
 		float minSeparation = float.max;
 		for ( int i = 0; i < manifold.pointCount; ++i )
 		{
-			minSeparation = b2MinFloat( minSeparation, manifold.points[i].separation );
+			minSeparation = min( minSeparation, manifold.points[i].separation );
 		}
 
 		// Does vertex-vertex have substantially larger separation?
@@ -1606,7 +1606,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			//}
 
 			b2Vec2 p = vertices[i];
-			float s = b2MinFloat( b2Dot( n, b2Sub( p2, p ) ), b2Dot( n, b2Sub( p1, p ) ) );
+			float s = min( b2Dot( n, b2Sub( p2, p ) ), b2Dot( n, b2Sub( p1, p ) ) );
 
 			if ( s > polygonSeparation )
 			{

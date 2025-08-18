@@ -105,30 +105,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/// @return the minimum of two floats
-float b2MinFloat(float a, float b)
-{
-	return a < b ? a : b;
-}
-
-/// @return the maximum of two floats
-float b2MaxFloat(float a, float b)
-{
-	return a > b ? a : b;
-}
-
-/// @return the absolute value of a float
-float b2AbsFloat(float a)
-{
-	return a < 0 ? -a : a;
-}
-
-/// @return a float clamped between a lower and upper bound
-float b2ClampFloat(float a, float lower, float upper)
-{
-	return a < lower ? lower : ( a > upper ? upper : a );
-}
-
 /// Vector dot product
 float b2Dot(b2Vec2 a, b2Vec2 b)
 {
@@ -218,8 +194,8 @@ b2Vec2 b2MulSub( b2Vec2 a, float s, b2Vec2 b )
 b2Vec2 b2Abs(b2Vec2 a)
 {
 	b2Vec2 b = void;
-	b.x = b2AbsFloat( a.x );
-	b.y = b2AbsFloat( a.y );
+	b.x = abs( a.x );
+	b.y = abs( a.y );
 	return b;
 }
 
@@ -227,8 +203,8 @@ b2Vec2 b2Abs(b2Vec2 a)
 b2Vec2 b2Min(b2Vec2 a, b2Vec2 b)
 {
 	b2Vec2 c = void;
-	c.x = b2MinFloat( a.x, b.x );
-	c.y = b2MinFloat( a.y, b.y );
+	c.x = min( a.x, b.x );
+	c.y = min( a.y, b.y );
 	return c;
 }
 
@@ -236,8 +212,8 @@ b2Vec2 b2Min(b2Vec2 a, b2Vec2 b)
 b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
 {
 	b2Vec2 c = void;
-	c.x = b2MaxFloat( a.x, b.x );
-	c.y = b2MaxFloat( a.y, b.y );
+	c.x = max( a.x, b.x );
+	c.y = max( a.y, b.y );
 	return c;
 }
 
@@ -245,8 +221,8 @@ b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
 b2Vec2 b2Clamp(b2Vec2 v, b2Vec2 a, b2Vec2 b)
 {
 	b2Vec2 c = void;
-	c.x = b2ClampFloat( v.x, a.x, b.x );
-	c.y = b2ClampFloat( v.y, a.y, b.y );
+	c.x = clamp( v.x, a.x, b.x );
+	c.y = clamp( v.y, a.y, b.y );
 	return c;
 }
 
@@ -283,7 +259,7 @@ b2Vec2 b2Normalize( b2Vec2 v )
 bool b2IsNormalized(b2Vec2 a)
 {
 	float aa = b2Dot( a, a );
-	return b2AbsFloat( 1.0f - aa ) < 100.0f * float.epsilon;
+	return abs( 1.0f - aa ) < 100.0f * float.epsilon;
 }
 
 /// Convert a vector into a unit vector if possible, otherwise returns the zero vector. Also
@@ -588,10 +564,10 @@ b2Vec2 b2AABB_Extents(b2AABB a)
 b2AABB b2AABB_Union(b2AABB a, b2AABB b)
 {
 	b2AABB c = void;
-	c.lowerBound.x = b2MinFloat( a.lowerBound.x, b.lowerBound.x );
-	c.lowerBound.y = b2MinFloat( a.lowerBound.y, b.lowerBound.y );
-	c.upperBound.x = b2MaxFloat( a.upperBound.x, b.upperBound.x );
-	c.upperBound.y = b2MaxFloat( a.upperBound.y, b.upperBound.y );
+	c.lowerBound.x = min( a.lowerBound.x, b.lowerBound.x );
+	c.lowerBound.y = min( a.lowerBound.y, b.lowerBound.y );
+	c.upperBound.x = max( a.upperBound.x, b.upperBound.x );
+	c.upperBound.y = max( a.upperBound.y, b.upperBound.y );
 	return c;
 }
 
@@ -707,10 +683,10 @@ float b2Atan2(float y, float x)
 		return 0.0f;
 	}
 
-	float ax = b2AbsFloat( x );
-	float ay = b2AbsFloat( y );
-	float mx = b2MaxFloat( ay, ax );
-	float mn = b2MinFloat( ay, ax );
+	float ax = abs( x );
+	float ay = abs( y );
+	float mx = max( ay, ax );
+	float mn = min( ay, ax );
 	float a = mn / mx;
 
 	// Minimax polynomial approximation to atan(a) on [0,1]
@@ -790,8 +766,8 @@ b2CosSin b2ComputeCosSin(float radians)
 
 b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2)
 {
-	B2_ASSERT( b2AbsFloat( 1.0f - b2Length( v1 ) ) < 100.0f * float.epsilon );
-	B2_ASSERT( b2AbsFloat( 1.0f - b2Length( v2 ) ) < 100.0f * float.epsilon );
+	B2_ASSERT( abs( 1.0f - b2Length( v1 ) ) < 100.0f * float.epsilon );
+	B2_ASSERT( abs( 1.0f - b2Length( v2 ) ) < 100.0f * float.epsilon );
 
 	b2Rot rot = void;
 	rot.c = b2Dot( v1, v2 );

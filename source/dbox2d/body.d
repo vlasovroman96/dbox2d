@@ -763,8 +763,8 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 				const(b2Shape)* s = b2ShapeArray_Get( world.shapes, shapeId );
 
 				b2ShapeExtent extent = b2ComputeShapeExtent( s, b2Vec2.zero() );
-				bodySim.minExtent = b2MinFloat( bodySim.minExtent, extent.minExtent );
-				bodySim.maxExtent = b2MaxFloat( bodySim.maxExtent, extent.maxExtent );
+				bodySim.minExtent = min( bodySim.minExtent, extent.minExtent );
+				bodySim.maxExtent = max( bodySim.maxExtent, extent.maxExtent );
 
 				shapeId = s.nextShapeId;
 			}
@@ -857,8 +857,8 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 		const(b2Shape)* s = b2ShapeArray_Get( world.shapes, shapeId );
 
 		b2ShapeExtent extent = b2ComputeShapeExtent( s, localCenter );
-		bodySim.minExtent = b2MinFloat( bodySim.minExtent, extent.minExtent );
-		bodySim.maxExtent = b2MaxFloat( bodySim.maxExtent, extent.maxExtent );
+		bodySim.minExtent = min( bodySim.minExtent, extent.minExtent );
+		bodySim.maxExtent = max( bodySim.maxExtent, extent.maxExtent );
 
 		shapeId = s.nextShapeId;
 	}
@@ -1078,7 +1078,7 @@ void b2Body_SetTargetTransform(b2BodyId bodyId, b2Transform target, float timeSt
 	// Early out if the body is asleep already and the desired movement is small
 	if ( body.setIndex != b2_awakeSet )
 	{
-		float maxVelocity = b2Length( linearVelocity ) + b2AbsFloat( angularVelocity ) * sim.maxExtent;
+		float maxVelocity = b2Length( linearVelocity ) + abs( angularVelocity ) * sim.maxExtent;
 
 		// Return if velocity would be sleepy
 		if ( maxVelocity < body.sleepThreshold )

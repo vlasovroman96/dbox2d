@@ -762,7 +762,7 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 		case b2_capsuleShape:
 		{
 			b2Vec2 axis = b2Sub( shape.capsule.center2, shape.capsule.center1 );
-			float projectedLength = b2AbsFloat( b2Dot( axis, line ) );
+			float projectedLength = abs( b2Dot( axis, line ) );
 			return projectedLength + 2.0f * shape.capsule.radius;
 		}
 
@@ -780,8 +780,8 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 			for ( int i = 1; i < count; ++i )
 			{
 				value = b2Dot( points[i], line );
-				lower = b2MinFloat( lower, value );
-				upper = b2MaxFloat( upper, value );
+				lower = min( lower, value );
+				upper = max( upper, value );
 			}
 
 			return ( upper - lower ) + 2.0f * shape.polygon.radius;
@@ -791,14 +791,14 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 		{
 			float value1 = b2Dot( shape.segment.point1, line );
 			float value2 = b2Dot( shape.segment.point2, line );
-			return b2AbsFloat( value2 - value1 );
+			return abs( value2 - value1 );
 		}
 
 		case b2_chainSegmentShape:
 		{
 			float value1 = b2Dot( shape.chainSegment.segment.point1, line );
 			float value2 = b2Dot( shape.chainSegment.segment.point2, line );
-			return b2AbsFloat( value2 - value1 );
+			return abs( value2 - value1 );
 		}
 
 		default:
@@ -833,7 +833,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			extent.minExtent = radius;
 			b2Vec2 c1 = b2Sub( shape.capsule.center1, localCenter );
 			b2Vec2 c2 = b2Sub( shape.capsule.center2, localCenter );
-			extent.maxExtent = sqrt( b2MaxFloat( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) ) + radius;
+			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) ) + radius;
 		}
 		break;
 
@@ -855,10 +855,10 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			{
 				b2Vec2 v = poly.vertices[i];
 				float planeOffset = b2Dot( poly.normals[i], b2Sub( v, poly.centroid ) );
-				minExtent = b2MinFloat( minExtent, planeOffset );
+				minExtent = min( minExtent, planeOffset );
 
 				float distanceSqr = b2LengthSquared( b2Sub( v, localCenter ) );
-				maxExtentSqr = b2MaxFloat( maxExtentSqr, distanceSqr );
+				maxExtentSqr = max( maxExtentSqr, distanceSqr );
 			}
 
 			extent.minExtent = minExtent + poly.radius;
@@ -871,7 +871,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			extent.minExtent = 0.0f;
 			b2Vec2 c1 = b2Sub( shape.segment.point1, localCenter );
 			b2Vec2 c2 = b2Sub( shape.segment.point2, localCenter );
-			extent.maxExtent = sqrt( b2MaxFloat( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
+			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
 		}
 		break;
 
@@ -880,7 +880,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			extent.minExtent = 0.0f;
 			b2Vec2 c1 = b2Sub( shape.chainSegment.segment.point1, localCenter );
 			b2Vec2 c2 = b2Sub( shape.chainSegment.segment.point2, localCenter );
-			extent.maxExtent = sqrt( b2MaxFloat( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
+			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
 		}
 		break;
 
