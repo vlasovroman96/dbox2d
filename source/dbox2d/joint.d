@@ -826,8 +826,8 @@ b2JointId b2CreateRevoluteJoint(b2WorldId worldId, const(b2RevoluteJointDef)* de
 {
 	B2_CHECK_DEF( def );
 	B2_ASSERT( def.lowerAngle <= def.upperAngle );
-	B2_ASSERT( def.lowerAngle >= -0.99f * B2_PI );
-	B2_ASSERT( def.upperAngle <= 0.99f * B2_PI );
+	B2_ASSERT( def.lowerAngle >= -0.99f * PI );
+	B2_ASSERT( def.upperAngle <= 0.99f * PI );
 
 	b2World* world = b2GetWorldFromId( worldId );
 
@@ -845,7 +845,7 @@ b2JointId b2CreateRevoluteJoint(b2WorldId worldId, const(b2RevoluteJointDef)* de
 	b2RevoluteJoint empty;
 	joint.revoluteJoint = empty;
 
-	joint.revoluteJoint.targetAngle = b2ClampFloat( def.targetAngle, -B2_PI, B2_PI );
+	joint.revoluteJoint.targetAngle = b2ClampFloat( def.targetAngle, -PI, PI );
 	joint.revoluteJoint.hertz = def.hertz;
 	joint.revoluteJoint.dampingRatio = def.dampingRatio;
 	joint.revoluteJoint.lowerAngle = def.lowerAngle;

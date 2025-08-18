@@ -1,6 +1,7 @@
 module dbox2d.solver;
 
 public import dbox2d.core;
+import dbox2d.constants;
 import dbox2d.ctz;
 public import dbox2d.math_functions;
 import dbox2d.atomic;
@@ -174,7 +175,7 @@ pragma(inline, true) b2Softness b2MakeSoft(float hertz, float zeta, float h)
 		);
 	}
 
-	float omega = 2.0f * B2_PI * hertz;
+	float omega = 2.0f * PI * hertz;
 	float a1 = 2.0f * zeta + h * omega;
 	float a2 = h * omega * a1;
 	float a3 = 1.0f / ( 1.0f + a2 );

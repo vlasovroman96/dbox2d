@@ -1,23 +1,25 @@
 module dbox2d.math_functions;
 
-import core.stdc.math;
+public import std.math.constants;
+
 import dbox2d.base;
 
+import core.stdc.math;
+
 static assert( int.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
+
 /// 2D vector
 /// This can be used to represent a point or free vector
 struct b2Vec2 {
 	/// coordinates
 	float x = 0, y = 0;
 
-    auto opUnary(string op : "+")(b2Vec2 b)
-    {
+    auto opUnary(string op : "+")(b2Vec2 b) {
         this.x += b.x;
         this.y += b.y;
     }
 
-    auto opUnary(string op : "-")(b2Vec2 b)
-    {
+    auto opUnary(string op : "-")(b2Vec2 b) {
         this.x += b.x;
         this.y += b.y;
     }
@@ -26,8 +28,7 @@ struct b2Vec2 {
         return b2Vec2(-this.x, -this.y);
     }
 
-    auto opUnary(string op : "*")(float b)
-    {
+    auto opUnary(string op : "*")(float b) {
         this.x *= b;
         this.y *= b;
     }
@@ -83,9 +84,6 @@ struct b2Plane {
 	b2Vec2 normal;
 	float offset = 0;
 }
-
-/// https://en.wikipedia.org/wiki/Pi
-enum B2_PI = 3.14159265359f;
 
 const(b2Vec2) b2Vec2_zero = { 0.0f, 0.0f };
 const(b2Rot) b2Rot_identity = { 1.0f, 0.0f };
@@ -473,7 +471,7 @@ float b2RelativeAngle(b2Rot a, b2Rot b)
 float b2UnwindAngle(float radians)
 {
 	// Assuming this is deterministic
-	return remainderf( radians, 2.0f * B2_PI );
+	return remainderf( radians, 2.0f * PI );
 }
 
 /// Rotate a vector
@@ -644,7 +642,7 @@ float b2PlaneSeparation(b2Plane plane, b2Vec2 point)
 /// that doesn't require transcendental functions.
 float b2SpringDamper(float hertz, float dampingRatio, float position, float velocity, float timeStep)
 {
-	float omega = 2.0f * B2_PI * hertz;
+	float omega = 2.0f * PI * hertz;
 	float omegaH = omega * timeStep;
 	return ( velocity - omega * omegaH * position ) / ( 1.0f + 2.0f * dampingRatio * omegaH + omegaH * omegaH );
 }
@@ -759,19 +757,19 @@ float b2Atan2(float y, float x)
 b2CosSin b2ComputeCosSin(float radians)
 {
 	float x = b2UnwindAngle( radians );
-	float pi2 = B2_PI * B2_PI;
+	float pi2 = PI * PI;
 
 	// cosine needs angle in [-pi/2, pi/2]
 	float c = void;
-	if ( x < -0.5f * B2_PI )
+	if ( x < -0.5f * PI )
 	{
-		float y = x + B2_PI;
+		float y = x + PI;
 		float y2 = y * y;
 		c = -( pi2 - 4.0f * y2 ) / ( pi2 + y2 );
 	}
-	else if ( x > 0.5f * B2_PI )
+	else if ( x > 0.5f * PI )
 	{
-		float y = x - B2_PI;
+		float y = x - PI;
 		float y2 = y * y;
 		c = -( pi2 - 4.0f * y2 ) / ( pi2 + y2 );
 	}
@@ -785,12 +783,12 @@ b2CosSin b2ComputeCosSin(float radians)
 	float s = void;
 	if ( x < 0.0f )
 	{
-		float y = x + B2_PI;
-		s = -16.0f * y * ( B2_PI - y ) / ( 5.0f * pi2 - 4.0f * y * ( B2_PI - y ) );
+		float y = x + PI;
+		s = -16.0f * y * ( PI - y ) / ( 5.0f * pi2 - 4.0f * y * ( PI - y ) );
 	}
 	else
 	{
-		s = 16.0f * x * ( B2_PI - x ) / ( 5.0f * pi2 - 4.0f * x * ( B2_PI - x ) );
+		s = 16.0f * x * ( PI - x ) / ( 5.0f * pi2 - 4.0f * x * ( PI - x ) );
 	}
 
 	float mag = sqrtf( s * s + c * c );

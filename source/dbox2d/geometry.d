@@ -224,7 +224,7 @@ b2MassData b2ComputeCircleMass(const(b2Circle)* shape, float density)
 	float rr = shape.radius * shape.radius;
 
 	b2MassData massData = void;
-	massData.mass = density * B2_PI * rr;
+	massData.mass = density * PI * rr;
 	massData.center = shape.center;
 
 	// inertia about the center of mass
@@ -242,7 +242,7 @@ b2MassData b2ComputeCapsuleMass(const(b2Capsule)* shape, float density)
 	float length = b2Length( b2Sub( p2, p1 ) );
 	float ll = length * length;
 
-	float circleMass = density * ( B2_PI * radius * radius );
+	float circleMass = density * ( PI * radius * radius );
 	float boxMass = density * ( 2.0f * radius * length );
 
 	b2MassData massData = void;
@@ -260,7 +260,7 @@ b2MassData b2ComputeCapsuleMass(const(b2Capsule)* shape, float density)
 	// I verified this formula by computing the convex hull of a 128 vertex capsule
 
 	// half circle centroid
-	float lc = 4.0f * radius / ( 3.0f * B2_PI );
+	float lc = 4.0f * radius / ( 3.0f * PI );
 
 	// half length of rectangular portion of capsule
 	float h = 0.5f * length;

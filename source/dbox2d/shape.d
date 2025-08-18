@@ -1,9 +1,6 @@
 module dbox2d.shape;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 public import dbox2d.array;
-
 public import dbox2d.types;
 import dbox2d.broad_phase;
 import dbox2d.physics_world;
@@ -22,10 +19,6 @@ mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
 mixin(B2_ARRAY_SOURCE!("b2Sensor", "b2Sensor"));
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
 mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
-
-
-
-
 
 struct b2Shape {
 	int id;
@@ -94,29 +87,6 @@ struct b2SensorOverlaps {
 	b2IntArray overlaps;
 }
 
-void b2CreateShapeProxy(b2Shape* shape, b2BroadPhase* bp, b2BodyType type, b2Transform transform, bool forcePairCreation);
-void b2DestroyShapeProxy(b2Shape* shape, b2BroadPhase* bp);
-
-void b2FreeChainData(b2ChainShape* chain);
-
-b2MassData b2ComputeShapeMass(const(b2Shape)* shape);
-b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter);
-b2AABB b2ComputeShapeAABB(const(b2Shape)* shape, b2Transform transform);
-b2Vec2 b2GetShapeCentroid(const(b2Shape)* shape);
-float b2GetShapePerimeter(const(b2Shape)* shape);
-float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line);
-
-b2ShapeProxy b2MakeShapeDistanceProxy(const(b2Shape)* shape);
-
-b2CastOutput b2RayCastShape(const(b2RayCastInput)* input, const(b2Shape)* shape, b2Transform transform);
-b2CastOutput b2ShapeCastShape(const(b2ShapeCastInput)* input, const(b2Shape)* shape, b2Transform transform);
-
-// b2PlaneResult b2CollideMoverAndCircle(const(b2Capsule)* mover, const(b2Circle)* shape);
-// b2PlaneResult b2CollideMoverAndCapsule(const(b2Capsule)* mover, const(b2Capsule)* shape);
-// b2PlaneResult b2CollideMoverAndPolygon(const(b2Capsule)* mover, const(b2Polygon)* shape);
-// b2PlaneResult b2CollideMoverAndSegment(const(b2Capsule)* mover, const(b2Segment)* shape);
-// b2PlaneResult b2CollideMover(const(b2Capsule)* mover, const(b2Shape)* shape, b2Transform transform);
-
 pragma(inline, true) float b2GetShapeRadius(const(b2Shape)* shape)
 {
 	switch ( shape.type )
@@ -146,12 +116,6 @@ pragma(inline, true) bool b2ShouldQueryCollide(b2Filter shapeFilter, b2QueryFilt
 {
 	return ( shapeFilter.categoryBits & queryFilter.maskBits ) != 0 && ( shapeFilter.maskBits & queryFilter.categoryBits ) != 0;
 }
-
-// alias b2ChainShapeArray = b2ChainShape[];
-// B2_ARRAY_INLINE( b2ChainShape, b2ChainShape )
-
-// alias b2ShapeArray = b2Shape[];
-// B2_ARRAY_INLINE( b2Shape, b2Shape )
 
 b2Shape* b2GetShape(b2World* world, b2ShapeId shapeId)
 {
@@ -762,14 +726,14 @@ float b2GetShapePerimeter(const(b2Shape)* shape)
 	{
 		case b2_capsuleShape:
 			return 2.0f * b2Length( b2Sub( shape.capsule.center1, shape.capsule.center2 ) ) +
-				   2.0f * B2_PI * shape.capsule.radius;
+				   2.0f * PI * shape.capsule.radius;
 		case b2_circleShape:
-			return 2.0f * B2_PI * shape.circle.radius;
+			return 2.0f * PI * shape.circle.radius;
 		case b2_polygonShape:
 		{
 			const(b2Vec2)* points = shape.polygon.vertices.ptr;
 			int count = shape.polygon.count;
-			float perimeter = 2.0f * B2_PI * shape.polygon.radius;
+			float perimeter = 2.0f * PI * shape.polygon.radius;
 			assert( count > 0 );
 			b2Vec2 prev = points[count - 1];
 			for ( int i = 0; i < count; ++i )

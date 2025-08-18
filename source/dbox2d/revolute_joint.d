@@ -135,8 +135,8 @@ float b2RevoluteJoint_GetUpperLimit(b2JointId jointId)
 void b2RevoluteJoint_SetLimits(b2JointId jointId, float lower, float upper)
 {
 	B2_ASSERT( lower <= upper );
-	B2_ASSERT( lower >= -0.99f * B2_PI );
-	B2_ASSERT( upper <= 0.99f * B2_PI );
+	B2_ASSERT( lower >= -0.99f * PI );
+	B2_ASSERT( upper <= 0.99f * PI );
 
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_revoluteJoint );
 	if ( lower != joint.revoluteJoint.lowerAngle || upper != joint.revoluteJoint.upperAngle )
@@ -526,7 +526,7 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	{
 		float jointAngle = b2RelativeAngle( frameA.q, frameB.q );
 		char[32] buffer = void;
-		snprintf( buffer.ptr, 32, " %.1f deg", 180.0f * jointAngle / B2_PI );
+		snprintf( buffer.ptr, 32, " %.1f deg", 180.0f * jointAngle / PI );
 		draw.DrawStringFcn( b2Add( frameA.p, r ), buffer.ptr, b2_colorWhite, draw.context );
 	}
 
