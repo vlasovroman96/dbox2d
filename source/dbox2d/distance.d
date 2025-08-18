@@ -105,7 +105,7 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 
 b2ShapeProxy b2MakeProxy(const(b2Vec2)* points, int count, float radius)
 {
-	count = b2MinInt( count, B2_MAX_POLYGON_VERTICES );
+	count = min( count, B2_MAX_POLYGON_VERTICES );
 	b2ShapeProxy proxy = void;
 	for ( int i = 0; i < count; ++i )
 	{
@@ -118,7 +118,7 @@ b2ShapeProxy b2MakeProxy(const(b2Vec2)* points, int count, float radius)
 
 b2ShapeProxy b2MakeOffsetProxy(const(b2Vec2)* points, int count, float radius, b2Vec2 position, b2Rot rotation)
 {
-	count = b2MinInt( count, B2_MAX_POLYGON_VERTICES );
+	count = min( count, B2_MAX_POLYGON_VERTICES );
 	b2Transform transform = {
 		p: position,
 		q: rotation,

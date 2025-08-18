@@ -415,7 +415,7 @@ b2WorldId b2CreateWorld(b2WorldDef* def)
 
 	if ( def.workerCount > 0 && def.enqueueTask != null && def.finishTask != null )
 	{
-		world.workerCount = b2MinInt( def.workerCount, B2_MAX_WORKERS );
+		world.workerCount = min( def.workerCount, B2_MAX_WORKERS );
 		world.enqueueTaskFcn = *(def.enqueueTask);
 		world.finishTaskFcn = *(def.finishTask);
 		world.userTaskContext = def.userTaskContext;

@@ -666,7 +666,7 @@ int b2Chain_GetSegments(b2ChainId chainId, b2ShapeId* segmentArray, int capacity
 
 	b2ChainShape* chain = b2GetChainShape( world, chainId );
 
-	int count = b2MinInt( chain.count, capacity );
+	int count = min( chain.count, capacity );
 	for ( int i = 0; i < count; ++i )
 	{
 		int shapeId = chain.shapeIndices[i];
@@ -1805,7 +1805,7 @@ int b2Shape_GetSensorData(b2ShapeId shapeId, b2ShapeId* visitorIds, int capacity
 
 	b2Sensor* sensor = b2SensorArray_Get( world.sensors, shape.sensorIndex );
 
-	int count = b2MinInt( cast(int)sensor.overlaps2.count, capacity );
+	int count = min( cast(int)sensor.overlaps2.count, capacity );
 	b2Visitor* refs = sensor.overlaps2.ptr;
 	for ( int i = 0; i < count; ++i )
 	{

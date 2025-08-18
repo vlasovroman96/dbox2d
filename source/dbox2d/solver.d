@@ -1077,7 +1077,7 @@ pragma(inline, true) private int GetWorkerStartIndex(int workerIndex, int blockC
 
 	int blocksPerWorker = blockCount / workerCount;
 	int remainder = blockCount - blocksPerWorker * workerCount;
-	return blocksPerWorker * workerIndex + b2MinInt( remainder, workerIndex );
+	return blocksPerWorker * workerIndex + min( remainder, workerIndex );
 }
 
 private void b2ExecuteStage(b2SolverStage* stage, b2StepContext* context, int previousSyncIndex, int syncIndex, int workerIndex)
