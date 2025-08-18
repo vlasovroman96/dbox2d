@@ -1519,7 +1519,7 @@ private int b2PartitionSAH(int* indices, int* binIndices, b2AABB* boxes, int cou
 		b2Vec2 c = b2AABB_Center( boxes[i] );
 		float[2] cArray = [ c.x, c.y ];
 		int binIndex = cast(int)( binCount * ( cArray[axisIndex] - minC ) * invD );
-		binIndex = b2ClampInt( binIndex, 0, B2_BIN_COUNT - 1 );
+		binIndex = clamp( binIndex, 0, B2_BIN_COUNT - 1 );
 		binIndices[i] = binIndex;
 		bins[binIndex].count += 1;
 		bins[binIndex].aabb = b2AABB_Union( bins[binIndex].aabb, boxes[i] );

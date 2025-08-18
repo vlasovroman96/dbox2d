@@ -106,7 +106,7 @@ struct b2Plane {
 }
 
 /// @return an integer clamped between a lower and upper bound
-int b2ClampInt(int a, int lower, int upper)
+int clamp(int a, int lower, int upper)
 {
 	return a < lower ? lower : ( a > upper ? upper : a );
 }
