@@ -86,6 +86,10 @@ struct b2Transform {
 struct b2Mat22 {
 	/// columns
 	b2Vec2 cx, cy;
+
+	static b2Mat22 zero() {
+		return b2Mat22(b2Vec2(0 ,0), b2Vec2(0 ,0));
+	} 
 }
 
 /// Axis-aligned bounding box
@@ -99,8 +103,6 @@ struct b2Plane {
 	b2Vec2 normal;
 	float offset = 0;
 }
-
-const(b2Mat22) b2Mat22_zero = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };
 
 /// @return the minimum of two integers
 int b2MinInt(int a, int b)
