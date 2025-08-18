@@ -105,12 +105,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/// @return an integer clamped between a lower and upper bound
-int clamp(int a, int lower, int upper)
-{
-	return a < lower ? lower : ( a > upper ? upper : a );
-}
-
 /// @return the minimum of two floats
 float b2MinFloat(float a, float b)
 {
