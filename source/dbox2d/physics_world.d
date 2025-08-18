@@ -2043,7 +2043,7 @@ bool TreeOverlapCallback(int proxyId, ulong userData, void* context)
 	b2DistanceInput input = void;
 	input.proxyA = *worldContext.proxy;
 	input.proxyB = b2MakeShapeDistanceProxy( shape );
-	input.transformA = b2Transform_identity;
+	input.transformA = b2Transform.identity();
 	input.transformB = transform;
 	input.useRadii = true;
 
@@ -2567,7 +2567,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	input.proxyA = b2MakeShapeDistanceProxy( shape );
 	input.proxyB = b2MakeProxy( &explosionContext.position, 1, 0.0f );
 	input.transformA = transform;
-	input.transformB = b2Transform_identity;
+	input.transformB = b2Transform.identity();
 	input.useRadii = true;
 
 	b2SimplexCache cache;

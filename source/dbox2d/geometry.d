@@ -493,8 +493,8 @@ bool b2PointInPolygon(const(b2Polygon)* shape, b2Vec2 point)
 	b2DistanceInput input;
 	input.proxyA = b2MakeProxy( shape.vertices.ptr, shape.count, 0.0f );
 	input.proxyB = b2MakeProxy( &point, 1, 0.0f );
-	input.transformA = b2Transform_identity;
-	input.transformB = b2Transform_identity;
+	input.transformA = b2Transform.identity();
+	input.transformB = b2Transform.identity();
 	input.useRadii = false;
 
 	b2SimplexCache cache;
@@ -885,8 +885,8 @@ b2CastOutput b2RayCastPolygon(const(b2Polygon)* shape, const(b2RayCastInput)* in
 	b2ShapeCastPairInput castInput = void;
 	castInput.proxyA = b2MakeProxy( shape.vertices.ptr, shape.count, shape.radius );
 	castInput.proxyB = b2MakeProxy( &input.origin, 1, 0.0f );
-	castInput.transformA = b2Transform_identity;
-	castInput.transformB = b2Transform_identity;
+	castInput.transformA = b2Transform.identity();
+	castInput.transformB = b2Transform.identity();
 	castInput.translationB = input.translation;
 	castInput.maxFraction = input.maxFraction;
 	castInput.canEncroach = false;
@@ -898,8 +898,8 @@ b2CastOutput b2ShapeCastCircle(const(b2Circle)* shape, const(b2ShapeCastInput)* 
 	b2ShapeCastPairInput pairInput = void;
 	pairInput.proxyA = b2MakeProxy( &shape.center, 1, shape.radius );
 	pairInput.proxyB = input.proxy;
-	pairInput.transformA = b2Transform_identity;
-	pairInput.transformB = b2Transform_identity;
+	pairInput.transformA = b2Transform.identity();
+	pairInput.transformB = b2Transform.identity();
 	pairInput.translationB = input.translation;
 	pairInput.maxFraction = input.maxFraction;
 	pairInput.canEncroach = input.canEncroach;
@@ -913,8 +913,8 @@ b2CastOutput b2ShapeCastCapsule(const(b2Capsule)* shape, const(b2ShapeCastInput)
 	b2ShapeCastPairInput pairInput = void;
 	pairInput.proxyA = b2MakeProxy( &shape.center1, 2, shape.radius );
 	pairInput.proxyB = input.proxy;
-	pairInput.transformA = b2Transform_identity;
-	pairInput.transformB = b2Transform_identity;
+	pairInput.transformA = b2Transform.identity();
+	pairInput.transformB = b2Transform.identity();
 	pairInput.translationB = input.translation;
 	pairInput.maxFraction = input.maxFraction;
 	pairInput.canEncroach = input.canEncroach;
@@ -928,8 +928,8 @@ b2CastOutput b2ShapeCastSegment(const(b2Segment)* shape, const(b2ShapeCastInput)
 	b2ShapeCastPairInput pairInput = void;
 	pairInput.proxyA = b2MakeProxy( &shape.point1, 2, 0.0f );
 	pairInput.proxyB = input.proxy;
-	pairInput.transformA = b2Transform_identity;
-	pairInput.transformB = b2Transform_identity;
+	pairInput.transformA = b2Transform.identity();
+	pairInput.transformB = b2Transform.identity();
 	pairInput.translationB = input.translation;
 	pairInput.maxFraction = input.maxFraction;
 	pairInput.canEncroach = input.canEncroach;
@@ -943,8 +943,8 @@ b2CastOutput b2ShapeCastPolygon(const(b2Polygon)* shape, const(b2ShapeCastInput)
 	b2ShapeCastPairInput pairInput = void;
 	pairInput.proxyA = b2MakeProxy( shape.vertices.ptr, shape.count, shape.radius );
 	pairInput.proxyB = input.proxy;
-	pairInput.transformA = b2Transform_identity;
-	pairInput.transformB = b2Transform_identity;
+	pairInput.transformA = b2Transform.identity();
+	pairInput.transformB = b2Transform.identity();
 	pairInput.translationB = input.translation;
 	pairInput.maxFraction = input.maxFraction;
 	pairInput.canEncroach = input.canEncroach;
@@ -958,8 +958,8 @@ b2PlaneResult b2CollideMoverAndCircle(const(b2Capsule)* mover, const(b2Circle)* 
 	b2DistanceInput distanceInput = void;
 	distanceInput.proxyA = b2MakeProxy( &shape.center, 1, 0.0f );
 	distanceInput.proxyB = b2MakeProxy( &mover.center1, 2, mover.radius );
-	distanceInput.transformA = b2Transform_identity;
-	distanceInput.transformB = b2Transform_identity;
+	distanceInput.transformA = b2Transform.identity();
+	distanceInput.transformB = b2Transform.identity();
 	distanceInput.useRadii = false;
 
 	float totalRadius = mover.radius + shape.radius;
@@ -985,8 +985,8 @@ b2PlaneResult b2CollideMoverAndCapsule(const(b2Capsule)* mover, const(b2Capsule)
 	b2DistanceInput distanceInput = void;
 	distanceInput.proxyA = b2MakeProxy( &shape.center1, 2, 0.0f );
 	distanceInput.proxyB = b2MakeProxy( &mover.center1, 2, mover.radius );
-	distanceInput.transformA = b2Transform_identity;
-	distanceInput.transformB = b2Transform_identity;
+	distanceInput.transformA = b2Transform.identity();
+	distanceInput.transformB = b2Transform.identity();
 	distanceInput.useRadii = false;
 
 	float totalRadius = mover.radius + shape.radius;
@@ -1012,8 +1012,8 @@ b2PlaneResult b2CollideMoverAndPolygon(const(b2Capsule)* mover, const(b2Polygon)
 	b2DistanceInput distanceInput = void;
 	distanceInput.proxyA = b2MakeProxy( shape.vertices.ptr, shape.count, shape.radius );
 	distanceInput.proxyB = b2MakeProxy( &mover.center1, 2, mover.radius );
-	distanceInput.transformA = b2Transform_identity;
-	distanceInput.transformB = b2Transform_identity;
+	distanceInput.transformA = b2Transform.identity();
+	distanceInput.transformB = b2Transform.identity();
 	distanceInput.useRadii = false;
 
 	float totalRadius = mover.radius + shape.radius;
@@ -1039,8 +1039,8 @@ b2PlaneResult b2CollideMoverAndSegment(const(b2Capsule)* mover, const(b2Segment)
 	b2DistanceInput distanceInput = void;
 	distanceInput.proxyA = b2MakeProxy( &shape.point1, 2, 0.0f );
 	distanceInput.proxyB = b2MakeProxy( &mover.center1, 2, mover.radius );
-	distanceInput.transformA = b2Transform_identity;
-	distanceInput.transformB = b2Transform_identity;
+	distanceInput.transformA = b2Transform.identity();
+	distanceInput.transformB = b2Transform.identity();
 	distanceInput.useRadii = false;
 
 	float totalRadius = mover.radius;

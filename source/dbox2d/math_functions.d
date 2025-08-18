@@ -73,6 +73,13 @@ struct b2Rot {
 struct b2Transform {
 	b2Vec2 p;
 	b2Rot q;
+
+	static b2Transform identity() {
+		auto _p = b2Vec2.zero;
+		auto _q = b2Rot.identity;
+
+		return b2Transform(_p, _q);
+	}
 }
 
 /// A 2-by-2 Matrix
@@ -93,7 +100,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-const(b2Transform) b2Transform_identity = { { 0.0f, 0.0f }, { 1.0f, 0.0f } };
 const(b2Mat22) b2Mat22_zero = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };
 
 /// @return the minimum of two integers

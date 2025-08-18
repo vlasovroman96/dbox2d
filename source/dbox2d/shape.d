@@ -1861,7 +1861,7 @@ b2Vec2 b2Shape_GetClosestPoint(b2ShapeId shapeId, b2Vec2 target)
 	input.proxyA = b2MakeShapeDistanceProxy( shape );
 	input.proxyB = b2MakeProxy( &target, 1, 0.0f );
 	input.transformA = transform;
-	input.transformB = b2Transform_identity;
+	input.transformB = b2Transform.identity();
 	input.useRadii = true;
 
 	b2SimplexCache cache = { 0 };

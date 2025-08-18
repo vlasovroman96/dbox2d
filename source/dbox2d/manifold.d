@@ -1379,8 +1379,8 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	b2DistanceInput input = void;
 	input.proxyA = b2MakeProxy( &segmentA.segment.point1, 2, 0.0f );
 	input.proxyB = b2MakeProxy( vertices.ptr, count, 0.0f );
-	input.transformA = b2Transform_identity;
-	input.transformB = b2Transform_identity;
+	input.transformA = b2Transform.identity();
+	input.transformB = b2Transform.identity();
 	input.useRadii = false;
 
 	b2DistanceOutput output = b2ShapeDistance( &input, cache, null, 0 );
