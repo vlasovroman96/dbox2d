@@ -27,7 +27,7 @@ private b2Polygon b2MakeCapsule(b2Vec2 p1, b2Vec2 p2, float radius)
 	b2Vec2 normal = b2RightPerp( axis );
 
 	shape.normals[0] = normal;
-	shape.normals[1] = b2Neg( normal );
+	shape.normals[1] = normal.neg();
 	shape.count = 2;
 	shape.radius = radius;
 
@@ -371,7 +371,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 			else
 			{
 				separationA = s1n;
-				normalA = b2Neg( normalA );
+				normalA = normalA.neg();
 			}
 		}
 
@@ -391,7 +391,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 			else
 			{
 				separationB = s1n;
-				normalB = b2Neg( normalB );
+				normalB = normalB.neg();
 			}
 		}
 
@@ -445,7 +445,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		else
 		{
 			// normal always points from A to B
-			manifold.normal = b2Neg( normalB );
+			manifold.normal = normalB.neg();
 
 			b2Vec2 cp = p1;
 			b2Vec2 cq = q1;
@@ -655,7 +655,7 @@ private b2Manifold b2ClipPolygons(const(b2Polygon)* polyA, const(b2Polygon)* pol
 	}
 	else
 	{
-		manifold.normal = b2Neg( normal );
+		manifold.normal = normal.neg();
 		b2ManifoldPoint* cp = manifold.points.ptr + 0;
 
 		{
@@ -1458,7 +1458,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 				// Use accurate normal
 				normalB = normals[ib];
 
-				b2NormalType type = b2ClassifyNormal( smoothParams, b2Neg( normalB ) );
+				b2NormalType type = b2ClassifyNormal( smoothParams, normalB.neg() );
 				if ( type == b2_normalSkip )
 				{
 					return manifold;
@@ -1500,7 +1500,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 					B2_ASSERT( manifold.pointCount == 0 || manifold.pointCount == 2 );
 					if ( manifold.pointCount == 2 )
 					{
-						manifold.normal = b2RotateVector( xfA.q, b2Neg( normalB ) );
+						manifold.normal = b2RotateVector( xfA.q, normalB.neg() );
 						manifold.points[0].anchorA = b2RotateVector( xfA.q, manifold.points[0].anchorA );
 						manifold.points[1].anchorA = b2RotateVector( xfA.q, manifold.points[1].anchorA );
 						b2Vec2 pAB = b2Sub( xfA.p, xfB.p );
@@ -1593,7 +1593,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 		{
 			b2Vec2 n = normals[i];
 
-			b2NormalType type = b2ClassifyNormal( smoothParams, b2Neg( n ) );
+			b2NormalType type = b2ClassifyNormal( smoothParams, n.neg() );
 			if ( type != b2_normalAdmit )
 			{
 				continue;
@@ -1650,7 +1650,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			if ( manifold.pointCount == 2 )
 			{
 
-				manifold.normal = b2RotateVector( xfA.q, b2Neg( normals[ia1] ) );
+				manifold.normal = b2RotateVector( xfA.q, normals[ia1].neg());
 				manifold.points[0].anchorA = b2RotateVector( xfA.q, manifold.points[0].anchorA );
 				manifold.points[1].anchorA = b2RotateVector( xfA.q, manifold.points[1].anchorA );
 				b2Vec2 pAB = b2Sub( xfA.p, xfB.p );

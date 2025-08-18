@@ -49,6 +49,10 @@ struct b2Vec2 {
 	static b2Vec2 zero() {
 		return b2Vec2(0, 0);
 	}
+
+	auto neg() const {
+		return b2Vec2( -this.x, -this.y );
+	}
 }
 
 /// Cosine and sine pair
@@ -151,12 +155,6 @@ b2Vec2 b2Add( b2Vec2 a, b2Vec2 b )
 b2Vec2 b2Sub( b2Vec2 a, b2Vec2 b )
 {
 	return b2Vec2( a.x - b.x, a.y - b.y );
-}
-
-/// Vector negation
-b2Vec2 b2Neg(b2Vec2 a)
-{
-	return b2Vec2( -a.x, -a.y );
 }
 
 /// Vector linear interpolation

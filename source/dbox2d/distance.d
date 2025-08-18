@@ -279,7 +279,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 		// a2 <= 0, so we clamp it to 0
 		s.v1.a = 1.0f;
 		s.count = 1;
-		return b2Neg( w1 );
+		return w1.neg;
 	}
 
 	// w2 region
@@ -290,7 +290,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 		s.v2.a = 1.0f;
 		s.count = 1;
 		s.v1 = s.v2;
-		return b2Neg( w2 );
+		return w2.neg();
 	}
 
 	// Must be in e12 region.
@@ -349,7 +349,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	{
 		s.v1.a = 1.0f;
 		s.count = 1;
-		return b2Neg( w1 );
+		return w1.neg();
 	}
 
 	// e12
@@ -379,7 +379,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v2.a = 1.0f;
 		s.count = 1;
 		s.v1 = s.v2;
-		return b2Neg( w2 );
+		return w2.neg();
 	}
 
 	// w3 region
@@ -388,7 +388,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v3.a = 1.0f;
 		s.count = 1;
 		s.v1 = s.v3;
-		return b2Neg( w3 );
+		return w3.neg();
 	}
 
 	// e23
@@ -475,7 +475,7 @@ b2DistanceOutput b2ShapeDistance(const(b2DistanceInput)* input, b2SimplexCache* 
 		switch ( simplex.count )
 		{
 			case 1:
-				d = b2Neg( simplex.v1.w );
+				d = simplex.v1.w.neg();
 				break;
 
 			case 2:
@@ -534,7 +534,7 @@ version (NDEBUG) {} else {
 		b2SimplexVertex* vertex = vertices[simplex.count];
 		vertex.indexA = b2FindSupport( proxyA, d );
 		vertex.wA = proxyA.points[vertex.indexA];
-		vertex.indexB = b2FindSupport( &localProxyB, b2Neg( d ) );
+		vertex.indexB = b2FindSupport( &localProxyB, d.neg() );
 		vertex.wB = localProxyB.points[vertex.indexB];
 		vertex.w = b2Sub( vertex.wA, vertex.wB );
 
@@ -772,7 +772,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 	b2Vec2 wA = proxyA.points[0];
 	b2Vec2 wB = proxyB.points[0];
 	b2Vec2 v = b2Sub( wA, wB );
-	b2Vec2 d = b2Neg( v );
+	b2Vec2 d = v.neg();
 
 	// Sigma is the target distance between proxies
 	const(float) linearSlop = B2_LINEAR_SLOP;
@@ -790,7 +790,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 		// Support in direction d (A - B)
 		int indexA = b2FindSupport( &proxyA, d );
 		wA = proxyA.points[indexA];
-		int indexB = b2FindSupport( &proxyB, b2Neg( d ) );
+		int indexB = b2FindSupport( &proxyB, d.neg() );
 		wB = proxyB.points[indexB];
 		b2Vec2 p0 = b2Sub( wA, wB );
 
@@ -841,7 +841,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 		switch ( simplex.count )
 		{
 			case 1:
-				d = b2Neg( simplex.v1.w );
+				d = simplex.v1.w.neg() ;
 				break;
 
 			case 2:
@@ -896,7 +896,7 @@ version (NDEBUG) {} else {
 	b2Vec2 pointA = void, pointB = void;
 	b2ComputeSimplexWitnessPoints( &pointB, &pointA, &simplex );
 
-	b2Vec2 n = b2Normalize( b2Neg( v ) );
+	b2Vec2 n = b2Normalize( v.neg() );
 	b2Vec2 point = { pointA.x + proxyA.radius * n.x, pointA.y + proxyA.radius * n.y };
 
 	output.point = b2TransformPoint( input.transformA, point );
@@ -985,7 +985,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		float s = b2Dot( b2Sub( pointA, pointB ), normal );
 		if ( s < 0.0f )
 		{
-			f.axis = b2Neg( f.axis );
+			f.axis = f.axis.neg();
 		}
 		return f;
 	}
@@ -1008,7 +1008,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 	float s = b2Dot( b2Sub( pointB, pointA ), normal );
 	if ( s < 0.0f )
 	{
-		f.axis = b2Neg( f.axis );
+		f.axis = f.axis.neg();
 	}
 	return f;
 }
@@ -1023,7 +1023,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 		case b2_pointsType:
 		{
 			b2Vec2 axisA = b2InvRotateVector( xfA.q, f.axis );
-			b2Vec2 axisB = b2InvRotateVector( xfB.q, b2Neg( f.axis ) );
+			b2Vec2 axisB = b2InvRotateVector( xfB.q, f.axis.neg());
 
 			*indexA = b2FindSupport( f.proxyA, axisA );
 			*indexB = b2FindSupport( f.proxyB, axisB );
@@ -1043,7 +1043,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
 			b2Vec2 pointA = b2TransformPoint( xfA, f.localPoint );
 
-			b2Vec2 axisB = b2InvRotateVector( xfB.q, b2Neg( normal ) );
+			b2Vec2 axisB = b2InvRotateVector( xfB.q, normal.neg() );
 
 			*indexA = -1;
 			*indexB = b2FindSupport( f.proxyB, axisB );
@@ -1060,7 +1060,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
 			b2Vec2 pointB = b2TransformPoint( xfB, f.localPoint );
 
-			b2Vec2 axisA = b2InvRotateVector( xfA.q, b2Neg( normal ) );
+			b2Vec2 axisA = b2InvRotateVector( xfA.q, normal.neg() );
 
 			*indexB = -1;
 			*indexA = b2FindSupport( f.proxyA, axisA );
