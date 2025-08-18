@@ -1,10 +1,4 @@
 module dbox2d.solver_set;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.array;
 import dbox2d.body;
@@ -13,28 +7,19 @@ import dbox2d.physics_world;
 import dbox2d.joint;
 import dbox2d.contact;
 
-
 import core.stdc.string;
-
 
 mixin(B2_ARRAY_SOURCE!("b2BodyState","b2BodyState"));
 mixin(B2_ARRAY_SOURCE!("b2JointSim","b2JointSim"));
 mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
 mixin(B2_ARRAY_SOURCE!("b2IslandSim","b2IslandSim"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
-
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
 mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
 mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
-
-
-
 
 // This holds solver set data. The following sets are used:
 // - static set for all static bodies and joints between static bodies
@@ -67,21 +52,6 @@ struct b2SolverSet {
 	// Aligns with b2World::solverSetIdPool. Used to create a stable id for body/contact/joint/islands.
 	int setIndex;
 }
-
-void b2DestroySolverSet(b2World* world, int setIndex);
-
-void b2WakeSolverSet(b2World* world, int setIndex);
-void b2TrySleepIsland(b2World* world, int islandId);
-
-// Merge set 2 into set 1 then destroy set 2.
-// Warning: any pointers into these sets will be orphaned.
-void b2MergeSolverSets(b2World* world, int setIndex1, int setIndex2);
-
-void b2TransferBody(b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Body* body);
-void b2TransferJoint(b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Joint* joint);
-
-// alias b2SolverSetArray = b2SolverSet[];
-// B2_ARRAY_INLINE( b2SolverSet, b2SolverSet )
 
 void b2DestroySolverSet(b2World* world, int setIndex)
 {
@@ -689,4 +659,3 @@ void b2TransferJoint(b2World* world, b2SolverSet* targetSet, b2SolverSet* source
 		}
 	}
 }
-

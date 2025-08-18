@@ -1,8 +1,4 @@
 module dbox2d.table;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import core.stdc.stdlib;
 public import core.stdc.stdint;
@@ -17,7 +13,6 @@ auto _SHAPE_KEY(K1, K2) (K1 k1, K2 k2) {
 	return k1 < k2 ? cast(ulong)k1 << 32 | k2 : cast(ulong)k2 << 32 | k1;
 }
 alias B2_SHAPE_PAIR_KEY = _SHAPE_KEY;
-// enum string B2_SHAPE_PAIR_KEY( string K1, string K2 ) = `` ~ K1 ~ ` < ` ~ K2 ~ ` ? cast(ulong)` ~ K1 ~ ` << 32 | cast(ulong)` ~ K2 ~ ` : cast(ulong)` ~ K2 ~ ` << 32 | cast(ulong)` ~ K1 ~ ``;
 
 struct b2SetItem {
 	ulong key;
@@ -29,21 +24,6 @@ struct b2HashSet {
 	uint capacity;
 	uint count;
 }
-
-b2HashSet b2CreateSet(int capacity);
-void b2DestroySet(b2HashSet* set);
-
-void b2ClearSet(b2HashSet* set);
-
-// Returns true if key was already in set
-bool b2AddKey(b2HashSet* set, ulong key);
-
-// Returns true if the key was found
-bool b2RemoveKey(b2HashSet* set, ulong key);
-
-bool b2ContainsKey(const(b2HashSet)* set, ulong key);
-
-int b2GetHashSetBytes(b2HashSet* set);
 
 static if (B2_SNOOP_TABLE_COUNTERS) {
 b2AtomicInt b2_findCount;

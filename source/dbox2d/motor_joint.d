@@ -1,8 +1,4 @@
 module dbox2d.motor_joint;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.body;
 import dbox2d.core;
@@ -408,21 +404,21 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 	stateB.angularVelocity = wB;
 }
 
-version (none) {
-void b2DumpMotorJoint()
-{
-	int indexA = m_bodyA.m_islandIndex;
-	int indexB = m_bodyB.m_islandIndex;
+// version (none) {
+// void b2DumpMotorJoint()
+// {
+// 	int indexA = m_bodyA.m_islandIndex;
+// 	int indexB = m_bodyB.m_islandIndex;
 
-	b2Dump("  b2MotorJointDef jd;\n");
-	b2Dump("  jd.bodyA = sims[%d];\n", indexA);
-	b2Dump("  jd.bodyB = sims[%d];\n", indexB);
-	b2Dump("  jd.collideConnected = bool(%d);\n", m_collideConnected);
-	b2Dump("  jd.localAnchorA.Set(%.9g, %.9g);\n", m_localAnchorA.x, m_localAnchorA.y);
-	b2Dump("  jd.localAnchorB.Set(%.9g, %.9g);\n", m_localAnchorB.x, m_localAnchorB.y);
-	b2Dump("  jd.referenceAngle = %.9g;\n", m_referenceAngle);
-	b2Dump("  jd.stiffness = %.9g;\n", m_stiffness);
-	b2Dump("  jd.damping = %.9g;\n", m_damping);
-	b2Dump("  joints[%d] = m_world->CreateJoint(&jd);\n", m_index);
-}
-}
+// 	b2Dump("  b2MotorJointDef jd;\n");
+// 	b2Dump("  jd.bodyA = sims[%d];\n", indexA);
+// 	b2Dump("  jd.bodyB = sims[%d];\n", indexB);
+// 	b2Dump("  jd.collideConnected = bool(%d);\n", m_collideConnected);
+// 	b2Dump("  jd.localAnchorA.Set(%.9g, %.9g);\n", m_localAnchorA.x, m_localAnchorA.y);
+// 	b2Dump("  jd.localAnchorB.Set(%.9g, %.9g);\n", m_localAnchorB.x, m_localAnchorB.y);
+// 	b2Dump("  jd.referenceAngle = %.9g;\n", m_referenceAngle);
+// 	b2Dump("  jd.stiffness = %.9g;\n", m_stiffness);
+// 	b2Dump("  jd.damping = %.9g;\n", m_damping);
+// 	b2Dump("  joints[%d] = m_world->CreateJoint(&jd);\n", m_index);
+// }
+// }

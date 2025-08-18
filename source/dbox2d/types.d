@@ -1,8 +1,4 @@
 module dbox2d.types;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.base;
 public import dbox2d.collision;
@@ -143,9 +139,6 @@ struct b2WorldDef {
 }
 
 /// Use this to initialize your world definition
-/// @ingroup world
-b2WorldDef b2DefaultWorldDef();
-
 /// The body simulation type.
 /// Each body is one of these three types. The type determines how the body behaves in the simulation.
 /// @ingroup body
@@ -162,11 +155,11 @@ enum b2BodyType : int {
 	/// number of body types
 	b2_bodyTypeCount,
 }
+
 alias b2_staticBody = b2BodyType.b2_staticBody;
 alias b2_kinematicBody = b2BodyType.b2_kinematicBody;
 alias b2_dynamicBody = b2BodyType.b2_dynamicBody;
 alias b2_bodyTypeCount = b2BodyType.b2_bodyTypeCount;
-
 
 /// Motion locks to restrict the body movement
 struct b2MotionLocks {
@@ -255,10 +248,6 @@ struct b2BodyDef {
 	int internalValue;
 }
 
-/// Use this to initialize your body definition
-/// @ingroup body
-b2BodyDef b2DefaultBodyDef();
-
 /// This is used to filter collision on shapes. It affects shape-vs-shape collision
 /// and shape-versus-query collision (such as b2World_CastRay).
 /// @ingroup shape
@@ -295,10 +284,6 @@ struct b2Filter {
 	int groupIndex;
 }
 
-/// Use this to initialize your filter
-/// @ingroup shape
-b2Filter b2DefaultFilter();
-
 /// The query filter is used to filter collisions between queries and shapes. For example,
 /// you may want a ray-cast representing a projectile to hit players and the static environment
 /// but not debris.
@@ -311,10 +296,6 @@ struct b2QueryFilter {
 	/// query would accept for collision.
 	ulong maskBits;
 }
-
-/// Use this to initialize your query filter
-/// @ingroup shape
-b2QueryFilter b2DefaultQueryFilter();
 
 /// Shape type
 /// @ingroup shape
@@ -337,13 +318,13 @@ enum b2ShapeType {
 	/// The number of shape types
 	b2_shapeTypeCount
 }
+
 alias b2_circleShape = b2ShapeType.b2_circleShape;
 alias b2_capsuleShape = b2ShapeType.b2_capsuleShape;
 alias b2_segmentShape = b2ShapeType.b2_segmentShape;
 alias b2_polygonShape = b2ShapeType.b2_polygonShape;
 alias b2_chainSegmentShape = b2ShapeType.b2_chainSegmentShape;
 alias b2_shapeTypeCount = b2ShapeType.b2_shapeTypeCount;
-
 
 /// Surface materials allow chain shapes to have per segment surface properties.
 /// @ingroup shape
@@ -368,10 +349,6 @@ struct b2SurfaceMaterial {
 	/// Custom debug draw color.
 	uint customColor;
 }
-
-/// Use this to initialize your surface material
-/// @ingroup shape
-b2SurfaceMaterial b2DefaultSurfaceMaterial();
 
 /// Used to create a shape.
 /// This is a temporary object used to bundle shape creation parameters. You may use
@@ -428,10 +405,6 @@ struct b2ShapeDef {
 	int internalValue;
 }
 
-/// Use this to initialize your shape definition
-/// @ingroup shape
-b2ShapeDef b2DefaultShapeDef();
-
 /// Used to create a chain of line segments. This is designed to eliminate ghost collisions with some limitations.
 /// - chains are one-sided
 /// - chains have no mass and should be used on static bodies
@@ -477,11 +450,6 @@ struct b2ChainDef {
 	int internalValue;
 }
 
-/// Use this to initialize your chain definition
-/// @ingroup shape
-b2ChainDef b2DefaultChainDef();
-
-//! @cond
 /// Profiling data. Times are in milliseconds.
 struct b2Profile {
 	float step = 0;
@@ -523,7 +491,6 @@ struct b2Counters {
 	int taskCount;
 	int[24] colorCounts;
 }
-//! @endcond
 
 /// Joint type enumeration
 ///
@@ -540,6 +507,7 @@ enum b2JointType {
 	b2_weldJoint,
 	b2_wheelJoint,
 }
+
 alias b2_distanceJoint = b2JointType.b2_distanceJoint;
 alias b2_filterJoint = b2JointType.b2_filterJoint;
 alias b2_motorJoint = b2JointType.b2_motorJoint;
@@ -548,7 +516,6 @@ alias b2_prismaticJoint = b2JointType.b2_prismaticJoint;
 alias b2_revoluteJoint = b2JointType.b2_revoluteJoint;
 alias b2_weldJoint = b2JointType.b2_weldJoint;
 alias b2_wheelJoint = b2JointType.b2_wheelJoint;
-
 
 /// Base joint definition used by all joint types.
 /// The local frames are measured from the body's origin rather than the center of mass because:
@@ -639,10 +606,6 @@ struct b2DistanceJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition
-/// @ingroup distance_joint
-b2DistanceJointDef b2DefaultDistanceJointDef();
-
 /// A motor joint is used to control the relative velocity and or transform between two bodies.
 /// With a velocity of zero this acts like top-down friction.
 /// @ingroup motor_joint
@@ -687,10 +650,6 @@ struct b2MotorJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition
-/// @ingroup motor_joint
-b2MotorJointDef b2DefaultMotorJointDef();
-
 /// A mouse joint is used to make a point on body B track a point on body A.
 /// You may move local frame A to change the target point.
 /// This a soft constraint and allows the constraint to stretch without
@@ -713,10 +672,6 @@ struct b2MouseJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition
-/// @ingroup mouse_joint
-b2MouseJointDef b2DefaultMouseJointDef();
-
 /// A filter joint is used to disable collision between two specific bodies.
 ///
 /// @ingroup filter_joint
@@ -727,10 +682,6 @@ struct b2FilterJointDef {
 	/// Used internally to detect a valid definition. DO NOT SET.
 	int internalValue;
 }
-
-/// Use this to initialize your joint definition
-/// @ingroup filter_joint
-b2FilterJointDef b2DefaultFilterJointDef();
 
 /// Prismatic joint definition
 /// Body B may slide along the x-axis in local frame A. Body B cannot rotate relative to body A.
@@ -775,10 +726,6 @@ struct b2PrismaticJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition
-/// @ingroupd prismatic_joint
-b2PrismaticJointDef b2DefaultPrismaticJointDef();
-
 /// Revolute joint definition
 /// A point on body B is fixed to a point on body A. Allows relative rotation.
 /// @ingroup revolute_joint
@@ -821,10 +768,6 @@ struct b2RevoluteJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition.
-/// @ingroup revolute_joint
-b2RevoluteJointDef b2DefaultRevoluteJointDef();
-
 /// Weld joint definition
 /// Connects two bodies together rigidly. This constraint provides springs to mimic
 /// soft-body simulation.
@@ -849,10 +792,6 @@ struct b2WeldJointDef {
 	/// Used internally to detect a valid definition. DO NOT SET.
 	int internalValue;
 }
-
-/// Use this to initialize your joint definition
-/// @ingroup weld_joint
-b2WeldJointDef b2DefaultWeldJointDef();
 
 /// Wheel joint definition
 /// Body B is a wheel that may rotate freely and slide along the local x-axis in frame A.
@@ -893,10 +832,6 @@ struct b2WheelJointDef {
 	int internalValue;
 }
 
-/// Use this to initialize your joint definition
-/// @ingroup wheel_joint
-b2WheelJointDef b2DefaultWheelJointDef();
-
 /// The explosion definition is used to configure options for explosions. Explosions
 /// consider shape geometry when computing the impulse.
 /// @ingroup world
@@ -918,10 +853,6 @@ struct b2ExplosionDef {
 	/// may be negative for implosions.
 	float impulsePerLength = 0;
 }
-
-/// Use this to initialize your explosion definition
-/// @ingroup world
-b2ExplosionDef b2DefaultExplosionDef();
 
 /**
  * @defgroup events Events
@@ -966,9 +897,6 @@ struct b2SensorEndTouchEvent {
 
 }
 
-alias b2SensorEndTouchEventArray = b2SensorEndTouchEvent[];
-alias b2ContactEndTouchEventArray = b2ContactEndTouchEvent[];
-alias b2JointEventArray = b2JointEvent[];
 /// Sensor events are buffered in the world and are available
 /// as begin/end overlap event arrays after the time step is complete.
 /// Note: these may become invalid if bodies and/or shapes are destroyed
@@ -1081,7 +1009,6 @@ struct b2BodyMoveEvent {
 	bool fellAsleep;
 }
 
-alias b2BodyMoveEventArray = b2BodyMoveEvent[];
 /// Body events are buffered in the Box2D world and are available
 /// as event arrays after the time step is complete.
 /// Note: this data becomes invalid if bodies are destroyed
@@ -1123,8 +1050,6 @@ struct b2ContactData {
 	b2ShapeId shapeIdB;
 	b2Manifold manifold;
 }
-
-/**@}*/
 
 /// Prototype for a contact filter callback.
 /// This is called when a contact pair is considered for collision. This allows you to
@@ -1336,6 +1261,7 @@ enum b2HexColor : uint {
 	b2_colorBox2DGreen = 0x8CC924,
 	b2_colorBox2DYellow = 0xFFEE8C
 }
+
 alias b2_colorAliceBlue = b2HexColor.b2_colorAliceBlue;
 alias b2_colorAntiqueWhite = b2HexColor.b2_colorAntiqueWhite;
 alias b2_colorAqua = b2HexColor.b2_colorAqua;
@@ -1559,11 +1485,6 @@ struct b2DebugDraw {
 	/// User context that is passed as an argument to drawing callback functions
 	void* context;
 }
-
-/// Use this to initialize your drawing interface. This allows you to implement a sub-set
-/// of the drawing functions.
-b2DebugDraw b2DefaultDebugDraw();
-
 
 b2WorldDef b2DefaultWorldDef()
 {

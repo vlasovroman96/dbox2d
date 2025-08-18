@@ -84,13 +84,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/**@}*/
-
-/**
- * @addtogroup math
- * @{
- */
-
 /// https://en.wikipedia.org/wiki/Pi
 enum B2_PI = 3.14159265359f;
 
@@ -98,24 +91,6 @@ const(b2Vec2) b2Vec2_zero = { 0.0f, 0.0f };
 const(b2Rot) b2Rot_identity = { 1.0f, 0.0f };
 const(b2Transform) b2Transform_identity = { { 0.0f, 0.0f }, { 1.0f, 0.0f } };
 const(b2Mat22) b2Mat22_zero = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };
-
-/// Is this a valid number? Not NaN or infinity.
-bool b2IsValidFloat(float a);
-
-/// Is this a valid vector? Not NaN or infinity.
-bool b2IsValidVec2(b2Vec2 v);
-
-/// Is this a valid rotation? Not NaN or infinity. Is normalized.
-bool b2IsValidRotation(b2Rot q);
-
-/// Is this a valid transform? Not NaN or infinity. Rotation is normalized.
-bool b2IsValidTransform(b2Transform t);
-
-/// Is this a valid bounding box? Not Nan or infinity. Upper bound greater than or equal to lower bound.
-// bool b2IsValidAABB(b2AABB aabb);
-
-/// Is this a valid plane? Normal is a unit vector. Not Nan or infinity.
-bool b2IsValidPlane(b2Plane a);
 
 /// @return the minimum of two integers
 int b2MinInt(int a, int b)
@@ -164,16 +139,6 @@ float b2ClampFloat(float a, float lower, float upper)
 {
 	return a < lower ? lower : ( a > upper ? upper : a );
 }
-
-/// Compute an approximate arctangent in the range [-pi, pi]
-/// This is hand coded for cross-platform determinism. The atan2f
-/// function in the standard library is not cross-platform deterministic.
-///	Accurate to around 0.0023 degrees
-float b2Atan2(float y, float x);
-
-/// Compute the cosine and sine of an angle in radians. Implemented
-/// for cross-platform determinism.
-b2CosSin b2ComputeCosSin(float radians);
 
 /// Vector dot product
 float b2Dot(b2Vec2 a, b2Vec2 b)
@@ -683,26 +648,6 @@ float b2SpringDamper(float hertz, float dampingRatio, float position, float velo
 	float omegaH = omega * timeStep;
 	return ( velocity - omega * omegaH * position ) / ( 1.0f + 2.0f * dampingRatio * omegaH + omegaH * omegaH );
 }
-
-/// Box2D bases all length units on meters, but you may need different units for your game.
-/// You can set this value to use different units. This should be done at application startup
-/// and only modified once. Default value is 1.
-/// For example, if your game uses pixels for units you can use pixels for all length values
-/// sent to Box2D. There should be no extra cost. However, Box2D has some internal tolerances
-/// and thresholds that have been tuned for meters. By calling this function, Box2D is able
-/// to adjust those tolerances and thresholds to improve accuracy.
-/// A good rule of thumb is to pass the height of your player character to this function. So
-/// if your player character is 32 pixels high, then pass 32 to this function. Then you may
-/// confidently use pixels for all the length values sent to Box2D. All length values returned
-/// from Box2D will also be pixels because Box2D does not do any scaling internally.
-/// However, you are now on the hook for coming up with good values for gravity, density, and
-/// forces.
-/// @warning This must be modified before any calls to Box2D
-void b2SetLengthUnitsPerMeter(float lengthUnits);
-
-/// Get the current length units per meter.
-float b2GetLengthUnitsPerMeter();
-
 
 bool b2IsValidFloat(float a)
 {

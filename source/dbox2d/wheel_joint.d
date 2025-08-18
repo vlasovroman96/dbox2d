@@ -1,8 +1,4 @@
 module dbox2d.wheel_joint;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.body;
 import dbox2d.core;
@@ -10,8 +6,6 @@ import dbox2d.joint;
 import dbox2d.physics_world;
 import dbox2d.solver;
 import dbox2d.solver_set;
-
-// needed for dll export
 import dbox2d.box2d;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));

@@ -1,11 +1,6 @@
 module dbox2d.solver;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.core;
-
 import dbox2d.ctz;
 public import dbox2d.math_functions;
 import dbox2d.atomic;
@@ -14,7 +9,6 @@ public import core.stdc.stdint;
 import dbox2d.island;
 import dbox2d.constraint_graph;
 import dbox2d.core;
-
 import dbox2d.body;
 import dbox2d.distance;
 import dbox2d.joint;
@@ -28,34 +22,17 @@ import dbox2d.solver_set;
 import dbox2d.timer;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
-// mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
 mixin(B2_ARRAY_SOURCE!("b2Sensor","b2Sensor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2Shape", "b2Shape"));
-// mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2ContactHitEvent","b2ContactHitEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactBeginTouchEvent","b2ContactBeginTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
 mixin(B2_ARRAY_SOURCE!("b2Visitor","b2Visitor"));
-
-
-// mixin(B2_ARRAY_SOURCE!("b2SensorBeginTouchEvent","b2SensorBeginTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));
-
 mixin(B2_ARRAY_SOURCE!("b2TaskContext","b2TaskContext"));
 mixin(B2_ARRAY_SOURCE!("b2JointEvent","b2JointEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorTaskContext","b2SensorTaskContext"));
 mixin(B2_ARRAY_SOURCE!("b2SensorHit","b2SensorHit"));
 mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
-// mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
-
-// mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
 
 struct b2Softness {
 	float biasRate = 0;
@@ -84,7 +61,6 @@ alias b2_stageRelax = b2SolverStageType.b2_stageRelax;
 alias b2_stageRestitution = b2SolverStageType.b2_stageRestitution;
 alias b2_stageStoreImpulses = b2SolverStageType.b2_stageStoreImpulses;
 
-
 enum b2SolverBlockType : short {
 	b2_bodyBlock,
 	b2_jointBlock,
@@ -92,12 +68,12 @@ enum b2SolverBlockType : short {
 	b2_graphJointBlock,
 	b2_graphContactBlock
 }
+
 alias b2_bodyBlock = b2SolverBlockType.b2_bodyBlock;
 alias b2_jointBlock = b2SolverBlockType.b2_jointBlock;
 alias b2_contactBlock = b2SolverBlockType.b2_contactBlock;
 alias b2_graphJointBlock = b2SolverBlockType.b2_graphJointBlock;
 alias b2_graphContactBlock = b2SolverBlockType.b2_graphContactBlock;
-
 
 // Each block of work has a sync index that gets incremented when a worker claims the block. This ensures only a single worker
 // claims a block, yet lets work be distributed dynamically across multiple workers (work stealing). This also reduces contention
@@ -185,7 +161,6 @@ struct b2StepContext {
 	b2AtomicU32 atomicSyncBits;
 
 	char[64] dummy2 = 0;
-
 }
 
 pragma(inline, true) b2Softness b2MakeSoft(float hertz, float zeta, float h)
@@ -243,7 +218,6 @@ pragma(inline, true) void b2Pause()
 			rep;
 			nop;
 		}
-	// __asm__ __volatile__( "pause\n" );
 	}
 
 // extern(C):
@@ -288,8 +262,6 @@ struct b2WorkerContext {
 // Integrate velocities and apply damping
 private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepContext* context)
 {
-	// b2TracyCZoneNC( integrate_velocity, "IntVel", b2_colorDeepPink, true );
-
 	b2BodyState* states = context.states;
 	b2BodySim* sims = context.sims;
 
@@ -363,14 +335,10 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		state.linearVelocity = v;
 		state.angularVelocity = w;
 	}
-
-	// b2TracyCZoneEnd( integrate_velocity );
 }
 
 private void b2PrepareJointsTask(int startIndex, int endIndex, b2StepContext* context)
 {
-	// b2TracyCZoneNC( prepare_joints, "PrepJoints", b2_colorOldLace, true );
-
 	b2JointSim** joints = context.joints;
 
 	for ( int i = startIndex; i < endIndex; ++i )
@@ -378,14 +346,10 @@ private void b2PrepareJointsTask(int startIndex, int endIndex, b2StepContext* co
 		b2JointSim* joint = joints[i];
 		b2PrepareJoint( joint, context );
 	}
-
-	// b2TracyCZoneEnd( prepare_joints );
 }
 
 private void b2WarmStartJointsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex)
 {
-	// b2TracyCZoneNC( warm_joints, "WarmJoints", b2_colorGold, true );
-
 	b2GraphColor* color = context.graph.colors.ptr + colorIndex;
 	b2JointSim* joints = color.jointSims.ptr;
 	B2_ASSERT( 0 <= startIndex && startIndex < color.jointSims.count );
@@ -396,14 +360,10 @@ private void b2WarmStartJointsTask(int startIndex, int endIndex, b2StepContext* 
 		b2JointSim* joint = joints + i;
 		b2WarmStartJoint( joint, context );
 	}
-
-	// b2TracyCZoneEnd( warm_joints );
 }
 
 private void b2SolveJointsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex, bool useBias, int workerIndex)
 {
-	// b2TracyCZoneNC( solve_joints, "SolveJoints", b2_colorLemonChiffon, true );
-
 	b2GraphColor* color = context.graph.colors.ptr + colorIndex;
 	b2JointSim* joints = color.jointSims.ptr;
 	B2_ASSERT( 0 <= startIndex && startIndex < color.jointSims.count );
@@ -430,14 +390,10 @@ private void b2SolveJointsTask(int startIndex, int endIndex, b2StepContext* cont
 			}
 		}
 	}
-
-	// b2TracyCZoneEnd( solve_joints );
 }
 
 private void b2IntegratePositionsTask(int startIndex, int endIndex, b2StepContext* context)
 {
-	// b2TracyCZoneNC( integrate_positions, "IntPos", b2_colorDarkSeaGreen, true );
-
 	b2BodyState* states = context.states;
 	float h = context.h;
 
@@ -465,8 +421,6 @@ private void b2IntegratePositionsTask(int startIndex, int endIndex, b2StepContex
 		state.deltaPosition = b2MulAdd( state.deltaPosition, h, state.linearVelocity );
 		state.deltaRotation = b2IntegrateRotation( state.deltaRotation, h * state.angularVelocity );
 	}
-
-	// b2TracyCZoneEnd( integrate_positions );
 }
 
 enum B2_MAX_CONTINUOUS_SENSOR_HITS = 8;
@@ -690,8 +644,6 @@ version (none) {
 
 private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* taskContext)
 {
-	// b2TracyCZoneNC( ccd, "CCD", b2_colorDarkGoldenRod, true );
-
 	b2SolverSet* awakeSet = b2SolverSetArray_Get( world.solverSets, b2_awakeSet );
 	b2BodySim* fastBodySim = b2BodySimArray_Get( awakeSet.bodySims, bodySimIndex );
 	B2_ASSERT( fastBodySim.flags & b2_isFast );
@@ -847,14 +799,10 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 			b2SensorHitArray_Push( taskContext.sensorHits, context.sensorHits[i] );
 		}
 	}
-
-	// b2TracyCZoneEnd( ccd );
 }
 
 private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex, void* context)
 {
-	// b2TracyCZoneNC( finalize_transfprms, "Transforms", b2_colorMediumSeaGreen, true );
-
 	b2StepContext* stepContext = cast(b2StepContext*)context;
 	b2World* world = stepContext.world;
 	bool enableSleep = world.enableSleep;
@@ -1046,33 +994,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 			shapeId = shape.nextShapeId;
 		}
 	}
-
-	// b2TracyCZoneEnd( finalize_transfprms );
 }
-
-/*
- typedef enum b2SolverStageType
-{
-	b2_stagePrepareJoints,
-	b2_stagePrepareContacts,
-	b2_stageIntegrateVelocities,
-	b2_stageWarmStart,
-	b2_stageSolve,
-	b2_stageIntegratePositions,
-	b2_stageRelax,
-	b2_stageRestitution,
-	b2_stageStoreImpulses
-} b2SolverStageType;
-
-typedef enum b2SolverBlockType
-{
-	b2_bodyBlock,
-	b2_jointBlock,
-	b2_contactBlock,
-	b2_graphJointBlock,
-	b2_graphContactBlock
-} b2SolverBlockType;
-*/
 
 private void b2ExecuteBlock(b2SolverStage* stage, b2StepContext* context, b2SolverBlock* block, int workerIndex)
 {
@@ -1993,9 +1915,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		b2AtomicStoreU32( &stepContext.atomicSyncBits, 0 );
 
 		world.profile.prepareStages = b2GetMillisecondsAndReset( &prepareTicks );
-		// b2TracyCZoneEnd( prepare_stages );
-
-		// b2TracyCZoneNC( solve_constraints, "Solve Constraints", b2_colorIndigo, true );
 		ulong constraintTicks = b2GetTicks();
 
 		// Must use worker index because thread 0 can be assigned multiple tasks by enkiTS
@@ -2031,9 +1950,7 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		}
 
 		world.profile.solveConstraints = b2GetMillisecondsAndReset( &constraintTicks );
-		// b2TracyCZoneEnd( solve_constraints );
 
-		// b2TracyCZoneNC( update_transforms, "Update Transforms", b2_colorMediumSeaGreen, true );
 		ulong transformTicks = b2GetTicks();
 
 		// Prepare contact, enlarged body, and island bit sets used in body finalization.
@@ -2067,12 +1984,10 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		b2FreeArenaItem( &world.arena, contacts );
 
 		world.profile.transforms = b2GetMilliseconds( transformTicks );
-		// b2TracyCZoneEnd( update_transforms );
 	}
 
 	// Report joint events
 	{
-		// b2TracyCZoneNC( joint_events, "Joint Events", b2_colorPeru, true );
 		ulong jointEventTicks = b2GetTicks();
 
 		// Gather bits for all joints that have force/torque events
@@ -2122,14 +2037,12 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		}
 
 		world.profile.jointEvents = b2GetMilliseconds( jointEventTicks );
-		// b2TracyCZoneEnd( joint_events );
 	}
 
 	// Report hit events
 	// todo_erin perhaps optimize this with a bitset
 	// todo_erin perhaps do this in parallel with other work below
 	{
-		// b2TracyCZoneNC( hit_events, "Hit Events", b2_colorRosyBrown, true );
 		ulong hitTicks = b2GetTicks();
 
 		B2_ASSERT( world.contactHitEvents.count == 0 );
@@ -2184,11 +2097,9 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		}
 
 		world.profile.hitEvents = b2GetMilliseconds( hitTicks );
-		// b2TracyCZoneEnd( hit_events );
 	}
 
 	{
-		// b2TracyCZoneNC( refit_bvh, "Refit BVH", b2_colorFireBrick, true );
 		ulong refitTicks = b2GetTicks();
 
 		// Finish the user tree task that was queued earlier in the time step. This must be complete before touching the
@@ -2279,13 +2190,11 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		b2ValidateBroadphase( &world.broadPhase );
 
 		world.profile.refit = b2GetMilliseconds( refitTicks );
-		// b2TracyCZoneEnd( refit_bvh );
 	}
 
 	int bulletBodyCount = b2AtomicLoadInt( &stepContext.bulletBodyCount );
 	if ( bulletBodyCount > 0 )
 	{
-		// b2TracyCZoneNC( bullets, "Bullets", b2_colorLightYellow, true );
 		ulong bulletTicks = b2GetTicks();
 
 		// Fast bullet bodies
@@ -2353,7 +2262,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		}
 
 		world.profile.bullets = b2GetMilliseconds( bulletTicks );
-		// b2TracyCZoneEnd( bullets );
 	}
 
 	// Need to free this even if no bullets got processed.
@@ -2363,7 +2271,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 
 	// Report sensor hits. This may include bullets sensor hits.
 	{
-		// b2TracyCZoneNC( sensor_hits, "Sensor Hits", b2_colorPowderBlue, true );
 		ulong sensorHitTicks = b2GetTicks();
 
 		int workerCount = world.workerCount;
@@ -2391,7 +2298,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		}
 
 		world.profile.sensorHits = b2GetMilliseconds( sensorHitTicks );
-		// b2TracyCZoneEnd( sensor_hits );
 	}
 
 	// Island sleeping
@@ -2399,7 +2305,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 	// todo_erin figure out how to do this in parallel with tree refit
 	if ( world.enableSleep == true )
 	{
-		// b2TracyCZoneNC( sleep_islands, "Island Sleep", b2_colorLightSlateGray, true );
 		ulong sleepTicks = b2GetTicks();
 
 		// Collect split island candidate for the next time step. No need to split if sleeping is disabled.
@@ -2449,7 +2354,6 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		b2ValidateSolverSets( world );
 
 		world.profile.sleepIslands = b2GetMilliseconds( sleepTicks );
-		// b2TracyCZoneEnd( sleep_islands );
 	}
 }
 

@@ -1,9 +1,4 @@
 module dbox2d.mover;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2025 Erin Catto
-// SPDX-License-Identifier: MIT
-
 import dbox2d.constants;
 
 import dbox2d.collision;

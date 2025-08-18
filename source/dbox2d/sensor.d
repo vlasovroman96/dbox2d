@@ -1,8 +1,4 @@
 module dbox2d.sensor;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.array;
 public import dbox2d.bitset;
@@ -15,38 +11,13 @@ import dbox2d.ctz;
 import dbox2d.distance;
 
 import core.stdc.stdlib;
-// import std.algorithm;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
-// mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
-// mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
 mixin(B2_ARRAY_SOURCE!("b2Sensor","b2Sensor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2Shape", "b2Shape"));
-// mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
-// mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactHitEvent","b2ContactHitEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactBeginTouchEvent","b2ContactBeginTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
 mixin(B2_ARRAY_SOURCE!("b2Visitor","b2Visitor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2SensorBeginTouchEvent","b2SensorBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));
-
-// mixin(B2_ARRAY_SOURCE!("b2TaskContext","b2TaskContext"));
-// mixin(B2_ARRAY_SOURCE!("b2JointEvent","b2JointEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorTaskContext","b2SensorTaskContext"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorHit","b2SensorHit"));
-// mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
-// mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
-
-// mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
-
 
 // Used to track shapes that hit sensors using time of impact
 struct b2SensorHit {
@@ -70,22 +41,6 @@ struct b2Sensor {
 struct b2SensorTaskContext {
 	b2BitSet eventBits;
 }
-
-void b2OverlapSensors(b2World* world);
-
-void b2DestroySensor(b2World* world, b2Shape* sensorShape);
-
-// alias b2SensorArray = b2Sensor[];
-// //B2_ARRAY_INLINE( b2Sensor, b2Sensor )
-
-// alias b2SensorHitArray = b2SensorHit[];
-// //B2_ARRAY_INLINE( b2SensorHit, b2SensorHit )
-
-// alias b2SensorTaskContextArray = b2SensorTaskContext[];
-// //B2_ARRAY_INLINE( b2SensorTaskContext, b2SensorTaskContext )
-
-// alias b2VisitorArray = b2Visitor[];
-//B2_ARRAY_INLINE( b2Visitor, b2Visitor )
 
 struct b2SensorQueryContext
 {
@@ -263,16 +218,10 @@ private void b2SensorTask(int startIndex, int endIndex, uint threadIndex, void* 
 		b2DynamicTree_Query( trees + 0, queryBounds, sensorShape.filter.maskBits, &b2SensorQueryCallback, &queryContext );
 		b2DynamicTree_Query( trees + 1, queryBounds, sensorShape.filter.maskBits, &b2SensorQueryCallback, &queryContext );
 		b2DynamicTree_Query( trees + 2, queryBounds, sensorShape.filter.maskBits, &b2SensorQueryCallback, &queryContext );
-
-		// alias cmpV = int function(const void* a, const void* b);
-
-		// cmpV  CmpV = &b2CompareVisitors;
-		// extern(C) 
 		
 		// Sort the overlaps to enable finding begin and end events.
 		qsort( cast(void*)sensor.overlaps2.ptr, cast(size_t)b2Visitor.sizeof, 
 			cast(size_t)sensor.overlaps2.count, &b2CompareVisitors);
-		// extern(D)
 		// Remove duplicates from overlaps2 (sorted). Duplicates are possible due to the hit events appended earlier.
 		int uniqueCount = 0;
 		int overlapCount = cast(int)sensor.overlaps2.count;
@@ -310,8 +259,6 @@ private void b2SensorTask(int startIndex, int endIndex, uint threadIndex, void* 
 			}
 		}
 	}
-
-	// b2TracyCZoneEnd( sensor_task );
 }
 
 void b2OverlapSensors(b2World* world)
@@ -323,8 +270,6 @@ void b2OverlapSensors(b2World* world)
 	}
 
 	B2_ASSERT( world.workerCount > 0 );
-
-	// b2TracyCZoneNC( overlap_sensors, "Sensors", b2_colorMediumPurple, true );
 
 	for ( int i = 0; i < world.workerCount; ++i )
 	{
@@ -339,8 +284,6 @@ void b2OverlapSensors(b2World* world)
 	{
 		world.finishTaskFcn( userSensorTask, world.userTaskContext );
 	}
-
-	// b2TracyCZoneNC( sensor_state, "Events", b2_colorLightSlateGray, true );
 
 	b2BitSet* bitSet = &world.sensorTaskContexts[0].eventBits;
 	for ( int i = 1; i < world.workerCount; ++i )
@@ -447,9 +390,6 @@ void b2OverlapSensors(b2World* world)
 			word = word & ( word - 1 );
 		}
 	}
-
-	// b2TracyCZoneEnd( sensor_state );
-	// b2TracyCZoneEnd( overlap_sensors );
 }
 
 void b2DestroySensor(b2World* world, b2Shape* sensorShape)

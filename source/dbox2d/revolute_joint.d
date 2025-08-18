@@ -1,12 +1,8 @@
 module dbox2d.revolute_joint;
-// @nogc nothrow:
-// extern(C): __gshared:
 
 private template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 static if (HasVersion!"_MSC_VER" && !HasVersion!"_CRT_SECURE_NO_WARNINGS") {
 version = _CRT_SECURE_NO_WARNINGS;
@@ -15,7 +11,6 @@ version = _CRT_SECURE_NO_WARNINGS;
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 
-
 import dbox2d.body;
 import dbox2d.core;
 import dbox2d.joint;
@@ -23,11 +18,9 @@ import dbox2d.physics_world;
 import dbox2d.solver;
 import dbox2d.solver_set;
 import dbox2d.array;
-// needed for dll export
 import dbox2d.box2d;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
-
 
 import core.stdc.stdio;
 

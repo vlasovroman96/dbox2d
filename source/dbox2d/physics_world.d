@@ -1,9 +1,4 @@
 module dbox2d.physics_world;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
-
 public import dbox2d.array;
 import dbox2d.aabb;
 public import dbox2d.bitset;
@@ -34,8 +29,6 @@ mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
 mixin(B2_ARRAY_SOURCE!("b2Sensor","b2Sensor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2Shape", "b2Shape"));
 mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
@@ -43,13 +36,9 @@ mixin(B2_ARRAY_SOURCE!("b2ContactHitEvent","b2ContactHitEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactBeginTouchEvent","b2ContactBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
 mixin(B2_ARRAY_SOURCE!("b2Visitor","b2Visitor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2SensorBeginTouchEvent","b2SensorBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));
-
 mixin(B2_ARRAY_SOURCE!("b2TaskContext","b2TaskContext"));
 mixin(B2_ARRAY_SOURCE!("b2JointEvent","b2JointEvent"));
 mixin(B2_ARRAY_SOURCE!("b2SensorTaskContext","b2SensorTaskContext"));
@@ -57,10 +46,7 @@ mixin(B2_ARRAY_SOURCE!("b2SensorHit","b2SensorHit"));
 mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
-
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
-
-
 
 public import dbox2d.types;
 
@@ -75,7 +61,6 @@ alias b2_staticSet = b2SetType.b2_staticSet;
 alias b2_disabledSet = b2SetType.b2_disabledSet;
 alias b2_awakeSet = b2SetType.b2_awakeSet;
 alias b2_firstSleepingSet = b2SetType.b2_firstSleepingSet;
-
 
 // Per thread task storage
 struct b2TaskContext {
@@ -98,7 +83,6 @@ struct b2TaskContext {
 	// Per worker split island candidate
 	float splitSleepTime = 0;
 	int splitIslandId;
-
 }
 
 // The world struct manages all physics entities, dynamic simulation,  and asynchronous queries.
@@ -245,43 +229,9 @@ struct b2World {
 	bool enableSpeculative;
 	bool inUse;
 }
-
-b2World* b2GetWorldFromId(b2WorldId id);
-b2World* b2GetWorld(int index);
-b2World* b2GetWorldLocked(int index);
-
-void b2ValidateConnectivity(b2World* world);
-void b2ValidateSolverSets(b2World* world);
-void b2ValidateContacts(b2World* world);
-
-import std.container.array;
-
-// B2_ARRAY_INLINE( b2BodyMoveEvent, b2BodyMoveEvent )
-// // B2_ARRAY_INLINE( b2ContactBeginTouchEvent, b2ContactBeginTouchEvent )
-// alias b2ContactBeginTouchEventArray = Array!b2ContactBeginTouchEvent;
-// // B2_ARRAY_INLINE( b2ContactEndTouchEvent, b2ContactEndTouchEvent )
-// // B2_ARRAY_INLINE( b2ContactHitEvent, b2ContactHitEvent )
-// alias b2ContactHitEventArray = Array!b2ContactHitEvent;
-// // B2_ARRAY_INLINE( b2JointEvent, b2JointEvent )
-// // B2_ARRAY_INLINE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent )
-// alias b2SensorBeginTouchEventArray = Array!b2SensorBeginTouchEvent;
-// // B2_ARRAY_INLINE( b2SensorEndTouchEvent, b2SensorEndTouchEvent )
-// // B2_ARRAY_INLINE( b2TaskContext, b2TaskContext )
-// alias b2TaskContextArray = Array!b2ContactBeginTouchEvent;
-
-
-
 static assert( B2_MAX_WORLDS > 0, "must be 1 or more" );
 static assert( B2_MAX_WORLDS < UINT16_MAX, "B2_MAX_WORLDS limit exceeded" );
 b2World[B2_MAX_WORLDS] b2_worlds;
-
-// B2_ARRAY_SOURCE( b2BodyMoveEvent, b2BodyMoveEvent )
-// B2_ARRAY_SOURCE( b2ContactBeginTouchEvent, b2ContactBeginTouchEvent )
-// B2_ARRAY_SOURCE( b2ContactEndTouchEvent, b2ContactEndTouchEvent )
-// B2_ARRAY_SOURCE( b2ContactHitEvent, b2ContactHitEvent )
-// B2_ARRAY_SOURCE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent )
-// B2_ARRAY_SOURCE( b2SensorEndTouchEvent, b2SensorEndTouchEvent )
-// B2_ARRAY_SOURCE( b2TaskContext, b2TaskContext )
 
 b2World* b2GetWorldFromId(b2WorldId id)
 {
@@ -604,8 +554,6 @@ void b2DestroyWorld(b2WorldId worldId)
 
 void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context)
 {
-	// b2TracyCZoneNC( collide_task, "Collide", b2_colorDodgerBlue, true );
-
 	b2StepContext* stepContext = cast(b2StepContext*)context;
 	b2World* world = stepContext.world;
 	assert( cast(int)threadIndex < world.workerCount );
@@ -687,8 +635,6 @@ void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context
 			//}
 		}
 	}
-
-	// b2TracyCZoneEnd( collide_task );
 }
 
 void b2UpdateTreesTask(int startIndex, int endIndex, uint threadIndex, void* context)
@@ -697,12 +643,8 @@ void b2UpdateTreesTask(int startIndex, int endIndex, uint threadIndex, void* con
 	// B2_UNUSED( endIndex );
 	// B2_UNUSED( threadIndex );
 
-	// b2TracyCZoneNC( tree_task, "Rebuild BVH", b2_colorFireBrick, true );
-
 	b2World* world = cast(b2World*)context;
 	b2BroadPhase_RebuildTrees( &world.broadPhase );
-
-	// b2TracyCZoneEnd( tree_task );
 }
 
 void b2AddNonTouchingContact(b2World* world, b2Contact* contact, b2ContactSim* contactSim)
@@ -738,8 +680,6 @@ void b2Collide(b2StepContext* context)
 
 	assert( world.workerCount > 0 );
 
-	// b2TracyCZoneNC( collide, "Narrow Phase", b2_colorDodgerBlue, true );
-
 	// Task that can be done in parallel with the narrow-phase
 	// - rebuild the collision tree for dynamic and kinematic bodies to keep their query performance good
 	// todo_erin move this to start when contacts are being created
@@ -760,7 +700,6 @@ void b2Collide(b2StepContext* context)
 
 	if ( contactCount == 0 )
 	{
-		// b2TracyCZoneEnd( collide );
 		return;
 	}
 
@@ -941,9 +880,6 @@ void b2Collide(b2StepContext* context)
 
 	b2ValidateSolverSets( world );
 	b2ValidateContacts( world );
-
-	// b2TracyCZoneEnd( contact_state );
-	// b2TracyCZoneEnd( collide );
 }
 
 void b2World_Step(b2WorldId worldId, float timeStep, int subStepCount)
@@ -978,8 +914,6 @@ void b2World_Step(b2WorldId worldId, float timeStep, int subStepCount)
 		// todo_erin would be useful to still process collision while paused
 		return;
 	}
-
-	// b2TracyCZoneNC( world_step, "Step", b2_colorBox2DGreen, true );
 
 	world.locked = true;
 	world.activeTaskCount = 0;
@@ -1054,8 +988,6 @@ void b2World_Step(b2WorldId worldId, float timeStep, int subStepCount)
 
 	// Make sure all tasks that were started were also finished
 	assert( world.activeTaskCount == 0 );
-
-	// b2TracyCZoneEnd( world_step );
 
 	// Swap end event array buffers
 	world.endEventArrayIndex = 1 - world.endEventArrayIndex;
@@ -3258,5 +3190,4 @@ version (none) {
 	{
 		// B2_UNUSED( world );
 	}
-
 }

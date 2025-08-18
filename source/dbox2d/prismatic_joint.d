@@ -1,8 +1,4 @@
 module dbox2d.prismatic_joint;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.body;
 import dbox2d.core;
@@ -17,33 +13,19 @@ import dbox2d.island;
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2Shape", "b2Shape"));
-// mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2ContactHitEvent","b2ContactHitEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactBeginTouchEvent","b2ContactBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
-// mixin(B2_ARRAY_SOURCE!("b2Visitor","b2Visitor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2SensorBeginTouchEvent","b2SensorBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));
-
 mixin(B2_ARRAY_SOURCE!("b2TaskContext","b2TaskContext"));
 mixin(B2_ARRAY_SOURCE!("b2JointEvent","b2JointEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorTaskContext","b2SensorTaskContext"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorHit","b2SensorHit"));
 mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
-
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
-// needed for dll export
-// import box2d.box2d;
 
 import core.stdc.stdio;
 
