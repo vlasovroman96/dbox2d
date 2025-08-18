@@ -278,7 +278,7 @@ void b2PrepareDistanceJoint(b2JointSim* base, b2StepContext* context)
 
 	b2Vec2 rA = joint.anchorA;
 	b2Vec2 rB = joint.anchorB;
-	b2Vec2 separation = b2Add( b2Sub( rB, rA ), joint.deltaCenter );
+	b2Vec2 separation = b2Sub( rB, rA ) + joint.deltaCenter;
 	b2Vec2 axis = b2Normalize( separation );
 
 	// compute effective mass
@@ -317,8 +317,8 @@ void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.anchorA );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.anchorB );
 
-	b2Vec2 ds = b2Add( b2Sub( stateB.deltaPosition, stateA.deltaPosition ), b2Sub( rB, rA ) );
-	b2Vec2 separation = b2Add( joint.deltaCenter, ds );
+	b2Vec2 ds = b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + b2Sub( rB, rA );
+	b2Vec2 separation = joint.deltaCenter + ds;
 	b2Vec2 axis = b2Normalize( separation );
 
 	float axialImpulse = joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse;
@@ -356,8 +356,8 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.anchorB );
 
 	// current separation
-	b2Vec2 ds = b2Add( b2Sub( stateB.deltaPosition, stateA.deltaPosition ), b2Sub( rB, rA ) );
-	b2Vec2 separation = b2Add( joint.deltaCenter, ds );
+	b2Vec2 ds = b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + b2Sub( rB, rA );
+	b2Vec2 separation = joint.deltaCenter + ds;
 
 	float length = b2Length( separation );
 	b2Vec2 axis = b2Normalize( separation );
@@ -371,7 +371,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		if ( joint.hertz > 0.0f )
 		{
 			// Cdot = dot(u, v + cross(w, r))
-			b2Vec2 vr = b2Add( b2Sub( vB, vA ), b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) ) );
+			b2Vec2 vr = b2Sub( vB, vA ) + b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) );
 			float Cdot = b2Dot( axis, vr );
 			float C = length - joint.length;
 			float bias = joint.distanceSoftness.biasRate * C;
@@ -395,7 +395,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		{
 			// lower limit
 			{
-				b2Vec2 vr = b2Add( b2Sub( vB, vA ), b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) ) );
+				b2Vec2 vr = b2Sub( vB, vA ) + b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) );
 				float Cdot = b2Dot( axis, vr );
 
 				float C = length - joint.minLength;
@@ -429,7 +429,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 			// upper
 			{
-				b2Vec2 vr = b2Add( b2Sub( vA, vB ), b2Sub( b2CrossSV( wA, rA ), b2CrossSV( wB, rB ) ) );
+				b2Vec2 vr = b2Sub( vA, vB ) + b2Sub( b2CrossSV( wA, rA ), b2CrossSV( wB, rB ) );
 				float Cdot = b2Dot( axis, vr );
 
 				float C = joint.maxLength - length;
@@ -464,7 +464,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 		if ( joint.enableMotor )
 		{
-			b2Vec2 vr = b2Add( b2Sub( vB, vA ), b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) ) );
+			b2Vec2 vr = b2Sub( vB, vA ) + b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) );
 			float Cdot = b2Dot( axis, vr );
 			float impulse = joint.axialMass * ( joint.motorSpeed - Cdot );
 			float oldImpulse = joint.motorImpulse;
@@ -482,7 +482,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	else
 	{
 		// rigid constraint
-		b2Vec2 vr = b2Add( b2Sub( vB, vA ), b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) ) );
+		b2Vec2 vr = b2Sub( vB, vA ) + b2Sub( b2CrossSV( wB, rB ), b2CrossSV( wA, rA ) );
 		float Cdot = b2Dot( axis, vr );
 
 		float C = length - joint.length;
@@ -555,13 +555,13 @@ void b2DrawDistanceJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 		if ( joint.minLength > B2_LINEAR_SLOP )
 		{
 			// draw->DrawPoint(pMin, 4.0f, c2, draw->context);
-			draw.DrawSegmentFcn( b2Sub( pMin, offset ), b2Add( pMin, offset ), b2_colorLightGreen, draw.context );
+			draw.DrawSegmentFcn( b2Sub( pMin, offset ), pMin + offset, b2_colorLightGreen, draw.context );
 		}
 
 		if ( joint.maxLength < B2_HUGE )
 		{
 			// draw->DrawPoint(pMax, 4.0f, c3, draw->context);
-			draw.DrawSegmentFcn( b2Sub( pMax, offset ), b2Add( pMax, offset ), b2_colorRed, draw.context );
+			draw.DrawSegmentFcn( b2Sub( pMax, offset ), pMax + offset, b2_colorRed, draw.context );
 		}
 
 		if ( joint.minLength > B2_LINEAR_SLOP && joint.maxLength < B2_HUGE )

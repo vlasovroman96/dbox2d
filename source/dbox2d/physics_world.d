@@ -2433,7 +2433,7 @@ void b2World_CollideMover(b2WorldId worldId, const(b2Capsule)* mover, b2QueryFil
 
 	b2AABB aabb = void;
 	aabb.lowerBound = b2Sub( b2Min( mover.center1, mover.center2 ), r );
-	aabb.upperBound = b2Add( b2Max( mover.center1, mover.center2 ), r );
+	aabb.upperBound = b2Max( mover.center1, mover.center2 ) + r;
 
 	WorldMoverContext worldContext = {
 		world, fcn, filter, *mover, context,

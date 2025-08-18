@@ -1211,7 +1211,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		case b2_motorJoint:
 		{
 			b2MotorJoint* joint = &sim.motorJoint;
-			linearImpulse = b2Length( b2Add(joint.linearVelocityImpulse, joint.linearSpringImpulse) );
+			linearImpulse = b2Length( joint.linearVelocityImpulse + joint.linearSpringImpulse );
 			angularImpulse = abs( joint.angularVelocityImpulse + joint.angularSpringImpulse );
 		}
 		break;

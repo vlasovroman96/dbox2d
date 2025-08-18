@@ -296,7 +296,7 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		float gravityScale = sim.invMass > 0.0f ? sim.gravityScale : 0.0f;
 
 		// lvd = h * im * f + h * g
-		b2Vec2 linearVelocityDelta = b2Add( b2MulSV( h * sim.invMass, sim.force ), b2MulSV( h * gravityScale, gravity ) );
+		b2Vec2 linearVelocityDelta = b2MulSV( h * sim.invMass, sim.force ) + b2MulSV( h * gravityScale, gravity );
 		float angularVelocityDelta = h * sim.invInertia * sim.torque;
 
 		v = b2MulAdd( linearVelocityDelta, linearDamping, v );
@@ -856,7 +856,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		B2_ASSERT( b2IsValidVec2( v ) );
 		B2_ASSERT( b2IsValidFloat( w ) );
 
-		sim.center = b2Add( sim.center, state.deltaPosition );
+		sim.center = sim.center + state.deltaPosition;
 		sim.transform.q = b2NormalizeRot( b2MulRot( state.deltaRotation, sim.transform.q ) );
 
 		// Use the velocity of the farthest point on the body to account for rotation.

@@ -13,7 +13,7 @@ b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 {
 	// https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/
 	b2Transform xf = void;
-	xf.p = b2Add( b2MulSV( 1.0f - time, sweep.c1 ), b2MulSV( time, sweep.c2 ) );
+	xf.p = b2MulSV( 1.0f - time, sweep.c1 ) + b2MulSV( time, sweep.c2 );
 
 	b2Rot q = {
 		( 1.0f - time ) * sweep.q1.c + time * sweep.q2.c,
@@ -298,7 +298,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 	s.v1.a = d12_1 * inv_d12;
 	s.v2.a = d12_2 * inv_d12;
 	s.count = 2;
-	return b2CrossSV( b2Cross( b2Add( w1, w2 ), e12 ), e12 );
+	return b2CrossSV( b2Cross( w1 + w2, e12 ), e12 );
 }
 
 private b2Vec2 b2SolveSimplex3(b2Simplex* s)
@@ -359,7 +359,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v1.a = d12_1 * inv_d12;
 		s.v2.a = d12_2 * inv_d12;
 		s.count = 2;
-		return b2CrossSV( b2Cross( b2Add( w1, w2 ), e12 ), e12 );
+		return b2CrossSV( b2Cross( w1 + w2, e12 ), e12 );
 	}
 
 	// e13
@@ -370,7 +370,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v3.a = d13_2 * inv_d13;
 		s.count = 2;
 		s.v2 = s.v3;
-		return b2CrossSV( b2Cross( b2Add( w1, w3 ), e13 ), e13 );
+		return b2CrossSV( b2Cross( w1 + w3, e13 ), e13 );
 	}
 
 	// w2 region
@@ -399,7 +399,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v3.a = d23_2 * inv_d23;
 		s.count = 2;
 		s.v1 = s.v3;
-		return b2CrossSV( b2Cross( b2Add( w2, w3 ), e23 ), e23 );
+		return b2CrossSV( b2Cross( w2 + w3, e23 ), e23 );
 	}
 
 	// Must be in triangle123
@@ -1150,7 +1150,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 
 	// todo_erin
 	// c1 can be at the origin yet the points are far away
-	// b2Vec2 origin = b2Add(sweepA.c1, input->proxyA.points[0]);
+	// b2Vec2 origin = sweepA.c1 + input->proxyA.points[0];
 
 	const(b2ShapeProxy)* proxyA = &input.proxyA;
 	const(b2ShapeProxy)* proxyB = &input.proxyB;

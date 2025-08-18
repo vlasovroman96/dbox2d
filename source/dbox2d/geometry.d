@@ -40,7 +40,7 @@ b2Vec2 b2ComputePolygonCentroid(const(b2Vec2)* vertices, int count)
 		float a = 0.5f * b2Cross( e1, e2 );
 
 		// Area weighted centroid
-		center = b2MulAdd( center, a * inv3, b2Add( e1, e2 ) );
+		center = b2MulAdd( center, a * inv3, e1 + e2 );
 		area += a;
 	}
 
@@ -50,7 +50,7 @@ b2Vec2 b2ComputePolygonCentroid(const(b2Vec2)* vertices, int count)
 	center.y *= invArea;
 
 	// Restore offset
-	center = b2Add( origin, center );
+	center = origin + center;
 
 	return center;
 }
@@ -331,7 +331,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 			b2Vec2 n1 = shape.normals[j];
 			b2Vec2 n2 = shape.normals[i];
 
-			b2Vec2 mid = b2Normalize( b2Add( n1, n2 ) );
+			b2Vec2 mid = b2Normalize( n1 + n2 );
 			vertices[i] = b2MulAdd( shape.vertices[i], sqrt2 * radius, mid );
 		}
 	}
@@ -365,7 +365,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 		area += triangleArea;
 
 		// Area weighted centroid, r at origin
-		center = b2MulAdd( center, triangleArea * inv3, b2Add( e1, e2 ) );
+		center = b2MulAdd( center, triangleArea * inv3, e1 + e2 );
 
 		float ex1 = e1.x, ey1 = e1.y;
 		float ex2 = e2.x, ey2 = e2.y;
@@ -386,7 +386,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 	float invArea = 1.0f / area;
 	center.x *= invArea;
 	center.y *= invArea;
-	massData.center = b2Add( r, center );
+	massData.center = r + center;
 
 	// Inertia tensor relative to the local origin (point s).
 	massData.rotationalInertia = density * rotationalInertia;
@@ -416,7 +416,7 @@ b2AABB b2ComputeCapsuleAABB(const(b2Capsule)* shape, b2Transform xf)
 
 	b2Vec2 r = { shape.radius, shape.radius };
 	b2Vec2 lower = b2Sub( b2Min( v1, v2 ), r );
-	b2Vec2 upper = b2Add( b2Max( v1, v2 ), r );
+	b2Vec2 upper = b2Max( v1, v2 ) + r;
 
 	b2AABB aabb = { lower, upper };
 	return aabb;
@@ -437,7 +437,7 @@ b2AABB b2ComputePolygonAABB(const(b2Polygon)* shape, b2Transform xf)
 
 	b2Vec2 r = { shape.radius, shape.radius };
 	lower = b2Sub( lower, r );
-	upper = b2Add( upper, r );
+	upper = upper + r;
 
 	b2AABB aabb = { lower, upper };
 	return aabb;
@@ -710,7 +710,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	{
 		// ray hits capsule side
 		output.fraction = s2 / rayLength;
-		output.point = b2Add( b2Lerp( v1, v2, s1 / capsuleLength ), b2MulSV( shape.radius, n ) );
+		output.point = b2Lerp( v1, v2, s1 / capsuleLength ) + b2MulSV( shape.radius, n );
 		output.normal = n;
 		output.hit = true;
 		return output;

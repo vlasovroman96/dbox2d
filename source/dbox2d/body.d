@@ -847,7 +847,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 	if ( state != null )
 	{
 		b2Vec2 deltaLinear = b2CrossSV( state.angularVelocity, b2Sub( bodySim.center, oldCenter ) );
-		state.linearVelocity = b2Add( state.linearVelocity, deltaLinear );
+		state.linearVelocity = state.linearVelocity + deltaLinear;
 	}
 
 	// Compute body extents relative to center of mass
@@ -1111,7 +1111,7 @@ b2Vec2 b2Body_GetLocalPointVelocity(b2BodyId bodyId, b2Vec2 localPoint)
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, body.localIndex );
 
 	b2Vec2 r = b2RotateVector( bodySim.transform.q, b2Sub( localPoint, bodySim.localCenter ) );
-	b2Vec2 v = b2Add( state.linearVelocity, b2CrossSV( state.angularVelocity, r ) );
+	b2Vec2 v = state.linearVelocity + b2CrossSV( state.angularVelocity, r ) ;
 	return v;
 }
 
@@ -1129,7 +1129,7 @@ b2Vec2 b2Body_GetWorldPointVelocity(b2BodyId bodyId, b2Vec2 worldPoint)
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, body.localIndex );
 
 	b2Vec2 r = b2Sub( worldPoint, bodySim.center );
-	b2Vec2 v = b2Add( state.linearVelocity, b2CrossSV( state.angularVelocity, r ) );
+	b2Vec2 v = state.linearVelocity + b2CrossSV( state.angularVelocity, r ) ;
 	return v;
 }
 
@@ -1151,7 +1151,7 @@ void b2Body_ApplyForce(b2BodyId bodyId, b2Vec2 force, b2Vec2 point, bool wake)
 	if ( body.setIndex == b2_awakeSet )
 	{
 		b2BodySim* bodySim = b2GetBodySim( world, body );
-		bodySim.force = b2Add( bodySim.force, force );
+		bodySim.force = bodySim.force + force;
 		bodySim.torque += b2Cross( b2Sub( point, bodySim.center ), force );
 	}
 }
@@ -1174,7 +1174,7 @@ void b2Body_ApplyForceToCenter(b2BodyId bodyId, b2Vec2 force, bool wake)
 	if ( body.setIndex == b2_awakeSet )
 	{
 		b2BodySim* bodySim = b2GetBodySim( world, body );
-		bodySim.force = b2Add( bodySim.force, force );
+		bodySim.force = bodySim.force + force;
 	}
 }
 

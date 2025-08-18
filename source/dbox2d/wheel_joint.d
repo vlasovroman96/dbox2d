@@ -159,7 +159,7 @@ b2Vec2 b2GetWheelJointForce(b2World* world, b2JointSim* base)
 	float perpForce = world.inv_h * joint.perpImpulse;
 	float axialForce = world.inv_h * ( joint.springImpulse + joint.lowerImpulse - joint.upperImpulse );
 
-	b2Vec2 force = b2Add( b2MulSV( perpForce, perpA ), b2MulSV( axialForce, axisA ) );
+	b2Vec2 force = b2MulSV( perpForce, perpA ) + b2MulSV( axialForce, axisA );
 	return force;
 }
 
@@ -234,19 +234,19 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = joint.frameA.p;
 	b2Vec2 rB = joint.frameB.p;
 
-	b2Vec2 d = b2Add( joint.deltaCenter, b2Sub( rB, rA ) );
+	b2Vec2 d = joint.deltaCenter + b2Sub( rB, rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	b2Vec2 perpA = b2LeftPerp( axisA );
 
 	// perpendicular constraint (keep wheel on line)
-	float s1 = b2Cross( b2Add( d, rA ), perpA );
+	float s1 = b2Cross( d + rA, perpA );
 	float s2 = b2Cross( rB, perpA );
 
 	float kp = mA + mB + iA * s1 * s1 + iB * s2 * s2;
 	joint.perpMass = kp > 0.0f ? 1.0f / kp : 0.0f;
 
 	// spring constraint
-	float a1 = b2Cross( b2Add( d, rA ), axisA );
+	float a1 = b2Cross( d + rA, axisA );
 	float a2 = b2Cross( rB, axisA );
 
 	float ka = mA + mB + iA * a1 * a1 + iB * a2 * a2;
@@ -287,19 +287,19 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-	b2Vec2 d = b2Add( b2Add( b2Sub( stateB.deltaPosition, stateA.deltaPosition ), joint.deltaCenter ), b2Sub( rB, rA ) );
+	b2Vec2 d = ( b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + joint.deltaCenter ) + b2Sub( rB, rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
 	b2Vec2 perpA = b2LeftPerp( axisA );
 
-	float a1 = b2Cross( b2Add( d, rA ), axisA );
+	float a1 = b2Cross( d + rA, axisA );
 	float a2 = b2Cross( rB, axisA );
-	float s1 = b2Cross( b2Add( d, rA ), perpA );
+	float s1 = b2Cross( d + rA, perpA );
 	float s2 = b2Cross( rB, perpA );
 
 	float axialImpulse = joint.springImpulse + joint.lowerImpulse - joint.upperImpulse;
 
-	b2Vec2 P = b2Add( b2MulSV( axialImpulse, axisA ), b2MulSV( joint.perpImpulse, perpA ) );
+	b2Vec2 P = b2MulSV( axialImpulse, axisA ) + b2MulSV( joint.perpImpulse, perpA );
 	float LA = axialImpulse * a1 + joint.perpImpulse * s1 + joint.motorImpulse;
 	float LB = axialImpulse * a2 + joint.perpImpulse * s2 + joint.motorImpulse;
 
@@ -337,12 +337,12 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-	b2Vec2 d = b2Add( b2Add( b2Sub( stateB.deltaPosition, stateA.deltaPosition ), joint.deltaCenter ), b2Sub( rB, rA ) );
+	b2Vec2 d = ( b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + joint.deltaCenter ) + b2Sub( rB, rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
 	float translation = b2Dot( axisA, d );
 
-	float a1 = b2Cross( b2Add( d, rA ), axisA );
+	float a1 = b2Cross( d + rA, axisA );
 	float a2 = b2Cross( rB, axisA );
 
 	// motor constraint
@@ -475,7 +475,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			impulseScale = base.constraintSoftness.impulseScale;
 		}
 
-		float s1 = b2Cross( b2Add( d, rA ), perpA );
+		float s1 = b2Cross( d + rA, perpA );
 		float s2 = b2Cross( rB, perpA );
 		float Cdot = b2Dot( perpA, b2Sub( vB, vA ) ) + s2 * wB - s1 * wA;
 

@@ -1344,7 +1344,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 	b2Vec2 radius = { input.proxy.radius, input.proxy.radius };
 
 	originAABB.lowerBound = b2Sub( originAABB.lowerBound, radius );
-	originAABB.upperBound = b2Add( originAABB.upperBound, radius );
+	originAABB.upperBound = originAABB.upperBound + radius;
 
 	b2Vec2 p1 = b2AABB_Center( originAABB );
 	b2Vec2 extension = b2AABB_Extents( originAABB );
@@ -1362,8 +1362,8 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 	// Build total box for the shape cast
 	b2Vec2 t = b2MulSV( maxFraction, input.translation );
 	b2AABB totalAABB = {
-		b2Min( originAABB.lowerBound, b2Add( originAABB.lowerBound, t ) ),
-		b2Max( originAABB.upperBound, b2Add( originAABB.upperBound, t ) ),
+		b2Min( originAABB.lowerBound, originAABB.lowerBound + t ),
+		b2Max( originAABB.upperBound, originAABB.upperBound + t ),
 	};
 
 	b2ShapeCastInput subInput = *input;
@@ -1395,7 +1395,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 		// |dot(v, p1 - c)| > dot(|v|, h)
 		// radius extension is added to the node in this case
 		b2Vec2 c = b2AABB_Center( node.aabb );
-		b2Vec2 h = b2Add( b2AABB_Extents( node.aabb ), extension );
+		b2Vec2 h = b2AABB_Extents( node.aabb ) + extension;
 		float term1 = abs( b2Dot( v, b2Sub( p1, c ) ) );
 		float term2 = b2Dot( abs_v, h );
 		if ( term2 < term1 )
@@ -1421,8 +1421,8 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 				// Update segment bounding box.
 				maxFraction = value;
 				t = b2MulSV( maxFraction, input.translation );
-				totalAABB.lowerBound = b2Min( originAABB.lowerBound, b2Add( originAABB.lowerBound, t ) );
-				totalAABB.upperBound = b2Max( originAABB.upperBound, b2Add( originAABB.upperBound, t ) );
+				totalAABB.lowerBound = b2Min( originAABB.lowerBound, originAABB.lowerBound + t );
+				totalAABB.upperBound = b2Max( originAABB.upperBound, originAABB.upperBound + t );
 			}
 		}
 		else

@@ -439,7 +439,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 		b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-		b2Vec2 Cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
+		b2Vec2 Cdot = b2Sub( (vB + b2CrossSV( wB, rB )), (vA + b2CrossSV( wA, rA)) );
 
 		b2Vec2 bias = b2Vec2.zero();
 		float massScale = 1.0f;
@@ -449,7 +449,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			b2Vec2 dcA = stateA.deltaPosition;
 			b2Vec2 dcB = stateB.deltaPosition;
 
-			b2Vec2 separation = b2Add( b2Add( b2Sub( dcB, dcA ), b2Sub( rB, rA ) ), joint.deltaCenter );
+			b2Vec2 separation = (b2Sub( dcB, dcA ) + b2Sub( rB, rA ) ) + joint.deltaCenter;
 			bias = b2MulSV( base.constraintSoftness.biasRate, separation );
 			massScale = base.constraintSoftness.massScale;
 			impulseScale = base.constraintSoftness.impulseScale;
@@ -460,7 +460,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		K.cy.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
 		K.cx.y = K.cy.x;
 		K.cy.y = mA + mB + rA.x * rA.x * iA + rB.x * rB.x * iB;
-		b2Vec2 b = b2Solve22( K, b2Add( Cdot, bias ) );
+		b2Vec2 b = b2Solve22( K, Cdot + bias );
 
 		b2Vec2 impulse = void;
 		impulse.x = -massScale * b.x - impulseScale * joint.linearImpulse.x;
@@ -517,17 +517,17 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 
 	b2Vec2 rx = { radius, 0.0f };
 	b2Vec2 r = b2RotateVector( frameA.q, rx );
-	draw.DrawSegmentFcn( frameA.p, b2Add( frameA.p, r ), b2_colorGray, draw.context );
+	draw.DrawSegmentFcn( frameA.p, frameA.p + r, b2_colorGray, draw.context );
 
 	r = b2RotateVector( frameB.q, rx );
-	draw.DrawSegmentFcn( frameB.p, b2Add( frameB.p, r ), b2_colorBlue, draw.context );
+	draw.DrawSegmentFcn( frameB.p, frameB.p + r, b2_colorBlue, draw.context );
 
 	if ( draw.drawJointExtras )
 	{
 		float jointAngle = b2RelativeAngle( frameA.q, frameB.q );
 		char[32] buffer = void;
 		snprintf( buffer.ptr, 32, " %.1f deg", 180.0f * jointAngle / PI );
-		draw.DrawStringFcn( b2Add( frameA.p, r ), buffer.ptr, b2_colorWhite, draw.context );
+		draw.DrawStringFcn( frameA.p + r, buffer.ptr, b2_colorWhite, draw.context );
 	}
 
 	float lowerAngle = joint.lowerAngle;
@@ -541,15 +541,15 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 		b2Rot rotHi = b2MulRot( frameA.q, b2MakeRot( upperAngle ) );
 		b2Vec2 rhi = b2RotateVector( rotHi, rx );
 
-		draw.DrawSegmentFcn( frameB.p, b2Add( frameB.p, rlo ), b2_colorGreen, draw.context );
-		draw.DrawSegmentFcn( frameB.p, b2Add( frameB.p, rhi ), b2_colorRed, draw.context );
+		draw.DrawSegmentFcn( frameB.p, frameB.p + rlo, b2_colorGreen, draw.context );
+		draw.DrawSegmentFcn( frameB.p, frameB.p + rhi, b2_colorRed, draw.context );
 	}
 
 	if ( joint.enableSpring )
 	{
 		b2Rot q = b2MulRot( frameA.q, b2MakeRot( joint.targetAngle ) );
 		b2Vec2 v = b2RotateVector( q, rx );
-		draw.DrawSegmentFcn( frameB.p, b2Add( frameB.p, v ), b2_colorViolet, draw.context );
+		draw.DrawSegmentFcn( frameB.p, frameB.p + v, b2_colorViolet, draw.context );
 	}
 
 	b2HexColor color = b2_colorGold;

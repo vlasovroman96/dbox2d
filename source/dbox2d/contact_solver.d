@@ -162,8 +162,8 @@ static if (B2_VALIDATE) {
 			cp.tangentMass = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 			// Save relative velocity for restitution
-			b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
-			b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
+			b2Vec2 vrA = vA + b2CrossSV( wA, rA );
+			b2Vec2 vrB = vB + b2CrossSV( wB, rB );
 			cp.relativeVelocity = b2Dot( normal, b2Sub( vrB, vrA ) );
 		}
 	}
@@ -217,7 +217,7 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 			b2Vec2 rA = cp.anchorA;
 			b2Vec2 rB = cp.anchorB;
 
-			b2Vec2 P = b2Add( b2MulSV( cp.normalImpulse, normal ), b2MulSV( cp.tangentImpulse, tangent ) );
+			b2Vec2 P = b2MulSV( cp.normalImpulse, normal ) + b2MulSV( cp.tangentImpulse, tangent );
 			wA -= iA * b2Cross( rA, P );
 			vA = b2MulAdd( vA, -mA, P );
 			wB += iB * b2Cross( rB, P );
@@ -293,7 +293,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 
 			// compute current separation
 			// this is subject to round-off error if the anchor is far from the body center of mass
-			b2Vec2 ds = b2Add( dp, b2Sub( b2RotateVector( dqB, rB ), b2RotateVector( dqA, rA ) ) );
+			b2Vec2 ds = dp + b2Sub( b2RotateVector( dqB, rB ), b2RotateVector( dqA, rA ) );
 			float s = cp.baseSeparation + b2Dot( ds, normal );
 
 			float velocityBias = 0.0f;
@@ -312,8 +312,8 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			}
 
 			// relative normal velocity at contact
-			b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
-			b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
+			b2Vec2 vrA = vA + b2CrossSV( wA, rA );
+			b2Vec2 vrB = vB + b2CrossSV( wB, rB );
 			float vn = b2Dot( b2Sub( vrB, vrA ), normal );
 
 			// incremental normal impulse
@@ -346,8 +346,8 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			b2Vec2 rB = cp.anchorB;
 
 			// relative tangent velocity at contact
-			b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
-			b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
+			b2Vec2 vrB = vB + b2CrossSV( wB, rB );
+			b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 
 			// vt = dot(vrB - sB * tangent - (vrA + sA * tangent), tangent)
 			//    = dot(vrB - vrA, tangent) - (sA + sB)
@@ -452,8 +452,8 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 				b2Vec2 rB = cp.anchorB;
 
 				// relative normal velocity at contact
-				b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
-				b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
+				b2Vec2 vrB = vB + b2CrossSV( wB, rB );
+				b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 				float vn = b2Dot( b2Sub( vrB, vrA ), normal );
 
 				// compute normal impulse
@@ -1558,8 +1558,8 @@ static if (B2_VALIDATE) {
 					( cast(float*)&constraint.tangentMass1 )[j] = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 					// relative velocity for restitution
-					b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
-					b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
+					b2Vec2 vrA = vA + b2CrossSV( wA, rA );
+					b2Vec2 vrB = vB + b2CrossSV( wB, rB );
 					( cast(float*)&constraint.relativeVelocity1 )[j] = b2Dot( normal, b2Sub( vrB, vrA ) );
 				}
 
@@ -1595,8 +1595,8 @@ static if (B2_VALIDATE) {
 					( cast(float*)&constraint.tangentMass2 )[j] = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 					// relative velocity for restitution
-					b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
-					b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
+					b2Vec2 vrA = vA + b2CrossSV( wA, rA );
+					b2Vec2 vrB = vB + b2CrossSV( wB, rB );
 					( cast(float*)&constraint.relativeVelocity2 )[j] = b2Dot( normal, b2Sub( vrB, vrA ) );
 				}
 				else

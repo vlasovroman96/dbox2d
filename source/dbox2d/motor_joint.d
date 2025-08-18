@@ -136,7 +136,7 @@ float b2MotorJoint_GetMaxSpringTorque(b2JointId jointId)
 
 b2Vec2 b2GetMotorJointForce(b2World* world, b2JointSim* base)
 {
-	b2Vec2 force = b2MulSV( world.inv_h, b2Add( base.motorJoint.linearVelocityImpulse, base.motorJoint.linearSpringImpulse ) );
+	b2Vec2 force = b2MulSV( world.inv_h, base.motorJoint.linearVelocityImpulse + base.motorJoint.linearSpringImpulse );
 	return force;
 }
 
@@ -251,7 +251,7 @@ void b2WarmStartMotorJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-	b2Vec2 linearImpulse = b2Add( joint.linearVelocityImpulse, joint.linearSpringImpulse );
+	b2Vec2 linearImpulse = joint.linearVelocityImpulse + joint.linearSpringImpulse;
 	float angularImpulse = joint.angularVelocityImpulse + joint.angularSpringImpulse;
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, linearImpulse );
@@ -328,14 +328,14 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 	{
 		b2Vec2 dcA = stateA.deltaPosition;
 		b2Vec2 dcB = stateB.deltaPosition;
-		b2Vec2 c = b2Add( b2Add( b2Sub( dcB, dcA ), b2Sub( rB, rA ) ), joint.deltaCenter );
+		b2Vec2 c = (b2Sub( dcB, dcA ) + b2Sub( rB, rA )) + joint.deltaCenter;
 
 		b2Vec2 bias = b2MulSV( joint.linearSpring.biasRate, c );
 		float massScale = joint.linearSpring.massScale;
 		float impulseScale = joint.linearSpring.impulseScale;
 
-		b2Vec2 cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
-		cdot = b2Add( cdot, bias );
+		b2Vec2 cdot = b2Sub( vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA )  );
+		cdot = cdot + bias;
 
 		// Updating the effective mass here may be overkill
 		b2Mat22 kl = void;
@@ -354,7 +354,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		};
 
 		float maxImpulse = context.h * joint.maxSpringForce;
-		joint.linearSpringImpulse = b2Add( joint.linearSpringImpulse, impulse );
+		joint.linearSpringImpulse = joint.linearSpringImpulse + impulse;
 
 		if ( b2LengthSquared( joint.linearSpringImpulse ) > maxImpulse * maxImpulse )
 		{
@@ -374,14 +374,14 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 	// linear velocity
 	if ( joint.maxVelocityForce > 0.0f )
 	{
-		b2Vec2 cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
+		b2Vec2 cdot = b2Sub( vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA ));
 		cdot = b2Sub( cdot, joint.linearVelocity );
 		b2Vec2 b = b2MulMV( joint.linearMass, cdot );
 		b2Vec2 impulse = { -b.x, -b.y };
 
 		b2Vec2 oldImpulse = joint.linearVelocityImpulse;
 		float maxImpulse = context.h * joint.maxVelocityForce;
-		joint.linearVelocityImpulse = b2Add( joint.linearVelocityImpulse, impulse );
+		joint.linearVelocityImpulse = joint.linearVelocityImpulse + impulse;
 
 		if ( b2LengthSquared( joint.linearVelocityImpulse ) > maxImpulse * maxImpulse )
 		{

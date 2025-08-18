@@ -145,12 +145,6 @@ b2Vec2 b2RightPerp( b2Vec2 v )
 	return b2Vec2( v.y, -v.x );
 }
 
-/// Vector addition
-b2Vec2 b2Add( b2Vec2 a, b2Vec2 b )
-{
-	return b2Vec2( a.x + b.x, a.y + b.y );
-}
-
 /// Vector subtraction
 b2Vec2 b2Sub( b2Vec2 a, b2Vec2 b )
 {
@@ -477,7 +471,7 @@ b2Transform b2MulTransforms(b2Transform A, b2Transform B)
 {
 	b2Transform C = void;
 	C.q = b2MulRot( A.q, B.q );
-	C.p = b2Add( b2RotateVector( A.q, B.p ), A.p );
+	C.p = b2RotateVector( A.q, B.p ) + A.p;
 	return C;
 }
 
@@ -589,7 +583,7 @@ b2AABB b2MakeAABB(const(b2Vec2)* points, int count, float radius)
 
 	b2Vec2 r = { radius, radius };
 	a.lowerBound = b2Sub( a.lowerBound, r );
-	a.upperBound = b2Add( a.upperBound, r );
+	a.upperBound = a.upperBound + r;
 
 	return a;
 }

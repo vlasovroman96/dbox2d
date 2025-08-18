@@ -205,17 +205,17 @@ void b2SolveMouseJoint(b2JointSim* base, b2StepContext* context)
 		b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 		b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-		b2Vec2 Cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
+		b2Vec2 Cdot = b2Sub( vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA ));
 
 		b2Vec2 dcA = stateA.deltaPosition;
 		b2Vec2 dcB = stateB.deltaPosition;
-		b2Vec2 C = b2Add( b2Add( b2Sub( dcB, dcA ), b2Sub( rB, rA ) ), joint.deltaCenter );
+		b2Vec2 C = (b2Sub( dcB, dcA ) + b2Sub( rB, rA )) + joint.deltaCenter;
 		b2Vec2 bias = b2MulSV( joint.linearSoftness.biasRate, C );
 
 		float massScale = joint.linearSoftness.massScale;
 		float impulseScale = joint.linearSoftness.impulseScale;
 
-		b2Vec2 b = b2MulMV( joint.linearMass, b2Add( Cdot, bias ) );
+		b2Vec2 b = b2MulMV( joint.linearMass, Cdot + bias );
 
 		b2Vec2 impulse = void;
 		impulse.x = -massScale * b.x - impulseScale * joint.linearImpulse.x;

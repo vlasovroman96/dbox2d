@@ -962,7 +962,7 @@ b2CastOutput b2ShapeCastShape(const(b2ShapeCastInput)* input, const(b2Shape)* sh
 			b2Vec2 approximateCentroid = localInput.proxy.points[0];
 			for ( int i = 1; i < localInput.proxy.count; ++i )
 			{
-				approximateCentroid = b2Add( approximateCentroid, localInput.proxy.points[i] );
+				approximateCentroid = approximateCentroid + localInput.proxy.points[i];
 			}
 
 			approximateCentroid = b2MulSV( 1.0f / localInput.proxy.count, approximateCentroid );

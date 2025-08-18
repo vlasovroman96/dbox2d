@@ -249,28 +249,28 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		{
 			b2Vec2 dcA = stateA.deltaPosition;
 			b2Vec2 dcB = stateB.deltaPosition;
-			b2Vec2 C = b2Add( b2Add( b2Sub( dcB, dcA ), b2Sub( rB, rA ) ), joint.deltaCenter );
+			b2Vec2 C = ( b2Sub( dcB, dcA ) + b2Sub( rB, rA ) ) + joint.deltaCenter;
 
 			bias = b2MulSV( joint.linearSpring.biasRate, C );
 			massScale = joint.linearSpring.massScale;
 			impulseScale = joint.linearSpring.impulseScale;
 		}
 
-		b2Vec2 Cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
+		b2Vec2 Cdot = b2Sub(vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA ) );
 
 		b2Mat22 K = void;
 		K.cx.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
 		K.cy.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
 		K.cx.y = K.cy.x;
 		K.cy.y = mA + mB + rA.x * rA.x * iA + rB.x * rB.x * iB;
-		b2Vec2 b = b2Solve22( K, b2Add( Cdot, bias ) );
+		b2Vec2 b = b2Solve22( K, Cdot + bias );
 
 		b2Vec2 impulse = {
 			-massScale * b.x - impulseScale * joint.linearImpulse.x,
 			-massScale * b.y - impulseScale * joint.linearImpulse.y,
 		};
 
-		joint.linearImpulse = b2Add( joint.linearImpulse, impulse );
+		joint.linearImpulse = joint.linearImpulse + impulse;
 
 		vA = b2MulSub( vA, mA, impulse );
 		wA -= iA * b2Cross( rA, impulse );
