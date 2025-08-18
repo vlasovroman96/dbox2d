@@ -66,7 +66,7 @@ b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2)
 	b2Vec2 d = b2Sub( p2, p1 );
 	b2Vec2 absD = b2Abs( d );
 
-	b2Vec2 normal = b2Vec2_zero;
+	b2Vec2 normal = b2Vec2.zero();
 
 	// x-coordinate
 	if ( absD.x < float.epsilon )

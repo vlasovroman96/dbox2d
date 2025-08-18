@@ -234,8 +234,8 @@ private void b2ComputeSimplexWitnessPoints(b2Vec2* a, b2Vec2* b, const(b2Simplex
 			break;
 
 		default:
-			*a = b2Vec2_zero;
-			*b = b2Vec2_zero;
+			*a = b2Vec2.zero();
+			*b = b2Vec2.zero();
 			B2_ASSERT( false );
 			break;
 	}
@@ -410,7 +410,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	s.count = 3;
 
 	// No search direction
-	return b2Vec2_zero;
+	return b2Vec2.zero();
 }
 
 // Uses GJK for computing the distance between convex shapes.
@@ -453,7 +453,7 @@ b2DistanceOutput b2ShapeDistance(const(b2DistanceInput)* input, b2SimplexCache* 
 	// Get simplex vertices as an array.
 	b2SimplexVertex*[3] vertices = [ &simplex.v1, &simplex.v2, &simplex.v3 ];
 
-	b2Vec2 nonUnitNormal = b2Vec2_zero;
+	b2Vec2 nonUnitNormal = b2Vec2.zero();
 
 	// These store the vertices of the last simplex so that we can check for duplicates and prevent cycling.
 	int[3] saveA = void, saveB = void;
@@ -708,7 +708,7 @@ pragma(inline, true) private b2Vec2 b2ComputeSimplexClosestPoint(const(b2Simplex
 		return b2Weight2( s.v1.a, s.v1.w, s.v2.a, s.v2.w );
 	}
 
-	return b2Vec2_zero;
+	return b2Vec2.zero();
 }
 
 struct b2ShapeCastData {
@@ -961,7 +961,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 		b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 		f.axis = b2Normalize( b2Sub( pointB, pointA ) );
-		f.localPoint = b2Vec2_zero;
+		f.localPoint = b2Vec2.zero();
 		return f;
 	}
 

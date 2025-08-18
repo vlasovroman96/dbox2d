@@ -134,7 +134,7 @@ void b2PrepareMouseJoint(b2JointSim* base, b2StepContext* context)
 
 	if ( context.enableWarmStarting == false )
 	{
-		joint.linearImpulse = b2Vec2_zero;
+		joint.linearImpulse = b2Vec2.zero;
 		joint.angularImpulse = 0.0f;
 	}
 }

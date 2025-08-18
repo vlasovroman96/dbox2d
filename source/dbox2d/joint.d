@@ -882,7 +882,7 @@ b2JointId b2CreateWeldJoint(b2WorldId worldId, const(b2WeldJointDef)* def)
 	joint.weldJoint.linearDampingRatio = def.linearDampingRatio;
 	joint.weldJoint.angularHertz = def.angularHertz;
 	joint.weldJoint.angularDampingRatio = def.angularDampingRatio;
-	joint.weldJoint.linearImpulse = b2Vec2_zero;
+	joint.weldJoint.linearImpulse = b2Vec2.zero;
 	joint.weldJoint.angularImpulse = 0.0f;
 
 	b2JointId jointId = { joint.jointId + 1, world.worldId, pair.joint.generation };
@@ -1285,7 +1285,7 @@ private b2Vec2 b2GetJointConstraintForce(b2World* world, b2Joint* joint)
 			return b2GetMouseJointForce( world, base );
 
 		case b2_filterJoint:
-			return b2Vec2_zero;
+			return b2Vec2.zero;
 
 		case b2_prismaticJoint:
 			return b2GetPrismaticJointForce( world, base );
@@ -1301,7 +1301,7 @@ private b2Vec2 b2GetJointConstraintForce(b2World* world, b2Joint* joint)
 
 		default:
 			B2_ASSERT( false );
-			return b2Vec2_zero;
+			return b2Vec2.zero;
 	}
 }
 

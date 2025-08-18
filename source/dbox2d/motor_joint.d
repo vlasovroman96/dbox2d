@@ -224,9 +224,9 @@ void b2PrepareMotorJoint(b2JointSim* base, b2StepContext* context)
 
 	if ( context.enableWarmStarting == false )
 	{
-		joint.linearVelocityImpulse = b2Vec2_zero;
+		joint.linearVelocityImpulse = b2Vec2.zero;
 		joint.angularVelocityImpulse = 0.0f;
-		joint.linearSpringImpulse = b2Vec2_zero;
+		joint.linearSpringImpulse = b2Vec2.zero;
 		joint.angularSpringImpulse = 0.0f;
 	}
 }

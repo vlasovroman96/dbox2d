@@ -266,7 +266,7 @@ void b2PrepareRevoluteJoint(b2JointSim* base, b2StepContext* context)
 
 	if ( context.enableWarmStarting == false )
 	{
-		joint.linearImpulse = b2Vec2_zero;
+		joint.linearImpulse = b2Vec2.zero();
 		joint.springImpulse = 0.0f;
 		joint.motorImpulse = 0.0f;
 		joint.lowerImpulse = 0.0f;
@@ -441,7 +441,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 		b2Vec2 Cdot = b2Sub( b2Add( vB, b2CrossSV( wB, rB ) ), b2Add( vA, b2CrossSV( wA, rA ) ) );
 
-		b2Vec2 bias = b2Vec2_zero;
+		b2Vec2 bias = b2Vec2.zero();
 		float massScale = 1.0f;
 		float impulseScale = 0.0f;
 		if ( useBias )

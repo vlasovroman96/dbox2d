@@ -270,7 +270,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	b2Transform sfA = { b2Add( xfA.p, b2RotateVector( xfA.q, origin ) ), xfA.q };
 	b2Transform xf = b2InvMulTransforms( sfA, xfB );
 
-	b2Vec2 p1 = b2Vec2_zero;
+	b2Vec2 p1 = b2Vec2.zero;
 	b2Vec2 q1 = b2Sub( capsuleA.center2, origin );
 
 	b2Vec2 p2 = b2TransformPoint( xf, capsuleB.center1 );
@@ -750,7 +750,7 @@ b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(
 	b2Polygon localPolyA = void;
 	localPolyA.count = polygonA.count;
 	localPolyA.radius = polygonA.radius;
-	localPolyA.vertices[0] = b2Vec2_zero;
+	localPolyA.vertices[0] = b2Vec2.zero;
 	localPolyA.normals[0] = polygonA.normals[0];
 	for ( int i = 1; i < localPolyA.count; ++i )
 	{

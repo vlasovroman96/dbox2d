@@ -871,7 +871,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		float sleepVelocity = b2MaxFloat( maxVelocity, positionSleepFactor * invTimeStep * maxDeltaPosition );
 
 		// reset state deltas
-		state.deltaPosition = b2Vec2_zero;
+		state.deltaPosition = b2Vec2.zero();
 		state.deltaRotation = b2Rot_identity;
 
 		sim.transform.p = b2Sub( sim.center, b2RotateVector( sim.transform.q, sim.localCenter ) );
@@ -885,7 +885,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		moveEvents[simIndex].fellAsleep = false;
 
 		// reset applied force and torque
-		sim.force = b2Vec2_zero;
+		sim.force = b2Vec2.zero();
 		sim.torque = 0.0f;
 
 		body.flags &= ~( b2_isFast | b2_isSpeedCapped | b2_hadTimeOfImpact );

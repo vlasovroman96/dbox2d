@@ -153,7 +153,7 @@ b2Polygon b2MakeBox(float halfWidth, float halfHeight)
 	shape.normals[2] = b2Vec2( 0.0f, 1.0f );
 	shape.normals[3] = b2Vec2( -1.0f, 0.0f );
 	shape.radius = 0.0f;
-	shape.centroid = b2Vec2_zero;
+	shape.centroid = b2Vec2.zero();
 	return shape;
 }
 

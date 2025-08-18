@@ -745,7 +745,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 
 	bodySim.invMass = 0.0f;
 	bodySim.invInertia = 0.0f;
-	bodySim.localCenter = b2Vec2_zero;
+	bodySim.localCenter = b2Vec2.zero();
 	bodySim.minExtent = B2_HUGE;
 	bodySim.maxExtent = 0.0f;
 
@@ -762,7 +762,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 			{
 				const(b2Shape)* s = b2ShapeArray_Get( world.shapes, shapeId );
 
-				b2ShapeExtent extent = b2ComputeShapeExtent( s, b2Vec2_zero );
+				b2ShapeExtent extent = b2ComputeShapeExtent( s, b2Vec2.zero() );
 				bodySim.minExtent = b2MinFloat( bodySim.minExtent, extent.minExtent );
 				bodySim.maxExtent = b2MaxFloat( bodySim.maxExtent, extent.maxExtent );
 
@@ -777,7 +777,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 	b2MassData* masses = cast(b2MassData*)b2AllocateArenaItem( &world.arena, cast(int)(shapeCount * b2MassData.sizeof), "mass data" );
 
 	// Accumulate mass over all shapes.
-	b2Vec2 localCenter = b2Vec2_zero;
+	b2Vec2 localCenter = b2Vec2.zero();
 	int shapeId = body.headShapeId;
 	int shapeIndex = 0;
 	while ( shapeId != B2_NULL_INDEX )
@@ -983,7 +983,7 @@ b2Vec2 b2Body_GetLinearVelocity(b2BodyId bodyId)
 	{
 		return state.linearVelocity;
 	}
-	return b2Vec2_zero;
+	return b2Vec2.zero();
 }
 
 float b2Body_GetAngularVelocity(b2BodyId bodyId)
@@ -1104,7 +1104,7 @@ b2Vec2 b2Body_GetLocalPointVelocity(b2BodyId bodyId, b2Vec2 localPoint)
 	b2BodyState* state = b2GetBodyState( world, body );
 	if ( state == null )
 	{
-		return b2Vec2_zero;
+		return b2Vec2.zero();
 	}
 
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, body.setIndex );
@@ -1122,7 +1122,7 @@ b2Vec2 b2Body_GetWorldPointVelocity(b2BodyId bodyId, b2Vec2 worldPoint)
 	b2BodyState* state = b2GetBodyState( world, body );
 	if ( state == null )
 	{
-		return b2Vec2_zero;
+		return b2Vec2.zero();
 	}
 
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, body.setIndex );

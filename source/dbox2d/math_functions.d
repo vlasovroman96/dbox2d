@@ -44,6 +44,10 @@ struct b2Vec2 {
     bool opEquals(b2Vec2 b) {
         return this.x == b.x && this.y == b.y;
     }
+
+	static b2Vec2 zero() {
+		return b2Vec2(0, 0);
+	}
 }
 
 /// Cosine and sine pair
@@ -85,7 +89,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-const(b2Vec2) b2Vec2_zero = { 0.0f, 0.0f };
 const(b2Rot) b2Rot_identity = { 1.0f, 0.0f };
 const(b2Transform) b2Transform_identity = { { 0.0f, 0.0f }, { 1.0f, 0.0f } };
 const(b2Mat22) b2Mat22_zero = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };

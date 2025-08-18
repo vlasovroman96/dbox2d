@@ -90,7 +90,7 @@ static if (B2_VALIDATE) {
 		constraint.tangentSpeed = contactSim.tangentSpeed;
 		constraint.pointCount = pointCount;
 
-		b2Vec2 vA = b2Vec2_zero;
+		b2Vec2 vA = b2Vec2.zero();
 		float wA = 0.0f;
 		float mA = contactSim.invMassA;
 		float iA = contactSim.invIA;
@@ -101,7 +101,7 @@ static if (B2_VALIDATE) {
 			wA = stateA.angularVelocity;
 		}
 
-		b2Vec2 vB = b2Vec2_zero;
+		b2Vec2 vB = b2Vec2.zero();
 		float wB = 0.0f;
 		float mB = contactSim.invMassB;
 		float iB = contactSim.invIB;
@@ -1480,7 +1480,7 @@ static if (B2_VALIDATE) {
 				constraint.indexA[j] = indexA;
 				constraint.indexB[j] = indexB;
 
-				b2Vec2 vA = b2Vec2_zero;
+				b2Vec2 vA = b2Vec2.zero();
 				float wA = 0.0f;
 				float mA = contactSim.invMassA;
 				float iA = contactSim.invIA;
@@ -1491,7 +1491,7 @@ static if (B2_VALIDATE) {
 					wA = stateA.angularVelocity;
 				}
 
-				b2Vec2 vB = b2Vec2_zero;
+				b2Vec2 vB = b2Vec2.zero();
 				float wB = 0.0f;
 				float mB = contactSim.invMassB;
 				float iB = contactSim.invIB;
