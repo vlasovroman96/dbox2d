@@ -1,6 +1,6 @@
 module dbox2d.math_functions;
 
-public import std.math.constants;
+public import std.math;
 public import std.algorithm;
 
 import dbox2d.base;
@@ -103,12 +103,6 @@ struct b2AABB {
 struct b2Plane {
 	b2Vec2 normal;
 	float offset = 0;
-}
-
-/// @return the absolute value of an integer
-int b2AbsInt(int a)
-{
-	return a < 0 ? -a : a;
 }
 
 /// @return an integer clamped between a lower and upper bound
