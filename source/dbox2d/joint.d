@@ -1,7 +1,4 @@
 module dbox2d.joint;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-//#pragma once
 
 public import dbox2d.array;
 public import dbox2d.solver;
@@ -22,38 +19,25 @@ import dbox2d.distance_joint;
 import dbox2d.motor_joint;
 import dbox2d.mouse_joint;
 
-
 import core.stdc.stdio;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2Shape", "b2Shape"));
-// mixin(B2_ARRAY_SOURCE!("b2ChainShape", "b2ChainShape"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2ContactHitEvent","b2ContactHitEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactBeginTouchEvent","b2ContactBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
-
-// mixin(B2_ARRAY_SOURCE!("b2Visitor","b2Visitor"));
-
-
 mixin(B2_ARRAY_SOURCE!("b2SensorBeginTouchEvent","b2SensorBeginTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));
-
 mixin(B2_ARRAY_SOURCE!("b2TaskContext","b2TaskContext"));
 mixin(B2_ARRAY_SOURCE!("b2JointEvent","b2JointEvent"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorTaskContext","b2SensorTaskContext"));
-// mixin(B2_ARRAY_SOURCE!("b2SensorHit","b2SensorHit"));
 mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
-
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
-
 
 /// A joint edge is used to connect bodies and joints together
 /// in a joint graph where each body is a node and each joint
@@ -99,7 +83,6 @@ struct b2Joint {
 
 	bool isMarked;
 	bool collideConnected;
-
 }
 
 struct b2DistanceJoint {
@@ -315,76 +298,6 @@ struct b2JointSim {
 		b2WheelJoint wheelJoint;
 	};
 }
-
-void b2DestroyJointInternal(b2World* world, b2Joint* joint, bool wakeBodies);
-
-b2Joint* b2GetJointFullId(b2World* world, b2JointId jointId);
-b2JointSim* b2GetJointSim(b2World* world, b2Joint* joint);
-b2JointSim* b2GetJointSimCheckType(b2JointId jointId, b2JointType type);
-
-void b2PrepareJoint(b2JointSim* joint, b2StepContext* context);
-void b2WarmStartJoint(b2JointSim* joint, b2StepContext* context);
-void b2SolveJoint(b2JointSim* joint, b2StepContext* context, bool useBias);
-
-void b2PrepareOverflowJoints(b2StepContext* context);
-void b2WarmStartOverflowJoints(b2StepContext* context);
-void b2SolveOverflowJoints(b2StepContext* context, bool useBias);
-
-void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float* torque);
-
-void b2DrawJoint(b2DebugDraw* draw, b2World* world, b2Joint* joint);
-
-// b2Vec2 b2GetDistanceJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetMotorJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetMouseJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetPrismaticJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetRevoluteJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetWeldJointForce(b2World* world, b2JointSim* base);
-// b2Vec2 b2GetWheelJointForce(b2World* world, b2JointSim* base);
-
-// float b2GetMotorJointTorque(b2World* world, b2JointSim* base);
-// float b2GetMouseJointTorque(b2World* world, b2JointSim* base);
-// float b2GetPrismaticJointTorque(b2World* world, b2JointSim* base);
-// float b2GetRevoluteJointTorque(b2World* world, b2JointSim* base);
-// float b2GetWeldJointTorque(b2World* world, b2JointSim* base);
-// float b2GetWheelJointTorque(b2World* world, b2JointSim* base);
-
-// void b2PrepareDistanceJoint(b2JointSim* base, b2StepContext* context);
-// void b2PrepareMotorJoint(b2JointSim* base, b2StepContext* context);
-// void b2PrepareMouseJoint(b2JointSim* base, b2StepContext* context);
-// void b2PreparePrismaticJoint(b2JointSim* base, b2StepContext* context);
-// void b2PrepareRevoluteJoint(b2JointSim* base, b2StepContext* context);
-// void b2PrepareWeldJoint(b2JointSim* base, b2StepContext* context);
-// void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context);
-
-// void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartMotorJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartMouseJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartPrismaticJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartRevoluteJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartWeldJoint(b2JointSim* base, b2StepContext* context);
-// void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context);
-
-// void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias);
-// void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context);
-// void b2SolveMouseJoint(b2JointSim* base, b2StepContext* context);
-// void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBias);
-// void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias);
-// void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias);
-// void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias);
-
-// void b2DrawDistanceJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB);
-// void b2DrawPrismaticJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB, float drawSize);
-// void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB, float drawSize);
-// void b2DrawWeldJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB, float drawSize);
-// void b2DrawWheelJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB);
-
-// Define inline functions for arrays
-// alias b2JointArray = b2Joint[];
-// B2_ARRAY_INLINE( b2Joint, b2Joint )
-
-// alias b2JointSimArray = b2JointSim[]; 
-// B2_ARRAY_INLINE( b2JointSim, b2JointSim )
 
 private b2JointDef b2DefaultJointDef()
 {
@@ -1815,8 +1728,6 @@ void b2SolveJoint(b2JointSim* joint, b2StepContext* context, bool useBias)
 
 void b2PrepareOverflowJoints(b2StepContext* context)
 {
-	// b2TracyCZoneNC( prepare_joints, "PrepJoints", b2_colorOldLace, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2JointSim* joints = graph.colors[B2_OVERFLOW_INDEX].jointSims.ptr;
 	int jointCount = cast(int)graph.colors[B2_OVERFLOW_INDEX].jointSims.count;
@@ -1826,14 +1737,10 @@ void b2PrepareOverflowJoints(b2StepContext* context)
 		b2JointSim* joint = joints + i;
 		b2PrepareJoint( joint, context );
 	}
-
-	// b2TracyCZoneEnd( prepare_joints );
 }
 
 void b2WarmStartOverflowJoints(b2StepContext* context)
 {
-	// b2TracyCZoneNC( prepare_joints, "PrepJoints", b2_colorOldLace, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2JointSim* joints = graph.colors[B2_OVERFLOW_INDEX].jointSims.ptr;
 	int jointCount = cast(int)graph.colors[B2_OVERFLOW_INDEX].jointSims.count;
@@ -1843,14 +1750,10 @@ void b2WarmStartOverflowJoints(b2StepContext* context)
 		b2JointSim* joint = joints + i;
 		b2WarmStartJoint( joint, context );
 	}
-
-	// b2TracyCZoneEnd( prepare_joints );
 }
 
 void b2SolveOverflowJoints(b2StepContext* context, bool useBias)
 {
-	// b2TracyCZoneNC( solve_joints, "SolveJoints", b2_colorLemonChiffon, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2JointSim* joints = graph.colors[B2_OVERFLOW_INDEX].jointSims.ptr;
 	int jointCount = cast(int)graph.colors[B2_OVERFLOW_INDEX].jointSims.count;
@@ -1860,8 +1763,6 @@ void b2SolveOverflowJoints(b2StepContext* context, bool useBias)
 		b2JointSim* joint = joints + i;
 		b2SolveJoint( joint, context, useBias );
 	}
-
-	// b2TracyCZoneEnd( solve_joints );
 }
 
 void b2DrawJoint(b2DebugDraw* draw, b2World* world, b2Joint* joint)

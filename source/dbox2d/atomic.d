@@ -1,17 +1,8 @@
 module dbox2d.atomic;
-// @nogc nothrow:
-// extern(C): __gshared:
 
-// template HasVersion(string versionId) {
-// 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-// }
 import core.stdc.config: c_long, c_ulong;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
-//#pragma once
-
-public import dbox2d.core;
+import dbox2d.core;
 import core.atomic;
 
 public import core.stdc.stdint;

@@ -1,14 +1,9 @@
 module dbox2d.contact_solver;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.solver;
 import dbox2d.body;
 
 mixin(B2_ARRAY_SOURCE!("b2BodyState","b2BodyState"));
-
 
 struct b2ContactConstraintPoint {
 	b2Vec2 anchorA, anchorB;
@@ -38,28 +33,10 @@ struct b2ContactConstraint {
 	int pointCount;
 }
 
-int b2GetContactConstraintSIMDByteCount();
-
-// Overflow contacts don't fit into the constraint graph coloring
-void b2PrepareOverflowContacts(b2StepContext* context);
-void b2WarmStartOverflowContacts(b2StepContext* context);
-void b2SolveOverflowContacts(b2StepContext* context, bool useBias);
-void b2ApplyOverflowRestitution(b2StepContext* context);
-void b2StoreOverflowImpulses(b2StepContext* context);
-
-// Contacts that live within the constraint graph coloring
-void b2PrepareContactsTask(int startIndex, int endIndex, b2StepContext* context);
-void b2WarmStartContactsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex);
-void b2SolveContactsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex, bool useBias);
-void b2ApplyRestitutionTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex);
-void b2StoreImpulsesTask(int startIndex, int endIndex, b2StepContext* context);
-
 import dbox2d.physics_world;
 
 void b2PrepareOverflowContacts(b2StepContext* context)
 {
-	// b2TracyCZoneNC( prepare_overflow_contact, "Prepare Overflow Contact", b2_colorYellow, true );
-
 	import dbox2d.contact;
 
 	b2World* world = context.world;
@@ -190,14 +167,10 @@ static if (B2_VALIDATE) {
 			cp.relativeVelocity = b2Dot( normal, b2Sub( vrB, vrA ) );
 		}
 	}
-
-	// b2TracyCZoneEnd( prepare_overflow_contact );
 }
 
 void b2WarmStartOverflowContacts(b2StepContext* context)
 {
-	// b2TracyCZoneNC( warmstart_overflow_contact, "WarmStart Overflow Contact", b2_colorDarkOrange, true );
-
 	import dbox2d.solver_set;
 	mixin(B2_ARRAY_SOURCE!("b2SolverSet", "b2SolverSet"));
 	b2ConstraintGraph* graph = context.graph;
@@ -259,8 +232,6 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 		stateB.linearVelocity = vB;
 		stateB.angularVelocity = wB;
 	}
-
-	// b2TracyCZoneEnd( warmstart_overflow_contact );
 }
 
 import dbox2d.solver_set;
@@ -269,8 +240,6 @@ mixin(B2_ARRAY_SOURCE!("b2SolverSet", "b2SolverSet"));
 
 void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 {
-	// b2TracyCZoneNC( solve_contact, "Solve Contact", b2_colorAliceBlue, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2GraphColor* color = &graph.colors[B2_OVERFLOW_INDEX];
 	b2ContactConstraint* constraints = color.overflowConstraints;
@@ -419,14 +388,10 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 		stateB.linearVelocity = vB;
 		stateB.angularVelocity = wB;
 	}
-
-	// b2TracyCZoneEnd( solve_contact );
 }
 
 void b2ApplyOverflowRestitution(b2StepContext* context)
 {
-	// b2TracyCZoneNC( overflow_resitution, "Overflow Restitution", b2_colorViolet, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2GraphColor* color = &graph.colors[B2_OVERFLOW_INDEX];
 	b2ContactConstraint* constraints = color.overflowConstraints;
@@ -517,16 +482,12 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 		stateB.linearVelocity = vB;
 		stateB.angularVelocity = wB;
 	}
-
-	// b2TracyCZoneEnd( overflow_resitution );
 }
 
 import dbox2d.contact;
 
 void b2StoreOverflowImpulses(b2StepContext* context)
 {
-	// b2TracyCZoneNC( store_impulses, "Store", b2_colorFireBrick, true );
-
 	b2ConstraintGraph* graph = context.graph;
 	b2GraphColor* color = &graph.colors[B2_OVERFLOW_INDEX];
 	b2ContactConstraint* constraints = color.overflowConstraints;
@@ -550,8 +511,6 @@ void b2StoreOverflowImpulses(b2StepContext* context)
 
 		manifold.rollingImpulse = constraint.rollingImpulse;
 	}
-
-	// b2TracyCZoneEnd( store_impulses );
 }
 
 version (B2_SIMD_AVX2) {
@@ -1480,7 +1439,6 @@ private void b2ScatterBodies(b2BodyState* states, int* indices, const(b2BodyStat
 
 void b2PrepareContactsTask(int startIndex, int endIndex, b2StepContext* context)
 {
-	// b2TracyCZoneNC( prepare_contact, "Prepare Contact", b2_colorYellow, true );
 	b2World* world = context.world;
 	b2ContactSim** contacts = context.contacts;
 	b2ContactConstraintSIMD* constraints = context.simdContactConstraints;
@@ -1707,14 +1665,10 @@ static if (B2_VALIDATE) {
 			}
 		}
 	}
-
-	// b2TracyCZoneEnd( prepare_contact );
 }
 
 void b2WarmStartContactsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex)
 {
-	// b2TracyCZoneNC( warm_start_contact, "Warm Start", b2_colorGreen, true );
-
 	b2BodyState* states = context.states;
 	b2ContactConstraintSIMD* constraints = context.graph.colors[colorIndex].simdConstraints;
 
@@ -1765,14 +1719,10 @@ void b2WarmStartContactsTask(int startIndex, int endIndex, b2StepContext* contex
 		b2ScatterBodies( states, c.indexA.ptr, &bA );
 		b2ScatterBodies( states, c.indexB.ptr, &bB );
 	}
-
-	// b2TracyCZoneEnd( warm_start_contact );
 }
 
 void b2SolveContactsTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex, bool useBias)
 {
-	// b2TracyCZoneNC( solve_contact, "Solve Contact", b2_colorAliceBlue, true );
-
 	b2BodyState* states = context.states;
 	b2ContactConstraintSIMD* constraints = context.graph.colors[colorIndex].simdConstraints;
 	b2FloatW inv_h = b2SplatW( context.inv_h );
@@ -2005,14 +1955,10 @@ void b2SolveContactsTask(int startIndex, int endIndex, b2StepContext* context, i
 		b2ScatterBodies( states, c.indexA.ptr, &bA );
 		b2ScatterBodies( states, c.indexB.ptr, &bB );
 	}
-
-	// b2TracyCZoneEnd( solve_contact );
 }
 
 void b2ApplyRestitutionTask(int startIndex, int endIndex, b2StepContext* context, int colorIndex)
 {
-	// b2TracyCZoneNC( restitution, "Restitution", b2_colorDodgerBlue, true );
-
 	b2BodyState* states = context.states;
 	b2ContactConstraintSIMD* constraints = context.graph.colors[colorIndex].simdConstraints;
 	b2FloatW threshold = b2SplatW( context.world.restitutionThreshold );
@@ -2120,14 +2066,10 @@ void b2ApplyRestitutionTask(int startIndex, int endIndex, b2StepContext* context
 		b2ScatterBodies( states, c.indexA.ptr, &bA );
 		b2ScatterBodies( states, c.indexB.ptr, &bB );
 	}
-
-	// b2TracyCZoneEnd( restitution );
 }
 
 void b2StoreImpulsesTask(int startIndex, int endIndex, b2StepContext* context)
 {
-	// b2TracyCZoneNC( store_impulses, "Store", b2_colorFireBrick, true );
-
 	b2ContactSim** contacts = context.contacts;
 	const(b2ContactConstraintSIMD)* constraints = context.simdContactConstraints;
 
@@ -2164,6 +2106,4 @@ void b2StoreImpulsesTask(int startIndex, int endIndex, b2StepContext* context)
 			m.points[1].normalVelocity = normalVelocity2[laneIndex];
 		}
 	}
-
-	// b2TracyCZoneEnd( store_impulses );
 }

@@ -1,12 +1,11 @@
 module dbox2d.arena_allocator;
 
-public import dbox2d.array;
+import dbox2d.array;
 import dbox2d.core;
 import dbox2d.base;
 
 import core.stdc.stddef;
 import core.stdc.inttypes;
-
 
 struct b2ArenaEntry {
 	char* data;
@@ -16,7 +15,6 @@ struct b2ArenaEntry {
 }
 
 mixin(B2_ARRAY_SOURCE!("b2ArenaEntry","b2ArenaEntry"));
-
 
 // This is a stack-like arena allocator used for fast per step allocations.
 // You must nest allocate/free pairs. The code will B2_ASSERT
@@ -33,21 +31,6 @@ struct b2ArenaAllocator {
 
 	b2ArenaEntryArray entries;
 }
-
-b2ArenaAllocator b2CreateArenaAllocator(int capacity);
-void b2DestroyArenaAllocator(b2ArenaAllocator* allocator);
-
-void* b2AllocateArenaItem(b2ArenaAllocator* alloc, int size, const(char)* name);
-void b2FreeArenaItem(b2ArenaAllocator* alloc, void* mem);
-
-// Grow the arena based on usage
-void b2GrowArena(b2ArenaAllocator* alloc);
-
-int b2GetArenaCapacity(b2ArenaAllocator* alloc);
-int b2GetArenaAllocation(b2ArenaAllocator* alloc);
-int b2GetMaxArenaAllocation(b2ArenaAllocator* alloc);
-
-// B2_ARRAY_INLINE( b2ArenaEntry, b2ArenaEntry )
 
 b2ArenaAllocator b2CreateArenaAllocator(int capacity)
 {

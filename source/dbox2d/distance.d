@@ -1,9 +1,4 @@
 module dbox2d.distance;
-// @nogc nothrow:
-// extern(C): __gshared:
-
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.constants;
 import dbox2d.core;

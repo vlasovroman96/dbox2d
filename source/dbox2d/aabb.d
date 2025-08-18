@@ -1,8 +1,4 @@
 module dbox2d.aabb;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.types;
 

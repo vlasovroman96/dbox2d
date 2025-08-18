@@ -1,12 +1,8 @@
 module dbox2d.distance_joint;
-// @nogc nothrow:
-// extern(C): __gshared:
 
 private template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 static if (HasVersion!"_MSC_VER" && !HasVersion!"_CRT_SECURE_NO_WARNINGS") {
 version = _CRT_SECURE_NO_WARNINGS;

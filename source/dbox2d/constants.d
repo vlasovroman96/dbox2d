@@ -1,13 +1,7 @@
 module dbox2d.constants;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 import dbox2d.math_functions;
 import dbox2d.core;
-
-// enum float b2_lengthUnitsPerMeter = 0;
 
 // Used to detect bad values. Positions greater than about 16km will have precision
 // problems, so 100km as a limit should be fine in all cases.
@@ -29,7 +23,6 @@ float B2_LINEAR_SLOP() => ( 0.005f * b2_lengthUnitsPerMeter );
 
 // Maximum number of simultaneous worlds that can be allocated
 enum B2_MAX_WORLDS = 128;
-
 
 // The maximum rotation of a body per time step. This limit is very large and is used
 // to prevent numerical problems. You shouldn't need to adjust this.

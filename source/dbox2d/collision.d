@@ -1,8 +1,4 @@
 module dbox2d.collision;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.base;
 import dbox2d.geometry;
@@ -175,109 +171,6 @@ struct b2ChainSegment {
 	int chainId;
 }
 
-/// Validate ray cast input data (NaN, etc)
-bool b2IsValidRay(const(b2RayCastInput)* input);
-
-/// Make a convex polygon from a convex hull. This will assert if the hull is not valid.
-/// @warning Do not manually fill in the hull data, it must come directly from b2ComputeHull
-b2Polygon b2MakePolygon(const(b2Hull)* hull, float radius);
-
-/// Make an offset convex polygon from a convex hull. This will assert if the hull is not valid.
-/// @warning Do not manually fill in the hull data, it must come directly from b2ComputeHull
-b2Polygon b2MakeOffsetPolygon(const(b2Hull)* hull, b2Vec2 position, b2Rot rotation);
-
-/// Make an offset convex polygon from a convex hull. This will assert if the hull is not valid.
-/// @warning Do not manually fill in the hull data, it must come directly from b2ComputeHull
-b2Polygon b2MakeOffsetRoundedPolygon(const(b2Hull)* hull, b2Vec2 position, b2Rot rotation, float radius);
-
-/// Make a square polygon, bypassing the need for a convex hull.
-/// @param halfWidth the half-width
-b2Polygon b2MakeSquare(float halfWidth);
-
-/// Make a box (rectangle) polygon, bypassing the need for a convex hull.
-/// @param halfWidth the half-width (x-axis)
-/// @param halfHeight the half-height (y-axis)
-// b2Polygon b2MakeBox(float halfWidth, float halfHeight);
-
-/// Make a rounded box, bypassing the need for a convex hull.
-/// @param halfWidth the half-width (x-axis)
-/// @param halfHeight the half-height (y-axis)
-/// @param radius the radius of the rounded extension
-b2Polygon b2MakeRoundedBox(float halfWidth, float halfHeight, float radius);
-
-/// Make an offset box, bypassing the need for a convex hull.
-/// @param halfWidth the half-width (x-axis)
-/// @param halfHeight the half-height (y-axis)
-/// @param center the local center of the box
-/// @param rotation the local rotation of the box
-b2Polygon b2MakeOffsetBox(float halfWidth, float halfHeight, b2Vec2 center, b2Rot rotation);
-
-/// Make an offset rounded box, bypassing the need for a convex hull.
-/// @param halfWidth the half-width (x-axis)
-/// @param halfHeight the half-height (y-axis)
-/// @param center the local center of the box
-/// @param rotation the local rotation of the box
-/// @param radius the radius of the rounded extension
-b2Polygon b2MakeOffsetRoundedBox(float halfWidth, float halfHeight, b2Vec2 center, b2Rot rotation, float radius);
-
-/// Transform a polygon. This is useful for transferring a shape from one body to another.
-b2Polygon b2TransformPolygon(b2Transform transform, const(b2Polygon)* polygon);
-
-/// Compute mass properties of a circle
-// b2MassData b2ComputeCircleMass(const(b2Circle)* shape, float density);
-
-/// Compute mass properties of a capsule
-// b2MassData b2ComputeCapsuleMass(const(b2Capsule)* shape, float density);
-
-/// Compute mass properties of a polygon
-// b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density);
-
-/// Compute the bounding box of a transformed circle
-// b2AABB b2ComputeCircleAABB(const(b2Circle)* shape, b2Transform transform);
-
-/// Compute the bounding box of a transformed capsule
-// b2AABB b2ComputeCapsuleAABB(const(b2Capsule)* shape, b2Transform transform);
-
-/// Compute the bounding box of a transformed polygon
-// b2AABB b2ComputePolygonAABB(const(b2Polygon)* shape, b2Transform transform);
-
-/// Compute the bounding box of a transformed line segment
-// b2AABB b2ComputeSegmentAABB(const(b2Segment)* shape, b2Transform transform);
-
-/// Test a point for overlap with a circle in local space
-// bool b2PointInCircle(const(b2Circle)* shape, b2Vec2 point);
-
-/// Test a point for overlap with a capsule in local space
-// bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point);
-
-/// Test a point for overlap with a convex polygon in local space
-// bool b2PointInPolygon(const(b2Polygon)* shape, b2Vec2 point);
-
-/// Ray cast versus circle shape in local space.
-// b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* input);
-
-/// Ray cast versus capsule shape in local space.
-// b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* input);
-
-/// Ray cast versus segment shape in local space. Optionally treat the segment as one-sided with hits from
-/// the left side being treated as a miss.
-// b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* input, bool oneSided);
-
-/// Ray cast versus polygon shape in local space.
-// b2CastOutput b2RayCastPolygon(const(b2Polygon)* shape, const(b2RayCastInput)* input);
-
-/// Shape cast versus a circle.
-// b2CastOutput b2ShapeCastCircle(const(b2Circle)* shape, const(b2ShapeCastInput)* input);
-
-/// Shape cast versus a capsule.
-// b2CastOutput b2ShapeCastCapsule(const(b2Capsule)* shape, const(b2ShapeCastInput)* input);
-
-/// Shape cast versus a line segment.
-// b2CastOutput b2ShapeCastSegment(const(b2Segment)* shape, const(b2ShapeCastInput)* input);
-
-/// Shape cast versus a convex polygon.
-// b2CastOutput b2ShapeCastPolygon(const(b2Polygon)* shape, const(b2ShapeCastInput)* input);
-
 /// A convex hull. Used to create convex polygons.
 /// @warning Do not modify these values directly, instead use b2ComputeHull()
 struct b2Hull {
@@ -414,12 +307,6 @@ struct b2ShapeCastPairInput {
 	bool canEncroach;		///< Allows shapes with a radius to move slightly closer if already touching
 }
 
-/// Perform a linear shape cast of shape B moving and shape A fixed. Determines the hit point, normal, and translation fraction.
-/// Initially touching shapes are treated as a miss.
-// b2CastOutput b2ShapeCast(const(b2ShapeCastPairInput)* input);
-
-/// Make a proxy for use in overlap, shape cast, and related functions. This is a deep copy of the points.
-// b2ShapeProxy b2MakeProxy(const(b2Vec2)* points, int count, float radius);
 
 /// Make a proxy with a transform. This is a deep copy of the points.
 b2ShapeProxy b2MakeOffsetProxy(const(b2Vec2)* points, int count, float radius, b2Vec2 position, b2Rot rotation);
@@ -476,20 +363,6 @@ struct b2TOIOutput {
 	/// The sweep time of the collision 
 	float fraction = 0;
 }
-
-/// Compute the upper bound on time before two shapes penetrate. Time is represented as
-/// a fraction between [0,tMax]. This uses a swept separating axis and may miss some intermediate,
-/// non-tunneling collisions. If you change the time interval, you should call this function
-/// again.
-// b2TOIOutput b2TimeOfImpact(const(b2TOIInput)* input);
-
-/**@}*/
-
-/**
- * @defgroup collision Collision
- * @brief Functions for colliding pairs of shapes
- * @{
- */
 
 /// A manifold point is a contact point belonging to a contact manifold.
 /// It holds details related to the geometry and dynamics of the contact points.
@@ -550,44 +423,6 @@ struct b2Manifold {
 
 }
 
-/// Compute the contact manifold between two circles
-// b2Manifold b2CollideCircles(const(b2Circle)* circleA, b2Transform xfA, const(b2Circle)* circleB, b2Transform xfB);
-
-/// Compute the contact manifold between a capsule and circle
-// b2Manifold b2CollideCapsuleAndCircle(const(b2Capsule)* capsuleA, b2Transform xfA, const(b2Circle)* circleB, b2Transform xfB);
-
-/// Compute the contact manifold between an segment and a circle
-// b2Manifold b2CollideSegmentAndCircle(const(b2Segment)* segmentA, b2Transform xfA, const(b2Circle)* circleB, b2Transform xfB);
-
-/// Compute the contact manifold between a polygon and a circle
-// b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA, const(b2Circle)* circleB, b2Transform xfB);
-
-/// Compute the contact manifold between a capsule and circle
-// b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(b2Capsule)* capsuleB, b2Transform xfB);
-
-/// Compute the contact manifold between an segment and a capsule
-// b2Manifold b2CollideSegmentAndCapsule(const(b2Segment)* segmentA, b2Transform xfA, const(b2Capsule)* capsuleB, b2Transform xfB);
-
-/// Compute the contact manifold between a polygon and capsule
-// b2Manifold b2CollidePolygonAndCapsule(const(b2Polygon)* polygonA, b2Transform xfA, const(b2Capsule)* capsuleB, b2Transform xfB);
-
-/// Compute the contact manifold between two polygons
-// b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(b2Polygon)* polygonB, b2Transform xfB);
-
-/// Compute the contact manifold between an segment and a polygon
-// b2Manifold b2CollideSegmentAndPolygon(const(b2Segment)* segmentA, b2Transform xfA, const(b2Polygon)* polygonB, b2Transform xfB);
-
-/// Compute the contact manifold between a chain segment and a circle
-// b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Transform xfA, const(b2Circle)* circleB, b2Transform xfB);
-
-/// Compute the contact manifold between a chain segment and a capsule
-// b2Manifold b2CollideChainSegmentAndCapsule(const(b2ChainSegment)* segmentA, b2Transform xfA, const(b2Capsule)* capsuleB, b2Transform xfB, b2SimplexCache* cache);
-
-/// Compute the contact manifold between a chain segment and a rounded polygon
-// b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Transform xfA, const(b2Polygon)* polygonB, b2Transform xfB, b2SimplexCache* cache);
-
-/**@}*/
-
 /**
  * @defgroup tree Dynamic Tree
  * The dynamic tree is a binary AABB tree to organize and query large numbers of geometric objects
@@ -606,8 +441,6 @@ struct b2Manifold {
  * @{
  */
 
-
-
 /// These are performance results returned by dynamic tree queries.
 struct b2TreeStats {
 	/// Number of internal nodes visited during the query
@@ -616,30 +449,6 @@ struct b2TreeStats {
 	/// Number of leaf nodes visited during the query
 	int leafVisits;
 }
-
-/// Constructing the tree initializes the node pool.
-// b2DynamicTree b2DynamicTree_Create();
-
-/// Destroy the tree, freeing the node pool.
-// void b2DynamicTree_Destroy(b2DynamicTree* tree);
-
-/// Create a proxy. Provide an AABB and a userData value.
-// int b2DynamicTree_CreateProxy(b2DynamicTree* tree, b2AABB aabb, ulong categoryBits, ulong userData);
-
-/// Destroy a proxy. This asserts if the id is invalid.
-// void b2DynamicTree_DestroyProxy(b2DynamicTree* tree, int proxyId);
-
-/// Move a proxy to a new AABB by removing and reinserting into the tree.
-// void b2DynamicTree_MoveProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb);
-
-/// Enlarge a proxy and enlarge ancestors as necessary.
-// void b2DynamicTree_EnlargeProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb);
-
-/// Modify the category bits on a proxy. This is an expensive operation.
-// void b2DynamicTree_SetCategoryBits(b2DynamicTree* tree, int proxyId, ulong categoryBits);
-
-/// Get the category bits on a proxy.
-// uint64_t b2DynamicTree_GetCategoryBits(b2DynamicTree* tree, int proxyId);
 
 /// This function receives proxies found in the AABB query.
 /// @return true if the query should continue
@@ -677,52 +486,6 @@ alias b2TreeRayCastCallbackFcn = float function(b2RayCastInput* input, int proxy
 /// - return a value less than input->maxFraction to clip the ray
 /// - return a value of input->maxFraction to continue the ray cast without clipping
 alias b2TreeShapeCastCallbackFcn = float function(b2ShapeCastInput* input, int proxyId, ulong userData, void* context );
-
-/// Ray cast against the proxies in the tree. This relies on the callback
-/// to perform a exact ray cast in the case were the proxy contains a shape.
-/// The callback also performs the any collision filtering. This has performance
-/// roughly equal to k * log(n), where k is the number of collisions and n is the
-/// number of proxies in the tree.
-/// @param tree the dynamic tree to ray cast
-/// @param input the ray cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
-/// @param maskBits filter bits: `bool accept = (maskBits & node->categoryBits) != 0;`
-/// @param callback a callback class that is called for each proxy that is hit by the shape
-/// @param context user context that is passed to the callback
-///	@return performance data
-// b2TreeStats b2DynamicTree_ShapeCast(b2DynamicTree* tree, b2ShapeCastInput* input, ulong maskBits, 
-	// b2TreeShapeCastCallbackFcn callback, void* context);
-
-/// Get the height of the binary tree.
-// int b2DynamicTree_GetHeight(const(b2DynamicTree)* tree);
-
-/// Get the ratio of the sum of the node areas to the root area.
-// float b2DynamicTree_GetAreaRatio(const(b2DynamicTree)* tree);
-
-/// Get the bounding box that contains the entire tree
-// b2AABB b2DynamicTree_GetRootBounds(const(b2DynamicTree)* tree);
-
-/// Get the number of proxies created
-// int b2DynamicTree_GetProxyCount(const(b2DynamicTree)* tree);
-
-/// Rebuild the tree while retaining subtrees that haven't changed. Returns the number of boxes sorted.
-// int b2DynamicTree_Rebuild(b2DynamicTree* tree, bool fullBuild);
-
-/// Get the number of bytes used by this tree
-// int b2DynamicTree_GetByteCount(const(b2DynamicTree)* tree);
-
-/// Get proxy user data
-// uint64_t b2DynamicTree_GetUserData(const(b2DynamicTree)* tree, int proxyId);
-
-/// Get the AABB of a proxy
-// b2AABB b2DynamicTree_GetAABB(const(b2DynamicTree)* tree, int proxyId);
-
-/// Validate this tree. For testing.
-// void b2DynamicTree_Validate(const(b2DynamicTree)* tree);
-
-/// Validate this tree has no enlarged AABBs. For testing.
-// void b2DynamicTree_ValidateNoEnlarged(const(b2DynamicTree)* tree);
-
-/**@}*/
 
 /**
  * @defgroup character Character mover
@@ -814,47 +577,6 @@ private ushort b2MaxUInt16(ushort a, ushort b)
 {
 	return a > b ? a : b;
 }
-
-// b2DynamicTree b2DynamicTree_Create()
-// {
-// 	b2DynamicTree tree = void;
-// 	tree.root = B2_NULL_INDEX;
-
-// 	tree.nodeCapacity = 16;
-// 	tree.nodeCount = 0;
-// 	tree.nodes = cast(b2TreeNode*)b2Alloc( cast(int)(tree.nodeCapacity * b2TreeNode.sizeof) );
-// 	memset( tree.nodes, 0, tree.nodeCapacity * b2TreeNode.sizeof );
-
-// 	// Build a linked list for the free list.
-// 	for ( int i = 0; i < tree.nodeCapacity - 1; ++i )
-// 	{
-// 		tree.nodes[i].next = i + 1;
-// 	}
-
-// 	tree.nodes[tree.nodeCapacity - 1].next = B2_NULL_INDEX;
-// 	tree.freeList = 0;
-
-// 	tree.proxyCount = 0;
-
-// 	tree.leafIndices = null;
-// 	tree.leafBoxes = null;
-// 	tree.leafCenters = null;
-// 	tree.binIndices = null;
-// 	tree.rebuildCapacity = 0;
-
-// 	return tree;
-// }
-
-// void b2DynamicTree_Destroy(b2DynamicTree* tree)
-// {
-// 	b2Free( tree.nodes, cast(int)(tree.nodeCapacity * b2TreeNode.sizeof) );
-// 	b2Free( tree.leafIndices, cast(int)(tree.rebuildCapacity * int.sizeof) );
-// 	b2Free( tree.leafBoxes, cast(int)(tree.rebuildCapacity * b2AABB.sizeof) );
-// 	b2Free( tree.leafCenters, cast(int)(tree.rebuildCapacity * b2Vec2.sizeof) );
-// 	b2Free( tree.binIndices, cast(int)(tree.rebuildCapacity * int.sizeof) );
-
-// 	memset( tree, 0, b2DynamicTree.sizeof );
-// }
 
 // Allocate a node from the pool. Grow the pool if necessary.
 private int b2AllocateNode(b2DynamicTree* tree)
@@ -1508,132 +1230,6 @@ private void b2RemoveLeaf(b2DynamicTree* tree, int leaf)
 		b2FreeNode( tree, parent );
 	}
 }
-
-// Create a proxy in the tree as a leaf node. We return the index of the node instead of a pointer so that we can grow
-// the node pool.
-// int b2DynamicTree_CreateProxy(b2DynamicTree* tree, b2AABB aabb, ulong categoryBits, ulong userData)
-// {
-// 	B2_ASSERT( -B2_HUGE < aabb.lowerBound.x && aabb.lowerBound.x < B2_HUGE );
-// 	B2_ASSERT( -B2_HUGE < aabb.lowerBound.y && aabb.lowerBound.y < B2_HUGE );
-// 	B2_ASSERT( -B2_HUGE < aabb.upperBound.x && aabb.upperBound.x < B2_HUGE );
-// 	B2_ASSERT( -B2_HUGE < aabb.upperBound.y && aabb.upperBound.y < B2_HUGE );
-
-// 	int proxyId = b2AllocateNode( tree );
-// 	b2TreeNode* node = tree.nodes + proxyId;
-
-// 	node.aabb = aabb;
-// 	node.userData = userData;
-// 	node.categoryBits = categoryBits;
-// 	node.height = 0;
-// 	node.flags = b2_allocatedNode | b2_leafNode;
-
-// 	bool shouldRotate = true;
-// 	b2InsertLeaf( tree, proxyId, shouldRotate );
-
-// 	tree.proxyCount += 1;
-
-// 	return proxyId;
-// }
-
-// void b2DynamicTree_DestroyProxy(b2DynamicTree* tree, int proxyId)
-// {
-// 	B2_ASSERT( 0 <= proxyId && proxyId < tree.nodeCapacity );
-// 	B2_ASSERT( b2IsLeaf( tree.nodes + proxyId ) );
-
-// 	b2RemoveLeaf( tree, proxyId );
-// 	b2FreeNode( tree, proxyId );
-
-// 	B2_ASSERT( tree.proxyCount > 0 );
-// 	tree.proxyCount -= 1;
-// }
-
-// int b2DynamicTree_GetProxyCount(const(b2DynamicTree)* tree)
-// {
-// 	return tree.proxyCount;
-// }
-
-// void b2DynamicTree_MoveProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb)
-// {
-// 	B2_ASSERT( b2IsValidAABB( aabb ) );
-// 	B2_ASSERT( aabb.upperBound.x - aabb.lowerBound.x < B2_HUGE );
-// 	B2_ASSERT( aabb.upperBound.y - aabb.lowerBound.y < B2_HUGE );
-// 	B2_ASSERT( 0 <= proxyId && proxyId < tree.nodeCapacity );
-// 	B2_ASSERT( b2IsLeaf( tree.nodes + proxyId ) );
-
-// 	b2RemoveLeaf( tree, proxyId );
-
-// 	tree.nodes[proxyId].aabb = aabb;
-
-// 	bool shouldRotate = false;
-// 	b2InsertLeaf( tree, proxyId, shouldRotate );
-// }
-
-// void b2DynamicTree_SetCategoryBits(b2DynamicTree* tree, int proxyId, ulong categoryBits)
-// {
-// 	b2TreeNode* nodes = tree.nodes;
-
-// 	B2_ASSERT( nodes[proxyId].children.child1 == B2_NULL_INDEX );
-// 	B2_ASSERT( nodes[proxyId].children.child2 == B2_NULL_INDEX );
-// 	B2_ASSERT( (nodes[proxyId].flags & b2_leafNode) == b2_leafNode );
-
-// 	nodes[proxyId].categoryBits = categoryBits;
-
-// 	// Fix up category bits in ancestor internal nodes
-// 	int nodeIndex = nodes[proxyId].parent;
-// 	while ( nodeIndex != B2_NULL_INDEX )
-// 	{
-// 		b2TreeNode* node = nodes + nodeIndex;
-// 		int child1 = node.children.child1;
-// 		B2_ASSERT( child1 != B2_NULL_INDEX );
-// 		int child2 = node.children.child2;
-// 		B2_ASSERT( child2 != B2_NULL_INDEX );
-// 		node.categoryBits = nodes[child1].categoryBits | nodes[child2].categoryBits;
-
-// 		nodeIndex = node.parent;
-// 	}
-// }
-
-// ulong b2DynamicTree_GetCategoryBits(b2DynamicTree* tree, int proxyId)
-// {
-// 	B2_ASSERT( 0 <= proxyId && proxyId < tree.nodeCapacity );
-// 	return tree.nodes[proxyId].categoryBits;
-// }
-
-// float b2DynamicTree_GetAreaRatio(const(b2DynamicTree)* tree)
-// {
-// 	if ( tree.root == B2_NULL_INDEX )
-// 	{
-// 		return 0.0f;
-// 	}
-
-// 	const(b2TreeNode)* root = tree.nodes + tree.root;
-// 	float rootArea = b2Perimeter( root.aabb );
-
-// 	float totalArea = 0.0f;
-// 	for ( int i = 0; i < tree.nodeCapacity; ++i )
-// 	{
-// 		const(b2TreeNode)* node = tree.nodes + i;
-// 		if ( b2IsAllocated(node) == false || b2IsLeaf( node ) || i == tree.root )
-// 		{
-// 			continue;
-// 		}
-
-// 		totalArea += b2Perimeter( node.aabb );
-// 	}
-
-// 	return totalArea / rootArea;
-// }
-
-// b2AABB b2DynamicTree_GetRootBounds(const(b2DynamicTree)* tree)
-// {
-// 	if (tree.root != B2_NULL_INDEX)
-// 	{
-// 		return tree.nodes[tree.root].aabb;
-// 	}
-
-// 	b2AABB empty = { b2Vec2_zero, b2Vec2_zero };
-// 	return empty;
-// }
 
 static if (B2_VALIDATE) {
 // Compute the height of a sub-tree.

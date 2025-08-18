@@ -1,16 +1,10 @@
 module dbox2d.manifold;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.constants;
 import dbox2d.core;
-
 import dbox2d.collision;
 import dbox2d.math_functions;
 import dbox2d.distance;
-
 
 import std.math;
 

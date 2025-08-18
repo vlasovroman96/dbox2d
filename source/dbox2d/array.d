@@ -1,16 +1,5 @@
 module dbox2d.array;
 
-import std.container.array;
-
-// alias b2IntArray = Array!int;
-// import dbox2d.contact;
-// import dbox2d.body;
-// import dbox2d.shape;
-// alias b2ContactBeginTouchEventArray = Array!b2ContactBeginTouchEvent;
-
-// alias b2ContactSimArray = Array!b2ContactSim;
-// alias b2ContactSimArray = b2ContactSim[];
-
 enum string B2_ARRAY_SOURCE(string PREFIX, string T) = 
 "
     alias " ~ PREFIX~"Array = " ~ T ~"[];

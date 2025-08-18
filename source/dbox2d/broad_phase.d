@@ -1,8 +1,4 @@
 module dbox2d.broad_phase;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.array;
 public import dbox2d.table;
@@ -29,21 +25,16 @@ auto _TYPE(T) (T key) {
 	return cast(b2BodyType)((key) & 3);
 }
 alias B2_PROXY_TYPE = _TYPE;
-// enum string B2_PROXY_TYPE( string KEY ) = `( cast(b2BodyType)( ( ` ~ KEY ~ ` ) & 3 ) )`;
 
 auto _ID(T)(T id) {
 	return id >> 2;
 }
 alias B2_PROXY_ID = _ID;
-// enum string B2_PROXY_ID( string KEY ) = `( ( ` ~ KEY ~ ` ) >> 2 )`;
 
 auto _KEY(T, Y) (T id, Y type) {
 	return ((id << 2) | type);
 }
 alias B2_PROXY_KEY = _KEY;
-// enum string B2_PROXY_KEY( string ID, string TYPE ) = `( ( ( ` ~ ID ~ ` ) << 2 ) | ( ` ~ TYPE ~ ` ) )`;
-
-// mixin B2_ARRAY_SOURCE!("b2Int", "int");
 
 /// The broad-phase is used for computing pairs and performing volume queries and ray casts.
 /// This broad-phase does not persist pairs. Instead, this reports potentially new pairs.
@@ -72,25 +63,6 @@ struct b2BroadPhase {
 	b2HashSet pairSet;
 
 }
-
-void b2CreateBroadPhase(b2BroadPhase* bp);
-void b2DestroyBroadPhase(b2BroadPhase* bp);
-
-int b2BroadPhase_CreateProxy(b2BroadPhase* bp, b2BodyType proxyType, b2AABB aabb, ulong categoryBits, int shapeIndex, bool forcePairCreation);
-void b2BroadPhase_DestroyProxy(b2BroadPhase* bp, int proxyKey);
-
-void b2BroadPhase_MoveProxy(b2BroadPhase* bp, int proxyKey, b2AABB aabb);
-void b2BroadPhase_EnlargeProxy(b2BroadPhase* bp, int proxyKey, b2AABB aabb);
-
-void b2BroadPhase_RebuildTrees(b2BroadPhase* bp);
-
-int b2BroadPhase_GetShapeIndex(b2BroadPhase* bp, int proxyKey);
-
-void b2UpdateBroadPhasePairs(b2World* world);
-bool b2BroadPhase_TestOverlap(const(b2BroadPhase)* bp, int proxyKeyA, int proxyKeyB);
-
-void b2ValidateBroadphase(const(b2BroadPhase)* bp);
-void b2ValidateNoEnlarged(const(b2BroadPhase)* bp);
 
 // This is what triggers new contact pairs to be created
 // Warning: this must be called in deterministic order
@@ -129,7 +101,6 @@ void b2CreateBroadPhase(b2BroadPhase* bp)
 }
 
 import core.stdc.string;
-// import rt.memset;
 
 void b2DestroyBroadPhase(b2BroadPhase* bp)
 {
@@ -312,11 +283,9 @@ bool b2PairQueryCallback(int proxyId, ulong userData, void* context)
 
 	b2World* world = queryContext.world;
 
-	b2Shape* shapeA = &world.shapes[shapeIdA];
-	// b2Shape* shapeA = b2ShapeArray_Get( &world.shapes, shapeIdA );
+	b2Shape* shapeA = b2ShapeArray_Get( world.shapes, shapeIdA );
 
-	b2Shape* shapeB = &world.shapes[shapeIdB];
-	// b2Shape* shapeB = b2ShapeArray_Get( &world.shapes, shapeIdB );
+	b2Shape* shapeB = b2ShapeArray_Get( world.shapes, shapeIdB );
 
 	int bodyIdA = shapeA.bodyId;
 	int bodyIdB = shapeB.bodyId;
@@ -395,10 +364,6 @@ b2TreeStats b2_staticStats;
 
 void b2FindPairsTask(int startIndex, int endIndex, uint threadIndex, void* context)
 {
-	// b2TracyCZoneNC( pair_task, "Pair", b2_colorMediumSlateBlue, true );
-	//b2TracyCZoneC( pair_task, "Pair", b2_colorMediumSlateBlue, true );
-
-
 	// B2_UNUSED( threadIndex );
 
 	b2World* world = cast(b2World*)context;
@@ -456,8 +421,6 @@ void b2FindPairsTask(int startIndex, int endIndex, uint threadIndex, void* conte
 		stats.nodeVisits += statsDynamic.nodeVisits;
 		stats.leafVisits += statsDynamic.leafVisits;
 	}
-
-	// b2TracyCZoneEnd( pair_task );
 }
 
 void b2UpdateBroadPhasePairs(b2World* world)
@@ -471,8 +434,6 @@ void b2UpdateBroadPhasePairs(b2World* world)
 	{
 		return;
 	}
-
-	// b2TracyCZoneNC( update_pairs, "Find Pairs", b2_colorMediumSlateBlue, true );
 
 	b2ArenaAllocator* alloc = &world.arena;
 
@@ -496,8 +457,6 @@ static if (B2_SNOOP_TABLE_COUNTERS) {
 	}
 
 	// todo_erin could start tree rebuild here
-
-	// b2TracyCZoneNC( create_contacts, "Create Contacts", b2_colorCoral, true );
 
 	// Single-threaded work
 	// - Clear move flags
@@ -554,10 +513,6 @@ static if (B2_SNOOP_TABLE_COUNTERS) {
 	bp.moveResults = null;
 
 	b2ValidateSolverSets( world );
-
-	// b2TracyCZoneEnd( create_contacts );
-
-	// b2TracyCZoneEnd( update_pairs );
 }
 
 bool b2BroadPhase_TestOverlap(const(b2BroadPhase)* bp, int proxyKeyA, int proxyKeyB)

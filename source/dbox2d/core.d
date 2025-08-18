@@ -14,23 +14,10 @@ import core.stdc.stdlib;
 template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
-
-// public import box2d.math_functions;
-
-// clang-format off
-
 enum B2_NULL_INDEX = -1 ;
 
 // for performance comparisons
 // alias B2_RESTRICT = restrict;
-
-// void B2_ASSERT(bool e) {
-// 	assert(e);
-// }
 
 version (NDEBUG) {
 	enum B2_DEBUG = 0;
@@ -130,9 +117,7 @@ version (BOX2D_PROFILE) {
 enum string B2_ARRAY_COUNT( string A ) = `cast(int)( A.sizeof / typeof( ` ~ A ~ `[0] ).sizeof )`;
 
 // Used to prevent the compiler from warning about unused variables
-// enum string B2_UNUSED( ... ) = `cast(void)typeof( ( __VA_ARGS__, 0 ) ).sizeof`;
 enum string B2_UNUSED = "";
-
 
 // Use to validate definitions. Do not take my cookie.
 enum B2_SECRET_COOKIE = 1152023;
@@ -152,10 +137,6 @@ void B2_CHECK_DEF(T)(T def) {
 	assert(def.internalValue == B2_SECRET_COOKIE);
 }
 
-// enum string B2_CHECK_DEF( string DEF ) = "
-// 	assert("~DEF~".internalValue === B2_SECRET_COOKIE);
-// ";
-
 struct b2AtomicInt {
 	int value;
 }
@@ -163,22 +144,6 @@ struct b2AtomicInt {
 struct b2AtomicU32 {
 	uint value;
 }
-
-void* b2Alloc(int size);
-enum string B2_ALLOC_STRUCT( string type ) = `b2Alloc(` ~ type ~ `.sizeof)`;
-enum string B2_ALLOC_ARRAY( string count, string type ) = `b2Alloc(` ~ count ~ ` * ` ~ type ~ `.sizeof)`;
-
-void b2Free(void* mem, int size);
-enum string B2_FREE_STRUCT( string mem, string type ) = `b2Free( ` ~ mem ~ `, ` ~ type ~ `.sizeof);`;
-enum string B2_FREE_ARRAY( string mem, string count, string type ) = `b2Free(` ~ mem ~ `, ` ~ count ~ ` * ` ~ type ~ `.sizeof)`;
-
-void* b2GrowAlloc(void* oldMem, int oldSize, int newSize);
-
-
-b2Mutex* b2CreateMutex();
-void b2DestroyMutex(b2Mutex* m);
-void b2LockMutex(b2Mutex* m);
-void b2UnlockMutex(b2Mutex* m);
 
 static float b2_lengthUnitsPerMeter = 1.0f;
 
@@ -278,7 +243,6 @@ void* b2Alloc( int size )
 	void* ptr = aligned_alloc( B2_ALIGNMENT, size32 );
 // #endif
 
-	// b2TracyCAlloc( ptr, size );
 // 
 	assert( ptr != null );
 	assert( ( cast(void*)(cast(int)ptr & 0x1F )) == null );
@@ -292,8 +256,6 @@ void b2Free( void* mem, int size )
 	{
 		return;
 	}
-
-	// b2TracyCFree( mem );
 
 	if ( b2_freeFcn != null )
 	{
@@ -327,4 +289,3 @@ int b2GetByteCount()
 {
 	return b2AtomicLoadInt( &b2_byteCount );
 }
-

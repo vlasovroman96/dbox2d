@@ -1,8 +1,4 @@
 module dbox2d.id_pool;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 
@@ -14,15 +10,6 @@ struct b2IdPool {
 	b2IntArray freeArray;
 	int nextIndex;
 }
-
-
-b2IdPool b2CreateIdPool();
-void b2DestroyIdPool(b2IdPool* pool);
-
-int b2AllocId(b2IdPool* pool);
-void b2FreeId(b2IdPool* pool, int id);
-void b2ValidateFreeId(b2IdPool* pool, int id);
-void b2ValidateUsedId(b2IdPool* pool, int id);
 
 pragma(inline, true) int b2GetIdCount(b2IdPool* pool)
 {
@@ -113,4 +100,3 @@ static if (B2_VALIDATE) {
 		// B2_UNUSED( pool, id );
 	}
 }
-

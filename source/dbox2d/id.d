@@ -1,8 +1,4 @@
 module dbox2d.id;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import core.stdc.stdint;
 
@@ -188,5 +184,3 @@ b2ContactId b2LoadContactId(uint* values)
 	id.generation = cast(uint)values[2];
 	return id;
 }
-
-/**@}*/

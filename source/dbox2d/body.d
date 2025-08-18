@@ -1,10 +1,4 @@
 module dbox2d.body;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.array;
 import dbox2d.box2d;
@@ -219,25 +213,6 @@ struct b2BodySim {
 	uint flags;
 }
 
-// Get a validated body from a world using an id.
-b2Body* b2GetBodyFullId(b2World* world, b2BodyId bodyId);
-
-b2Transform b2GetBodyTransformQuick(b2World* world, b2Body* body);
-b2Transform b2GetBodyTransform(b2World* world, int bodyId);
-
-// Create a b2BodyId from a raw id.
-b2BodyId b2MakeBodyId(b2World* world, int bodyId);
-
-bool b2ShouldBodiesCollide(b2World* world, b2Body* bodyA, b2Body* bodyB);
-
-b2BodySim* b2GetBodySim(b2World* world, b2Body* body);
-b2BodyState* b2GetBodyState(b2World* world, b2Body* body);
-
-// careful calling this because it can invalidate body, state, joint, and contact pointers
-bool b2WakeBody(b2World* world, b2Body* body);
-
-void b2UpdateBodyMassData(b2World* world, b2Body* body);
-
 pragma(inline, true) b2Sweep b2MakeSweep(const(b2BodySim)* bodySim)
 {
 	b2Sweep s = void;
@@ -249,20 +224,7 @@ pragma(inline, true) b2Sweep b2MakeSweep(const(b2BodySim)* bodySim)
 	return s;
 }
 
-// Define inline functions for arrays
-
-// alias b2BodyArray = b2Body[];
-// mixin B2_ARRAY_SOURCE!("b2Body", "b2Body");
-// B2_ARRAY_INLINE( b2Body, b2Body ")")
-
-// alias b2BodySimArray = b2BodySim[];
-// B2_ARRAY_INLINE( b2BodySim, b2BodySim )
-
-// alias b2BodyStateArray = b2Body[];
-// B2_ARRAY_INLINE( b2BodyState, b2BodyState )
-
 import core.stdc.math;
-
 
 void b2LimitVelocity(b2BodyState* state, float maxLinearSpeed)
 {

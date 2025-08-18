@@ -780,8 +780,6 @@ void b2SplitIsland(b2World* world, int baseId)
 // are interacting with these data structures.
 void b2SplitIslandTask(int startIndex, int endIndex, uint threadIndex, void* context)
 {
-	// b2TracyCZoneNC( split, "Split Island", b2_colorOlive, true );
-
 	// B2_UNUSED( startIndex, endIndex, threadIndex );
 
 	ulong ticks = b2GetTicks();
@@ -792,7 +790,6 @@ void b2SplitIslandTask(int startIndex, int endIndex, uint threadIndex, void* con
 	b2SplitIsland( world, world.splitIslandId );
 
 	world.profile.splitIslands += b2GetMilliseconds( ticks );
-	// b2TracyCZoneEnd( split );
 }
 
 static if (B2_VALIDATE) {

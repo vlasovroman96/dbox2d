@@ -1,15 +1,9 @@
 module dbox2d.ctz;
-// @nogc nothrow:
-// extern(C): __gshared:
 
 template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
 import core.stdc.config: c_long, c_ulong;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import core.stdc.stdlib;
 public import core.stdc.stdint;
@@ -77,8 +71,6 @@ pragma(inline, true) uint b2CTZ64(ulong block)
 
 	return index;
 }
-
-// import core.bitop;
 
 pragma(inline, true) int b2PopCount64(ulong block)
 {

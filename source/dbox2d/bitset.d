@@ -1,8 +1,4 @@
 module dbox2d.bitset;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.core;
 
@@ -16,13 +12,6 @@ struct b2BitSet {
 	uint blockCapacity;
 	uint blockCount;
 }
-
-b2BitSet b2CreateBitSet(uint bitCapacity);
-void b2DestroyBitSet(b2BitSet* bitSet);
-void b2SetBitCountAndClear(b2BitSet* bitSet, uint bitCount);
-void b2InPlaceUnion(b2BitSet* setA, const(b2BitSet)* setB);
-void b2GrowBitSet(b2BitSet* bitSet, uint blockCount);
-int b2CountSetBits(b2BitSet* bitSet);
 
 pragma(inline, true) void b2SetBit(b2BitSet* bitSet, uint bitIndex)
 {

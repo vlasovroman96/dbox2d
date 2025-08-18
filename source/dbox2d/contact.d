@@ -1,10 +1,4 @@
 module dbox2d.contact;
-// @nogc nothrow:
-// extern(C): __gshared:
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
-
-//#pragma once
 
 public import dbox2d.array;
 public import dbox2d.core;
@@ -23,8 +17,6 @@ mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
 mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
 mixin(B2_ARRAY_SOURCE!("b2Shape","b2Shape"));
-
-
 
 enum b2ContactFlags
 {
@@ -111,13 +103,13 @@ enum b2ContactSimFlags
 	// This contact wants pre-solve events
 	b2_simEnablePreSolveEvents = 0x00200000,
 }
+
 alias b2_simTouchingFlag = b2ContactSimFlags.b2_simTouchingFlag;
 alias b2_simDisjoint = b2ContactSimFlags.b2_simDisjoint;
 alias b2_simStartedTouching = b2ContactSimFlags.b2_simStartedTouching;
 alias b2_simStoppedTouching = b2ContactSimFlags.b2_simStoppedTouching;
 alias b2_simEnableHitEvent = b2ContactSimFlags.b2_simEnableHitEvent;
 alias b2_simEnablePreSolveEvents = b2ContactSimFlags.b2_simEnablePreSolveEvents;
-
 
 /// The class manages contact between two shapes. A contact exists for each overlapping
 /// AABB in the broad-phase (except if filtered). Therefore a contact object may exist
@@ -155,24 +147,6 @@ static if (B2_VALIDATE) {
 
 	b2SimplexCache cache;
 }
-
-void b2InitializeContactRegisters();
-
-void b2CreateContact(b2World* world, b2Shape* shapeA, b2Shape* shapeB);
-void b2DestroyContact(b2World* world, b2Contact* contact, bool wakeBodies);
-
-b2ContactSim* b2GetContactSim(b2World* world, b2Contact* contact);
-
-
-bool b2UpdateContact(b2World* world, b2ContactSim* contactSim, b2Shape* shapeA, b2Transform transformA, b2Vec2 centerOffsetA, b2Shape* shapeB, b2Transform transformB, b2Vec2 centerOffsetB);
-
-b2Manifold b2ComputeManifold(b2Shape* shapeA, b2Transform transformA, b2Shape* shapeB, b2Transform transformB);
-
-// alias b2ContactArray = b2Contact[];
-// B2_ARRAY_INLINE( b2Contact, b2Contact )
-
-// alias b2ContactSimArray = b2ContactSim[];
-// B2_ARRAY_INLINE( b2ContactSim, b2ContactSim )
 
 private b2Contact* b2GetContactFullId(b2World* world, b2ContactId contactId)
 {

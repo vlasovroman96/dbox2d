@@ -1,6 +1,4 @@
 module dbox2d.dynamic_tree;
-// SPDX-FileCopyrightText: 2023 Erin Catto
-// SPDX-License-Identifier: MIT
 
 import dbox2d.aabb;
 import dbox2d.constants;
@@ -13,7 +11,6 @@ import core.stdc.float_;
 import core.stdc.string;
 
 enum B2_TREE_STACK_SIZE = 1024;
-
 
 /// The dynamic tree structure. This should be considered private data.
 /// It is placed here for performance reasons.
@@ -373,7 +370,6 @@ alias b2_rotateBF = b2RotateType.b2_rotateBF;
 alias b2_rotateBG = b2RotateType.b2_rotateBG;
 alias b2_rotateCD = b2RotateType.b2_rotateCD;
 alias b2_rotateCE = b2RotateType.b2_rotateCE;
-
 
 // Perform a left or right rotation if node A is imbalanced.
 // Returns the new root index.

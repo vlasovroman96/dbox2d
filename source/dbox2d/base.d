@@ -92,8 +92,6 @@ struct b2Version
 // Get the current version of Box2D
 b2Version b2GetVersion();
 
-//! @cond
-
 // see https://github.com/scottt/debugbreak
 // static if (is(Windows))
 // {
@@ -133,28 +131,11 @@ alias B2_ASSERT = (a) {
         b2Breakpoint();
     // (a) ? cast(void)0 : b2Breakpoint();
 };
-// enum B2_ASSERT(bool a) = (a) ? cast(void)0 : b2Breakpoint();
-
 
 // Get the absolute number of system ticks. The value is platform specific.
 import core.sys.posix.sched;
 import core.stdc.time;
 
-// ulong b2GetTicks();
-
-
-// Get the milliseconds passed from an initial tick value.
-// float b2GetMilliseconds(ulong ticks);
-
-// Get the milliseconds passed from an initial tick value. Resets the passed in
-// value to the current tick value.
-// float b2GetMillisecondsAndReset(ref ulong ticks);
-
-// Yield to be used in a busy loop.
-// void b2Yield();
-
 // Simple djb2 hash function for determinism testing
 static immutable int B2_HASH_INIT = 5381;
 uint b2Hash(uint hash, const uint8_t[] data, int count);
-
-//! @endcond
