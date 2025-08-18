@@ -994,7 +994,7 @@ private int b2ComputeHeight(const(b2DynamicTree)* tree, int nodeId)
 
 	int height1 = b2ComputeHeight( tree, node.children.child1 );
 	int height2 = b2ComputeHeight( tree, node.children.child2 );
-	return 1 + b2MaxInt( height1, height2 );
+	return 1 + max( height1, height2 );
 }
 
 private void b2ValidateStructure(const(b2DynamicTree)* tree, int index)
@@ -1060,7 +1060,7 @@ private void b2ValidateMetrics(const(b2DynamicTree)* tree, int index)
 
 	int height1 = tree.nodes[child1].height;
 	int height2 = tree.nodes[child2].height;
-	int height = 1 + b2MaxInt( height1, height2 );
+	int height = 1 + max( height1, height2 );
 	B2_ASSERT( node.height == height );
 
 	// b2AABB aabb = b2AABB_Union(tree->nodes[child1].aabb, tree->nodes[child2].aabb);

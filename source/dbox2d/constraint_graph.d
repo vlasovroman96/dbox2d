@@ -99,7 +99,7 @@ void b2CreateGraph(b2ConstraintGraph* graph, int bodyCapacity)
 
 	*graph =  b2ConstraintGraph ();
 
-	bodyCapacity = b2MaxInt( bodyCapacity, 8 );
+	bodyCapacity = max( bodyCapacity, 8 );
 
 	// Initialize graph color bit set.
 	// No bitset for overflow color.

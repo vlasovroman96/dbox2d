@@ -1380,7 +1380,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 			}
 
 static if (B2_SNOOP_TOI_COUNTERS) {
-			b2_toiMaxRootIterations = b2MaxInt( b2_toiMaxRootIterations, rootIterationCount );
+			b2_toiMaxRootIterations = max( b2_toiMaxRootIterations, rootIterationCount );
 }
 
 			pushBackIterations += 1;
@@ -1414,7 +1414,7 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 	}
 
 static if (B2_SNOOP_TOI_COUNTERS) {
-	b2_toiMaxDistanceIterations = b2MaxInt( b2_toiMaxDistanceIterations, distanceIterations );
+	b2_toiMaxDistanceIterations = max( b2_toiMaxDistanceIterations, distanceIterations );
 
 	float time = b2GetMilliseconds( ticks );
 	b2_toiMaxTime = b2MaxFloat( b2_toiMaxTime, time );

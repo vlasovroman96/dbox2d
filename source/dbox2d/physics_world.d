@@ -931,7 +931,7 @@ void b2World_Step(b2WorldId worldId, float timeStep, int subStepCount)
 	b2StepContext context = { 0 };
 	context.world = world;
 	context.dt = timeStep;
-	context.subStepCount = b2MaxInt( 1, subStepCount );
+	context.subStepCount = max( 1, subStepCount );
 
 	if ( timeStep > 0.0f )
 	{
@@ -1797,7 +1797,7 @@ b2Counters b2World_GetCounters(b2WorldId worldId)
 
 	b2DynamicTree* dynamicTree = &world.broadPhase.trees[b2_dynamicBody];
 	b2DynamicTree* kinematicTree = &world.broadPhase.trees[b2_kinematicBody];
-	s.treeHeight = b2MaxInt( b2DynamicTree_GetHeight( dynamicTree ), b2DynamicTree_GetHeight( kinematicTree ) );
+	s.treeHeight = max( b2DynamicTree_GetHeight( dynamicTree ), b2DynamicTree_GetHeight( kinematicTree ) );
 
 	s.stackUsed = b2GetMaxArenaAllocation( &world.arena );
 	s.byteCount = b2GetByteCount();

@@ -105,12 +105,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/// @return the maximum of two integers
-int b2MaxInt(int a, int b)
-{
-	return a > b ? a : b;
-}
-
 /// @return the absolute value of an integer
 int b2AbsInt(int a)
 {

@@ -491,7 +491,7 @@ private b2JointPair b2CreateJoint(b2World* world, const(b2JointDef)* def, b2Join
 
 	int bodyIdA = bodyA.id;
 	int bodyIdB = bodyB.id;
-	int maxSetIndex = b2MaxInt( bodyA.setIndex, bodyB.setIndex );
+	int maxSetIndex = max( bodyA.setIndex, bodyB.setIndex );
 
 	// Create joint id and joint
 	int jointId = b2AllocId( &world.jointIdPool );
