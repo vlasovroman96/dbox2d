@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/dbox2d
+dbox2d.so
+dbox2d.dylib
+dbox2d.dll
+dbox2d.a
+dbox2d.lib
+dbox2d-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
+.vscode/
