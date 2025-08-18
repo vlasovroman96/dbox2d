@@ -15,3 +15,4 @@ dbox2d-test-*
 *.obj
 *.lst
 .vscode/
+*.a
