@@ -58,10 +58,6 @@ struct b2Vec2 {
 	auto rightPerp() const {
 		return b2Vec2( y, -x );
 	}
-
-	// auto neg() const {
-	// 	return b2Vec2( -this.x, -this.y );
-	// }
 }
 
 /// Cosine and sine pair
