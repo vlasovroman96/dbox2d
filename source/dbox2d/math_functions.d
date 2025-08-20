@@ -2,10 +2,11 @@ module dbox2d.math_functions;
 
 public import std.math;
 public import std.algorithm;
+public import std.stdint;
 
 import dbox2d.base;
 
-static assert( int.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
+static assert( int32_t.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
 
 /// 2D vector
 /// This can be used to represent a point or free vector
