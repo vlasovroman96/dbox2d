@@ -61,7 +61,7 @@ struct b2Vec2 {
 
 	/// Get the length of this vector (the norm)
 	float length() {
-		return sqrtf( this.x * this.x + this.y * this.y );
+		return core.stdc.math.hypot(this.x, this.y);
 	}
 }
 
