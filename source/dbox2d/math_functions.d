@@ -600,7 +600,7 @@ float b2SpringDamper(float hertz, float dampingRatio, float position, float velo
 
 bool b2IsValidFloat(float a)
 {
-	if ( isnan( a ) )
+	if ( isNaN( a ) )
 	{
 		return false;
 	}
@@ -615,7 +615,7 @@ bool b2IsValidFloat(float a)
 
 bool b2IsValidVec2(b2Vec2 v)
 {
-	if ( isnan( v.x ) || isnan( v.y ) )
+	if ( isNaN( v.x ) || isNaN( v.y ) )
 	{
 		return false;
 	}
@@ -630,7 +630,7 @@ bool b2IsValidVec2(b2Vec2 v)
 
 bool b2IsValidRotation(b2Rot q)
 {
-	if ( isnan( q.s ) || isnan( q.c ) )
+	if ( isNaN( q.s ) || isNaN( q.c ) )
 	{
 		return false;
 	}
