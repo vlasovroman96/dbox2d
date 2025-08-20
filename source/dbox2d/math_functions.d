@@ -50,14 +50,12 @@ struct b2Vec2 {
 		return b2Vec2(0, 0);
 	}
 
-	auto leftPerp() 
-	{
+	auto leftPerp() {
 		return b2Vec2( -y, x );
 	}
 
 	/// Get a right pointing perpendicular vector. Equivalent to b2CrossVS(v, 1.0f)
-	auto rightPerp() const
-	{
+	auto rightPerp() const {
 		return b2Vec2( y, -x );
 	}
 
