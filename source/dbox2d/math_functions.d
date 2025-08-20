@@ -5,8 +5,6 @@ public import std.algorithm;
 
 import dbox2d.base;
 
-import core.stdc.math;
-
 static assert( int.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
 
 /// 2D vector
@@ -61,7 +59,7 @@ struct b2Vec2 {
 
 	/// Get the length of this vector (the norm)
 	float length() {
-		return core.stdc.math.hypot(this.x, this.y);
+		return hypot(this.x, this.y);
 	}
 }
 
@@ -221,14 +219,14 @@ float b2Distance(b2Vec2 a, b2Vec2 b)
 {
 	float dx = b.x - a.x;
 	float dy = b.y - a.y;
-	return sqrtf( dx * dx + dy * dy );
+	return sqrt( dx * dx + dy * dy );
 }
 
 /// Convert a vector into a unit vector if possible, otherwise returns the zero vector.
 /// todo MSVC is not inlining this function in several places per warning 4710
 b2Vec2 b2Normalize( b2Vec2 v )
 {
-	float length = sqrtf( v.x * v.x + v.y * v.y );
+	float length = sqrt( v.x * v.x + v.y * v.y );
 	if ( length < float.epsilon )
 	{
 		return b2Vec2( 0.0f, 0.0f );
@@ -250,7 +248,7 @@ bool b2IsNormalized(b2Vec2 a)
 /// outputs the length.
 b2Vec2 b2GetLengthAndNormalize( float* length, b2Vec2 v )
 {
-	*length = sqrtf( v.x * v.x + v.y * v.y );
+	*length = sqrt( v.x * v.x + v.y * v.y );
 	if ( *length < float.epsilon )
 	{
 		return b2Vec2( 0.0f, 0.0f );
@@ -264,7 +262,7 @@ b2Vec2 b2GetLengthAndNormalize( float* length, b2Vec2 v )
 /// Normalize rotation
 b2Rot b2NormalizeRot(b2Rot q)
 {
-	float mag = sqrtf( q.s * q.s + q.c * q.c );
+	float mag = sqrt( q.s * q.s + q.c * q.c );
 	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 	b2Rot qn = { q.c * invMag, q.s * invMag };
 	return qn;
@@ -280,7 +278,7 @@ b2Rot b2IntegrateRotation(b2Rot q1, float deltaAngle)
 	// c2 = c1 - omega * h * s1
 	// s2 = s1 + omega * h * c1
 	b2Rot q2 = { q1.c - deltaAngle * q1.s, q1.s + deltaAngle * q1.c };
-	float mag = sqrtf( q2.s * q2.s + q2.c * q2.c );
+	float mag = sqrt( q2.s * q2.s + q2.c * q2.c );
 	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 	b2Rot qn = { q2.c * invMag, q2.s * invMag };
 	return qn;
@@ -335,7 +333,7 @@ b2Rot b2NLerp(b2Rot q1, b2Rot q2, float t)
 		omt * q1.s + t * q2.s,
 	};
 
-	float mag = sqrtf( q.s * q.s + q.c * q.c );
+	float mag = sqrt( q.s * q.s + q.c * q.c );
 	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 	b2Rot qn = { q.c * invMag, q.s * invMag };
 	return qn;
@@ -422,7 +420,7 @@ float b2RelativeAngle(b2Rot a, b2Rot b)
 float b2UnwindAngle(float radians)
 {
 	// Assuming this is deterministic
-	return remainderf( radians, 2.0f * PI );
+	return remainder( radians, 2.0f * PI );
 }
 
 /// Rotate a vector
@@ -605,7 +603,7 @@ bool b2IsValidFloat(float a)
 		return false;
 	}
 
-	if ( isinf( a ) )
+	if ( isInfinity( a ) )
 	{
 		return false;
 	}
@@ -620,7 +618,7 @@ bool b2IsValidVec2(b2Vec2 v)
 		return false;
 	}
 
-	if ( isinf( v.x ) || isinf( v.y ) )
+	if ( isInfinity( v.x ) || isInfinity( v.y ) )
 	{
 		return false;
 	}
@@ -635,7 +633,7 @@ bool b2IsValidRotation(b2Rot q)
 		return false;
 	}
 
-	if ( isinf( q.s ) || isinf( q.c ) )
+	if ( isInfinity( q.s ) || isInfinity( q.c ) )
 	{
 		return false;
 	}
@@ -742,7 +740,7 @@ b2CosSin b2ComputeCosSin(float radians)
 		s = 16.0f * x * ( PI - x ) / ( 5.0f * pi2 - 4.0f * x * ( PI - x ) );
 	}
 
-	float mag = sqrtf( s * s + c * c );
+	float mag = sqrt( s * s + c * c );
 	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 	b2CosSin cs = { c * invMag, s * invMag };
 	return cs;
