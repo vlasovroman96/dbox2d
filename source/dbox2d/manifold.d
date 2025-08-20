@@ -24,7 +24,7 @@ private b2Polygon b2MakeCapsule(b2Vec2 p1, b2Vec2 p2, float radius)
 	b2Vec2 d = b2Sub( p2, p1 );
 	B2_ASSERT( b2LengthSquared( d ) > float.epsilon );
 	b2Vec2 axis = b2Normalize( d );
-	b2Vec2 normal = b2RightPerp( axis );
+	b2Vec2 normal = axis.rightPerp();
 
 	shape.normals[0] = normal;
 	shape.normals[1] = -normal;
@@ -358,7 +358,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		float separationA = void;
 
 		{
-			normalA = b2LeftPerp( u1 );
+			normalA = u1.leftPerp();
 			float ss1 = b2Dot( b2Sub( p2, p1 ), normalA );
 			float ss2 = b2Dot( b2Sub( q2, p1 ), normalA );
 			float s1p = ss1 < ss2 ? ss1 : ss2;
@@ -378,7 +378,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		b2Vec2 normalB = void;
 		float separationB = void;
 		{
-			normalB = b2LeftPerp( u2 );
+			normalB = u2.leftPerp();
 			float ss1 = b2Dot( b2Sub( p1, p2 ), normalB );
 			float ss2 = b2Dot( b2Sub( q1, p2 ), normalB );
 			float s1p = ss1 < ss2 ? ss1 : ss2;
@@ -499,7 +499,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		}
 		else
 		{
-			normal = b2LeftPerp( u1 );
+			normal = u1.leftPerp();
 		}
 
 		b2Vec2 c1 = b2MulAdd( closest1, radiusA, normal );
@@ -1101,7 +1101,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	b2Vec2 e = b2Sub( p2, p1 );
 
 	// Normal points to the right
-	float offset = b2Dot( b2RightPerp( e ), b2Sub( pB, p1 ) );
+	float offset = b2Dot( e.rightPerp(), b2Sub( pB, p1 ) );
 	if ( offset < 0.0f )
 	{
 		// collision is one-sided
@@ -1184,7 +1184,7 @@ private b2Manifold b2ClipSegments(b2Vec2 a1, b2Vec2 a2, b2Vec2 b1, b2Vec2 b2, b2
 {
 	b2Manifold manifold;
 
-	b2Vec2 tangent = b2LeftPerp( normal );
+	b2Vec2 tangent = normal.leftPerp();
 
 	// Barycentric coordinates of each point relative to a1 along tangent
 	float lower1 = 0.0f;
@@ -1337,15 +1337,15 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 	const(float) convexTol = 0.01f;
 	b2Vec2 edge0 = b2Normalize( b2Sub( p1, segmentA.ghost1 ) );
-	smoothParams.normal0 = b2RightPerp( edge0 );
+	smoothParams.normal0 = edge0.rightPerp();
 	smoothParams.convex1 = b2Cross( edge0, edge1 ) >= convexTol;
 
 	b2Vec2 edge2 = b2Normalize( b2Sub( segmentA.ghost2, p2 ) );
-	smoothParams.normal2 = b2RightPerp( edge2 );
+	smoothParams.normal2 = edge2.rightPerp();
 	smoothParams.convex2 = b2Cross( edge1, edge2 ) >= convexTol;
 
 	// Normal points to the right
-	b2Vec2 normal1 = b2RightPerp( edge1 );
+	b2Vec2 normal1 = edge1.rightPerp();
 	bool behind1 = b2Dot( normal1, b2Sub( centroidB, p1 ) ) < 0.0f;
 	bool behind0 = true;
 	bool behind2 = true;

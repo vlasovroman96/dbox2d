@@ -133,7 +133,7 @@ static if (B2_VALIDATE) {
 		}
 
 		b2Vec2 normal = constraint.normal;
-		b2Vec2 tangent = b2RightPerp( constraint.normal );
+		b2Vec2 tangent = constraint.normal.rightPerp();
 
 		for ( int j = 0; j < pointCount; ++j )
 		{
@@ -206,7 +206,7 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 
 		// Stiffer for static contacts to avoid bodies getting pushed through the ground
 		b2Vec2 normal = constraint.normal;
-		b2Vec2 tangent = b2RightPerp( constraint.normal );
+		b2Vec2 tangent = constraint.normal.rightPerp();
 		int pointCount = constraint.pointCount;
 
 		for ( int j = 0; j < pointCount; ++j )
@@ -275,7 +275,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 		b2Vec2 dp = b2Sub( stateB.deltaPosition, stateA.deltaPosition );
 
 		b2Vec2 normal = constraint.normal;
-		b2Vec2 tangent = b2RightPerp( normal );
+		b2Vec2 tangent = normal.rightPerp();
 		float friction = constraint.friction;
 		b2Softness softness = constraint.softness;
 
@@ -1528,7 +1528,7 @@ static if (B2_VALIDATE) {
 				( cast(float*)&constraint.massScale )[j] = soft.massScale;
 				( cast(float*)&constraint.impulseScale )[j] = soft.impulseScale;
 
-				b2Vec2 tangent = b2RightPerp( normal );
+				b2Vec2 tangent = normal.rightPerp();
 
 				{
 					const(b2ManifoldPoint)* mp = &manifold.points[0];

@@ -152,7 +152,7 @@ b2Vec2 b2GetWheelJointForce(b2World* world, b2JointSim* base)
 
 	b2Vec2 localAxisA = b2RotateVector( base.localFrameA.q, b2Vec2( 1.0f, 0.0f ) );
 	b2Vec2 axisA = b2RotateVector( transformA.q, localAxisA );
-	b2Vec2 perpA = b2LeftPerp( axisA );
+	b2Vec2 perpA = axisA.leftPerp();
 
 	b2WheelJoint* joint = &base.wheelJoint;
 
@@ -236,7 +236,7 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 
 	b2Vec2 d = joint.deltaCenter + b2Sub( rB, rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
-	b2Vec2 perpA = b2LeftPerp( axisA );
+	b2Vec2 perpA = axisA.leftPerp();
 
 	// perpendicular constraint (keep wheel on line)
 	float s1 = b2Cross( d + rA, perpA );
@@ -290,7 +290,7 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 d = ( b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + joint.deltaCenter ) + b2Sub( rB, rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
-	b2Vec2 perpA = b2LeftPerp( axisA );
+	b2Vec2 perpA = axisA.leftPerp();
 
 	float a1 = b2Cross( d + rA, axisA );
 	float a2 = b2Cross( rB, axisA );
@@ -462,7 +462,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 
 	// point to line constraint
 	{
-		b2Vec2 perpA = b2LeftPerp( axisA );
+		b2Vec2 perpA = axisA.leftPerp();
 
 		float bias = 0.0f;
 		float massScale = 1.0f;
@@ -543,7 +543,7 @@ void b2DrawWheelJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transform
 	{
 		b2Vec2 lower = b2MulAdd( frameA.p, joint.lowerTranslation, axisA );
 		b2Vec2 upper = b2MulAdd( frameA.p, joint.upperTranslation, axisA );
-		b2Vec2 perp = b2LeftPerp( axisA );
+		b2Vec2 perp = axisA.leftPerp();
 		draw.DrawSegmentFcn( lower, upper, c1, draw.context );
 		draw.DrawSegmentFcn( b2MulSub( lower, 0.1f, perp ), b2MulAdd( lower, 0.1f, perp ), c2, draw.context );
 		draw.DrawSegmentFcn( b2MulSub( upper, 0.1f, perp ), b2MulAdd( upper, 0.1f, perp ), c3, draw.context );

@@ -50,6 +50,17 @@ struct b2Vec2 {
 		return b2Vec2(0, 0);
 	}
 
+	auto leftPerp() 
+	{
+		return b2Vec2( -y, x );
+	}
+
+	/// Get a right pointing perpendicular vector. Equivalent to b2CrossVS(v, 1.0f)
+	auto rightPerp() const
+	{
+		return b2Vec2( y, -x );
+	}
+
 	// auto neg() const {
 	// 	return b2Vec2( -this.x, -this.y );
 	// }
@@ -131,18 +142,6 @@ b2Vec2 b2CrossVS( b2Vec2 v, float s )
 b2Vec2 b2CrossSV(float s, b2Vec2 v)
 {
 	return b2Vec2( -s * v.y, s * v.x );
-}
-
-/// Get a left pointing perpendicular vector. Equivalent to b2CrossSV(1.0f, v)
-b2Vec2 b2LeftPerp(b2Vec2 v)
-{
-	return b2Vec2( -v.y, v.x );
-}
-
-/// Get a right pointing perpendicular vector. Equivalent to b2CrossVS(v, 1.0f)
-b2Vec2 b2RightPerp( b2Vec2 v )
-{
-	return b2Vec2( v.y, -v.x );
 }
 
 /// Vector subtraction

@@ -1323,7 +1323,7 @@ void b2DrawWithBounds(b2World* world, b2DebugDraw* draw)
 
 							if ( draw.drawFrictionImpulses )
 							{
-								b2Vec2 tangent = b2RightPerp( normal );
+								b2Vec2 tangent = normal.rightPerp();
 								b2Vec2 p1 = point.point;
 								b2Vec2 p2 = b2MulAdd( p1, k_impulseScale * point.tangentImpulse, tangent );
 								draw.DrawSegmentFcn( p1, p2, frictionColor, draw.context );
@@ -2604,7 +2604,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 		direction = b2Vec2( 1.0f, 0.0f );
 	}
 
-	b2Vec2 localLine = b2InvRotateVector( transform.q, b2LeftPerp( direction ) );
+	b2Vec2 localLine = b2InvRotateVector( transform.q, direction.leftPerp() );
 	float perimeter = b2GetShapeProjectedPerimeter( shape, localLine );
 	float scale = 1.0f;
 	if ( output.distance > radius && falloff > 0.0f )
