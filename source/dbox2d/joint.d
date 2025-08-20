@@ -1211,7 +1211,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		case b2_motorJoint:
 		{
 			b2MotorJoint* joint = &sim.motorJoint;
-			linearImpulse = b2Length( joint.linearVelocityImpulse + joint.linearSpringImpulse );
+			linearImpulse = ( joint.linearVelocityImpulse + joint.linearSpringImpulse ).length;
 			angularImpulse = abs( joint.angularVelocityImpulse + joint.angularSpringImpulse );
 		}
 		break;
@@ -1219,7 +1219,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		case b2_mouseJoint:
 		{
 			b2MouseJoint* joint = &sim.mouseJoint;
-			linearImpulse = b2Length( joint.linearImpulse );
+			linearImpulse = joint.linearImpulse.length();
 			angularImpulse = abs( joint.angularImpulse );
 		}
 		break;
@@ -1238,7 +1238,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		{
 			b2RevoluteJoint* joint = &sim.revoluteJoint;
 
-			linearImpulse = b2Length( joint.linearImpulse );
+			linearImpulse = joint.linearImpulse.length();
 			angularImpulse = abs( joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse );
 		}
 		break;
@@ -1246,7 +1246,7 @@ void b2GetJointReaction(b2JointSim* sim, float invTimeStep, float* force, float*
 		case b2_weldJoint:
 		{
 			b2WeldJoint* joint = &sim.weldJoint;
-			linearImpulse = b2Length( joint.linearImpulse );
+			linearImpulse = joint.linearImpulse.length();
 			angularImpulse = abs( joint.angularImpulse );
 		}
 		break;
@@ -1373,7 +1373,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 		case b2_distanceJoint:
 		{
 			b2DistanceJoint* distanceJoint = &base.distanceJoint;
-			float length = b2Length( dp );
+			float length = dp.length();
 			if ( distanceJoint.enableSpring )
 			{
 				if ( distanceJoint.enableLimit )
@@ -1432,14 +1432,14 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 		}
 
 		case b2_revoluteJoint:
-			return b2Length( dp );
+			return dp.length();
 
 		case b2_weldJoint:
 		{
 			b2WeldJoint* weldJoint = &base.weldJoint;
 			if ( weldJoint.linearHertz == 0.0f )
 			{
-				return b2Length( dp );
+				return dp.length();
 			}
 
 			return 0.0f;

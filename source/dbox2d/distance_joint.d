@@ -99,7 +99,7 @@ float b2DistanceJoint_GetCurrentLength(b2JointId jointId)
 	b2Vec2 pA = b2TransformPoint( transformA, base.localFrameA.p );
 	b2Vec2 pB = b2TransformPoint( transformB, base.localFrameB.p );
 	b2Vec2 d = b2Sub( pB, pA );
-	float length = b2Length( d );
+	float length = d.length();
 	return length;
 }
 
@@ -359,7 +359,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	b2Vec2 ds = b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + b2Sub( rB, rA );
 	b2Vec2 separation = joint.deltaCenter + ds;
 
-	float length = b2Length( separation );
+	float length = separation.length();
 	b2Vec2 axis = b2Normalize( separation );
 
 	// joint is soft if

@@ -58,6 +58,11 @@ struct b2Vec2 {
 	auto rightPerp() const {
 		return b2Vec2( y, -x );
 	}
+
+	/// Get the length of this vector (the norm)
+	float length() {
+		return sqrtf( this.x * this.x + this.y * this.y );
+	}
 }
 
 /// Cosine and sine pair
@@ -209,12 +214,6 @@ b2Vec2 b2Clamp(b2Vec2 v, b2Vec2 a, b2Vec2 b)
 	c.x = clamp( v.x, a.x, b.x );
 	c.y = clamp( v.y, a.y, b.y );
 	return c;
-}
-
-/// Get the length of this vector (the norm)
-float b2Length(b2Vec2 v)
-{
-	return sqrtf( v.x * v.x + v.y * v.y );
 }
 
 /// Get the distance between two points
@@ -751,8 +750,8 @@ b2CosSin b2ComputeCosSin(float radians)
 
 b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2)
 {
-	B2_ASSERT( abs( 1.0f - b2Length( v1 ) ) < 100.0f * float.epsilon );
-	B2_ASSERT( abs( 1.0f - b2Length( v2 ) ) < 100.0f * float.epsilon );
+	B2_ASSERT( abs( 1.0f - v1.length() ) < 100.0f * float.epsilon );
+	B2_ASSERT( abs( 1.0f - v2.length() ) < 100.0f * float.epsilon );
 
 	b2Rot rot = void;
 	rot.c = b2Dot( v1, v2 );

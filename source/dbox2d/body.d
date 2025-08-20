@@ -1078,7 +1078,7 @@ void b2Body_SetTargetTransform(b2BodyId bodyId, b2Transform target, float timeSt
 	// Early out if the body is asleep already and the desired movement is small
 	if ( body.setIndex != b2_awakeSet )
 	{
-		float maxVelocity = b2Length( linearVelocity ) + abs( angularVelocity ) * sim.maxExtent;
+		float maxVelocity = linearVelocity.length() + abs( angularVelocity ) * sim.maxExtent;
 
 		// Return if velocity would be sleepy
 		if ( maxVelocity < body.sleepThreshold )

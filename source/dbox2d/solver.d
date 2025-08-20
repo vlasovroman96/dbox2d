@@ -305,7 +305,7 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		// Clamp to max linear speed
 		if ( b2Dot( v, v ) > maxLinearSpeedSquared )
 		{
-			float ratio = maxLinearSpeed / b2Length( v );
+			float ratio = maxLinearSpeed / v.length();
 			v = b2MulSV( ratio, v );
 			sim.flags |= b2_isSpeedCapped;
 		}
@@ -860,10 +860,10 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		sim.transform.q = b2NormalizeRot( b2MulRot( state.deltaRotation, sim.transform.q ) );
 
 		// Use the velocity of the farthest point on the body to account for rotation.
-		float maxVelocity = b2Length( v ) + abs( w ) * sim.maxExtent;
+		float maxVelocity = v.length() + abs( w ) * sim.maxExtent;
 
 		// Sleep needs to observe position correction as well as true velocity.
-		float maxDeltaPosition = b2Length( state.deltaPosition ) + abs( state.deltaRotation.s ) * sim.maxExtent;
+		float maxDeltaPosition =  state.deltaPosition.length() + abs( state.deltaRotation.s ) * sim.maxExtent;
 
 		// Position correction is not as important for sleep as true velocity.
 		float positionSleepFactor = 0.5f;

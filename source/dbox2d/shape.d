@@ -725,7 +725,7 @@ float b2GetShapePerimeter(const(b2Shape)* shape)
 	switch ( shape.type )
 	{
 		case b2_capsuleShape:
-			return 2.0f * b2Length( b2Sub( shape.capsule.center1, shape.capsule.center2 ) ) +
+			return 2.0f * b2Sub( shape.capsule.center1, shape.capsule.center2 ).length() +
 				   2.0f * PI * shape.capsule.radius;
 		case b2_circleShape:
 			return 2.0f * PI * shape.circle.radius;
@@ -739,16 +739,16 @@ float b2GetShapePerimeter(const(b2Shape)* shape)
 			for ( int i = 0; i < count; ++i )
 			{
 				b2Vec2 next = points[i];
-				perimeter += b2Length( b2Sub( next, prev ) );
+				perimeter += b2Sub( next, prev ).length;
 				prev = next;
 			}
 
 			return perimeter;
 		}
 		case b2_segmentShape:
-			return 2.0f * b2Length( b2Sub( shape.segment.point1, shape.segment.point2 ) );
+			return 2.0f * b2Sub( shape.segment.point1, shape.segment.point2).length();
 		case b2_chainSegmentShape:
-			return 2.0f * b2Length( b2Sub( shape.chainSegment.segment.point1, shape.chainSegment.segment.point2 ) );
+			return 2.0f * b2Sub( shape.chainSegment.segment.point1, shape.chainSegment.segment.point2 ).length();
 		default:
 			return 0.0f;
 	}
@@ -841,7 +841,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 		{
 			float radius = shape.circle.radius;
 			extent.minExtent = radius;
-			extent.maxExtent = b2Length( b2Sub( shape.circle.center, localCenter ) ) + radius;
+			extent.maxExtent = b2Sub( shape.circle.center, localCenter ).length() + radius;
 		}
 		break;
 

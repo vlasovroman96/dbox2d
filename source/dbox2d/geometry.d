@@ -239,7 +239,7 @@ b2MassData b2ComputeCapsuleMass(const(b2Capsule)* shape, float density)
 	float rr = radius * radius;
 	b2Vec2 p1 = shape.center1;
 	b2Vec2 p2 = shape.center2;
-	float length = b2Length( b2Sub( p2, p1 ) );
+	float length = b2Sub( p2, p1 ).length();
 	float ll = length * length;
 
 	float circleMass = density * ( PI * radius * radius );
