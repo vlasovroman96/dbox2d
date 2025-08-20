@@ -25,7 +25,7 @@ struct b2Vec2 {
         this.y += b.y;
     }
 
-    auto opUnary(string op : "-")() {
+    auto opUnary(string op : "-")() const {
         return b2Vec2(-this.x, -this.y);
     }
 
@@ -50,9 +50,9 @@ struct b2Vec2 {
 		return b2Vec2(0, 0);
 	}
 
-	auto neg() const {
-		return b2Vec2( -this.x, -this.y );
-	}
+	// auto neg() const {
+	// 	return b2Vec2( -this.x, -this.y );
+	// }
 }
 
 /// Cosine and sine pair

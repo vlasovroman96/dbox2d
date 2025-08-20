@@ -683,7 +683,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	{
 		s2 = s22;
 		b = b2;
-		n = n.neg();
+		n = -n;
 	}
 
 	if ( s2 < 0.0f || input.maxFraction * rayLength < s2 )
@@ -788,7 +788,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 
 	if ( numerator > 0.0f )
 	{
-		normal = normal.neg();
+		normal = -normal;
 	}
 
 	output.fraction = t;
