@@ -8,6 +8,9 @@ import dbox2d.array;
 import dbox2d.constraint_graph;
 import dbox2d.base;
 import dbox2d.collision;
+import dbox2d.physics_world;
+import dbox2d.contact;
+import dbox2d.solver_set;
 
 mixin(B2_ARRAY_SOURCE!("b2BodyState","b2BodyState"));
 
@@ -39,12 +42,8 @@ struct b2ContactConstraint {
 	int pointCount;
 }
 
-import dbox2d.physics_world;
-
 void b2PrepareOverflowContacts(b2StepContext* context)
 {
-	import dbox2d.contact;
-
 	b2World* world = context.world;
 	b2ConstraintGraph* graph = context.graph;
 	b2GraphColor* color = &(graph.colors[B2_OVERFLOW_INDEX]);
@@ -177,7 +176,6 @@ static if (B2_VALIDATE) {
 
 void b2WarmStartOverflowContacts(b2StepContext* context)
 {
-	import dbox2d.solver_set;
 	mixin(B2_ARRAY_SOURCE!("b2SolverSet", "b2SolverSet"));
 	b2ConstraintGraph* graph = context.graph;
 	b2GraphColor* color = &graph.colors[B2_OVERFLOW_INDEX];
@@ -239,8 +237,6 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 		stateB.angularVelocity = wB;
 	}
 }
-
-import dbox2d.solver_set;
 
 mixin(B2_ARRAY_SOURCE!("b2SolverSet", "b2SolverSet"));
 
@@ -489,8 +485,6 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 		stateB.angularVelocity = wB;
 	}
 }
-
-import dbox2d.contact;
 
 void b2StoreOverflowImpulses(b2StepContext* context)
 {
