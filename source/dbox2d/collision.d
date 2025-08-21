@@ -7,10 +7,7 @@ import dbox2d.core;
 import dbox2d.constants;
 import dbox2d.aabb;
 import dbox2d.math_functions;
-// import core.stdc.stdlib;
-// import core.stdc.stdint;
 import dbox2d.dynamic_tree;
-// import core.stdc.string;
 import dbox2d.collision;
 import dbox2d.manifold;
 import dbox2d.hull;
@@ -592,8 +589,8 @@ private int b2AllocateNode(b2DynamicTree* tree)
 		tree.nodeCapacity += oldCapacity >> 1;
 		tree.nodes = cast(b2TreeNode*)b2Alloc( cast(int)(tree.nodeCapacity * b2TreeNode.sizeof) );
 		B2_ASSERT( oldNodes != null );
-		tree.nodes[] = oldNodes[];
-		(tree.nodes + tree.nodeCount)[0 .. ( tree.nodeCapacity - tree.nodeCount ) * b2TreeNode.sizeof ] = 0;
+		*tree.nodes = *oldNodes;
+		(tree.nodes + tree.nodeCount)[0 .. ( tree.nodeCapacity - tree.nodeCount ) * b2TreeNode.sizeof ] = null;
 		b2Free( oldNodes, cast(int)(oldCapacity * b2TreeNode.sizeof) );
 
 		// Build a linked list for the free list. The parent pointer becomes the "next" pointer.
