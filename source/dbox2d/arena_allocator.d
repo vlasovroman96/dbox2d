@@ -1,11 +1,10 @@
 module dbox2d.arena_allocator;
 
+import std.stdint;
+
 import dbox2d.array;
 import dbox2d.core;
 import dbox2d.base;
-
-import core.stdc.stddef;
-import core.stdc.inttypes;
 
 struct b2ArenaEntry {
 	char* data;
