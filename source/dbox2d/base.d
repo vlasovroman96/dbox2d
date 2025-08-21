@@ -5,7 +5,7 @@ import std.traits;
 
 import dbox2d.timer;
 
-import core.stdc.stdint;
+import std.stdint;
 
 // Shared library macros
 // static if (is(Windows))
