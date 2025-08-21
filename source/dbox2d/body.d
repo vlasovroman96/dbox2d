@@ -1,10 +1,10 @@
 module dbox2d.body;
 
-public import dbox2d.array;
+import dbox2d.array;
 import dbox2d.box2d;
 
-public import dbox2d.math_functions;
-public import dbox2d.types;
+import dbox2d.math_functions;
+import dbox2d.types;
 import dbox2d.physics_world;
 import dbox2d.island;
 import dbox2d.contact;
@@ -13,8 +13,12 @@ import dbox2d.core;
 import dbox2d.joint;
 import dbox2d.shape;
 import dbox2d.sensor;
-
+import dbox2d.id;
 import dbox2d.solver_set;
+import dbox2d.collision;
+import dbox2d.broad_phase;
+import dbox2d.arena_allocator;
+import dbox2d.id_pool;
 
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));

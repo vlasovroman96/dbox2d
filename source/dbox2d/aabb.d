@@ -1,6 +1,8 @@
 module dbox2d.aabb;
 
-public import dbox2d.types;
+import dbox2d.types;
+import dbox2d.math_functions;
+import dbox2d.collision;
 
 // Ray cast an AABB
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2);

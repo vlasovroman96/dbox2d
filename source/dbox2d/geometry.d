@@ -11,6 +11,7 @@ import core.stdc.assert_;
 import core.stdc.float_;
 import core.stdc.stddef;
 import dbox2d.distance;
+import dbox2d.base;
 
 static assert( B2_MAX_POLYGON_VERTICES > 2, "must be 3 or more" );
 

@@ -9,6 +9,9 @@ import dbox2d.solver_set;
 import dbox2d.contact;
 import dbox2d.shape;
 import dbox2d.island;
+import dbox2d.id;
+import dbox2d.math_functions;
+import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));

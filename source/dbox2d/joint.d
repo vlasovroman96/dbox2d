@@ -1,10 +1,10 @@
 module dbox2d.joint;
 
-public import dbox2d.array;
-public import dbox2d.solver;
+import dbox2d.array;
+import dbox2d.solver;
 import dbox2d.body;
-
-public import dbox2d.types;
+import dbox2d.id;
+import dbox2d.types;
 import dbox2d.physics_world;
 import dbox2d.contact;
 import dbox2d.shape;
@@ -18,8 +18,16 @@ import dbox2d.wheel_joint;
 import dbox2d.distance_joint;
 import dbox2d.motor_joint;
 import dbox2d.mouse_joint;
+import dbox2d.math_functions;
+import dbox2d.core;
+import dbox2d.base;
+import dbox2d.constants;
+import dbox2d.id_pool;
+import dbox2d.constraint_graph;
+import dbox2d.broad_phase;
 
 import core.stdc.stdio;
+import core.stdc.string;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));

@@ -5,10 +5,10 @@ import core.stdc.config: c_long, c_ulong;
 import dbox2d.core;
 import core.atomic;
 
-public import core.stdc.stdint;
+import core.stdc.stdint;
 
 version (_MSC_VER) {
-public import intrin;
+	import intrin;
 }
 
 pragma(inline, true) void b2AtomicStoreInt(b2AtomicInt* a, int value)

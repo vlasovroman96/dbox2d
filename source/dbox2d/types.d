@@ -1,13 +1,13 @@
 module dbox2d.types;
 
-public import dbox2d.base;
-public import dbox2d.collision;
-public import dbox2d.id;
-public import dbox2d.math_functions;
+import dbox2d.base;
+import dbox2d.collision;
+import dbox2d.id;
+import dbox2d.math_functions;
 import dbox2d.core;
 
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
+import core.stdc.stdlib;
+import core.stdc.stdint;
 
 enum B2_DEFAULT_CATEGORY_BITS = 1;
 enum B2_DEFAULT_MASK_BITS = UINT64_MAX;

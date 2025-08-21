@@ -1,9 +1,9 @@
 module dbox2d.bitset;
 
-public import dbox2d.core;
+import dbox2d.core;
 
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
+import core.stdc.stdlib;
+import core.stdc.stdint;
 import core.stdc.string;
 
 // Bit set provides fast operations on large arrays of bits.

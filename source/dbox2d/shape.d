@@ -1,7 +1,7 @@
 module dbox2d.shape;
 
-public import dbox2d.array;
-public import dbox2d.types;
+import dbox2d.array;
+import dbox2d.types;
 import dbox2d.broad_phase;
 import dbox2d.physics_world;
 import dbox2d.body;
@@ -10,6 +10,13 @@ import std.math;
 import dbox2d.contact;
 import dbox2d.distance;
 import dbox2d.geometry;
+import dbox2d.id;
+import dbox2d.math_functions;
+import dbox2d.collision;
+import dbox2d.constants;
+import dbox2d.id_pool;
+import dbox2d.base;
+import dbox2d.core;
 
 mixin (B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin(B2_ARRAY_SOURCE!("b2SensorEndTouchEvent","b2SensorEndTouchEvent"));

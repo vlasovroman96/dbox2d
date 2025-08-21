@@ -1,8 +1,8 @@
 module dbox2d.table;
 
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
-public import core.stdc.string;
+import core.stdc.stdlib;
+import core.stdc.stdint;
+import core.stdc.string;
 
 
 import dbox2d.core;

@@ -1,11 +1,16 @@
 module dbox2d.solver_set;
 
-public import dbox2d.array;
+import dbox2d.array;
 import dbox2d.body;
 import dbox2d.island;
 import dbox2d.physics_world;
 import dbox2d.joint;
 import dbox2d.contact;
+import dbox2d.id_pool;
+import dbox2d.core;
+import dbox2d.constraint_graph;
+import dbox2d.constants;
+import dbox2d.bitset;
 
 import core.stdc.string;
 

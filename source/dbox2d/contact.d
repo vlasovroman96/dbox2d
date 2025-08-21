@@ -1,20 +1,27 @@
 module dbox2d.contact;
 
-public import dbox2d.array;
-public import dbox2d.core;
+import dbox2d.array;
+import dbox2d.core;
 import dbox2d.island;
-
-public import dbox2d.collision;
-public import dbox2d.types;
+import dbox2d.collision;
+import dbox2d.types;
 import dbox2d.shape;
 import dbox2d.physics_world;
 import dbox2d.solver_set;
 import dbox2d.body;
 import dbox2d.manifold;
+import dbox2d.constraint_graph;
+import dbox2d.id_pool;
+import dbox2d.id;
+import dbox2d.constants;
+import dbox2d.table;
+import dbox2d.math_functions;
+import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
+mixin(B2_ARRAY_SOURCE!("b2ContactEndTouchEvent","b2ContactEndTouchEvent"));
 mixin(B2_ARRAY_SOURCE!("b2ContactSim","b2ContactSim"));
 mixin(B2_ARRAY_SOURCE!("b2Shape","b2Shape"));
 

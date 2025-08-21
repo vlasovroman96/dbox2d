@@ -7,6 +7,10 @@ import dbox2d.physics_world;
 import dbox2d.solver;
 import dbox2d.solver_set;
 import dbox2d.box2d;
+import dbox2d.id;
+import dbox2d.math_functions;
+import dbox2d.base;
+import dbox2d.array;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));

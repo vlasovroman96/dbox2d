@@ -1,7 +1,13 @@
 module dbox2d.contact_solver;
 
-public import dbox2d.solver;
+import dbox2d.solver;
 import dbox2d.body;
+import dbox2d.math_functions;
+import dbox2d.core;
+import dbox2d.array;
+import dbox2d.constraint_graph;
+import dbox2d.base;
+import dbox2d.collision;
 
 mixin(B2_ARRAY_SOURCE!("b2BodyState","b2BodyState"));
 

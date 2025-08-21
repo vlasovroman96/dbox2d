@@ -8,6 +8,11 @@ import dbox2d.solver_set;
 import dbox2d.physics_world;
 import dbox2d.geometry;
 import dbox2d.box2d;
+import dbox2d.id;
+import dbox2d.collision;
+import dbox2d.array;
+import dbox2d.math_functions;
+import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));

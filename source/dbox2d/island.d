@@ -16,6 +16,8 @@ import dbox2d.core;
 import dbox2d.body;
 import dbox2d.solver_set;
 import dbox2d.timer;
+import dbox2d.id_pool;
+import dbox2d.arena_allocator;
 
 mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
 // Deterministic solver

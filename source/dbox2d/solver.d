@@ -1,12 +1,14 @@
 module dbox2d.solver;
 
-public import dbox2d.core;
+import dbox2d.core;
+import dbox2d.table;
+import dbox2d.id;
 import dbox2d.constants;
 import dbox2d.ctz;
-public import dbox2d.math_functions;
+import dbox2d.math_functions;
 import dbox2d.atomic;
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
+import core.stdc.stdlib;
+import core.stdc.stdint;
 import dbox2d.island;
 import dbox2d.constraint_graph;
 import dbox2d.core;
@@ -21,6 +23,12 @@ import dbox2d.shape;
 import dbox2d.dynamic_tree;
 import dbox2d.solver_set;
 import dbox2d.timer;
+import dbox2d.collision;
+import dbox2d.bitset;
+import dbox2d.broad_phase;
+import dbox2d.arena_allocator;
+import dbox2d.id_pool;
+import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Island","b2Island"));

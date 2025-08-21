@@ -1,19 +1,20 @@
 module dbox2d.constraint_graph;
 
-public import dbox2d.array;
-public import dbox2d.bitset;
-public import dbox2d.constants;
+import dbox2d.core;
+import dbox2d.array;
+import dbox2d.bitset;
+import dbox2d.constants;
 import dbox2d.contact_solver;
 import dbox2d.physics_world;
 import dbox2d.contact;
 import dbox2d.joint;
 import dbox2d.shape;
-public import dbox2d.array;
-public import dbox2d.bitset;
-public import dbox2d.broad_phase;
-public import dbox2d.constraint_graph;
-public import dbox2d.id_pool;
-public import dbox2d.arena_allocator;
+import dbox2d.array;
+import dbox2d.bitset;
+import dbox2d.broad_phase;
+import dbox2d.constraint_graph;
+import dbox2d.id_pool;
+import dbox2d.arena_allocator;
 import std.math;
 import dbox2d.ctz;
 import dbox2d.body;
@@ -31,6 +32,7 @@ import dbox2d.distance;
 import core.stdc.string;
 import core.stdc.stdio;
 import dbox2d.timer;
+import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));

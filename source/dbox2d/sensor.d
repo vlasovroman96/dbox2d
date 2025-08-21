@@ -1,7 +1,7 @@
 module dbox2d.sensor;
 
-public import dbox2d.array;
-public import dbox2d.bitset;
+import dbox2d.array;
+import dbox2d.bitset;
 
 import dbox2d.physics_world;
 import dbox2d.shape;
@@ -9,6 +9,11 @@ import dbox2d.body;
 import dbox2d.dynamic_tree;
 import dbox2d.ctz;
 import dbox2d.distance;
+import dbox2d.id;
+import dbox2d.core;
+import dbox2d.math_functions;
+import dbox2d.collision;
+import dbox2d.base;
 
 import core.stdc.stdlib;
 

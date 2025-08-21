@@ -1,19 +1,22 @@
 module dbox2d.broad_phase;
 
-public import dbox2d.array;
-public import dbox2d.table;
+import dbox2d.array;
+import dbox2d.table;
 import std.conv;
 import dbox2d.shape;
 import dbox2d.body;
 import dbox2d.atomic;
 
-public import dbox2d.collision;
-public import dbox2d.types;
+import dbox2d.collision;
+import dbox2d.types;
 import dbox2d.base;
 import dbox2d.core;
 import dbox2d.physics_world;
 import dbox2d.contact;
 import dbox2d.dynamic_tree;
+import dbox2d.id;
+import dbox2d.arena_allocator;
+import dbox2d.math_functions;
 
 mixin (B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin (B2_ARRAY_SOURCE!("b2Shape","b2Shape"));

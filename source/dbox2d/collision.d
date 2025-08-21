@@ -1,13 +1,13 @@
 module dbox2d.collision;
 
-public import dbox2d.base;
+import dbox2d.base;
 import dbox2d.geometry;
 import dbox2d.types;
 import dbox2d.core;
 import dbox2d.constants;
 import dbox2d.aabb;
-public import dbox2d.math_functions;
-public import core.stdc.stdlib;
+import dbox2d.math_functions;
+import core.stdc.stdlib;
 import core.stdc.stdint;
 import dbox2d.dynamic_tree;
 import core.stdc.string;
