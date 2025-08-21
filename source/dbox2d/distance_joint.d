@@ -26,8 +26,6 @@ mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2Body","b2Body"));
 
-import core.stdc.stdio;
-
 void b2DistanceJoint_SetLength(b2JointId jointId, float length)
 {
 	b2JointSim* base = b2GetJointSimCheckType( jointId, b2_distanceJoint );
