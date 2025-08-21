@@ -1,8 +1,8 @@
 module dbox2d.mover;
-import dbox2d.constants;
 
+import dbox2d.constants;
 import dbox2d.collision;
-import dbox2d.math_functions;
+import dbox2d.math;
 
 b2PlaneSolverResult b2SolvePlanes(b2Vec2 targetDelta, b2CollisionPlane* planes, int count)
 {

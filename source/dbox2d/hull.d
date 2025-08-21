@@ -4,7 +4,7 @@ import dbox2d.constants;
 import dbox2d.core;
 
 import dbox2d.collision;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.base;
 
 import core.stdc.float_;

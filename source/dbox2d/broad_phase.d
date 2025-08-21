@@ -16,7 +16,7 @@ import dbox2d.contact;
 import dbox2d.dynamic_tree;
 import dbox2d.id;
 import dbox2d.arena_allocator;
-import dbox2d.math_functions;
+import dbox2d.math;
 
 mixin (B2_ARRAY_SOURCE!("b2Int", "int"));
 mixin (B2_ARRAY_SOURCE!("b2Shape","b2Shape"));

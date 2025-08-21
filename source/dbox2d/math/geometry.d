@@ -1,12 +1,10 @@
-module dbox2d.geometry;
+module dbox2d.math.geometry;
 
 import dbox2d.constants;
 import dbox2d.shape;
-
 import dbox2d.collision;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.hull;
-
 import core.stdc.assert_;
 import core.stdc.float_;
 import core.stdc.stddef;

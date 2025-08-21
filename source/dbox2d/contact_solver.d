@@ -2,7 +2,7 @@ module dbox2d.contact_solver;
 
 import dbox2d.solver;
 import dbox2d.body;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.core;
 import dbox2d.array;
 import dbox2d.constraint_graph;

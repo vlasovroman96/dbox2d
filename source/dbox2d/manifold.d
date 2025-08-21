@@ -1,13 +1,13 @@
 module dbox2d.manifold;
 
+import std.math;
+
+import dbox2d.math;
 import dbox2d.constants;
 import dbox2d.core;
 import dbox2d.collision;
-import dbox2d.math_functions;
 import dbox2d.distance;
 import dbox2d.base;
-
-import std.math;
 
 import core.stdc.float_;
 import core.stdc.stddef;

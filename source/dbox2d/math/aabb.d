@@ -1,7 +1,7 @@
-module dbox2d.aabb;
+module dbox2d.math.aabb;
 
 import dbox2d.types;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.collision;
 
 // Ray cast an AABB

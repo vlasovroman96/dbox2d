@@ -1,11 +1,10 @@
 module dbox2d.dynamic_tree;
 
-import dbox2d.aabb;
+import dbox2d.math.aabb;
 import dbox2d.constants;
 import dbox2d.core;
-
 import dbox2d.collision;
-import dbox2d.math_functions;
+import dbox2d.math.math_functions;
 import dbox2d.types;
 import dbox2d.base;
 
@@ -152,7 +151,6 @@ void b2DynamicTree_Destroy(b2DynamicTree* tree)
 	memset( tree, 0, b2DynamicTree.sizeof );
 }
 
-import dbox2d.aabb;
 // Allocate a node from the pool. Grow the pool if necessary.
 private int b2AllocateNode(b2DynamicTree* tree)
 {

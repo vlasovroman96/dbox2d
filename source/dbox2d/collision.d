@@ -1,17 +1,14 @@
 module dbox2d.collision;
 
 import dbox2d.base;
-import dbox2d.geometry;
+import dbox2d.math;
 import dbox2d.types;
 import dbox2d.core;
 import dbox2d.constants;
-import dbox2d.aabb;
-import dbox2d.math_functions;
 import dbox2d.dynamic_tree;
 import dbox2d.collision;
 import dbox2d.manifold;
 import dbox2d.hull;
-import dbox2d.geometry;
 /**
  * @defgroup geometry Geometry
  * @brief Geometry types and algorithms

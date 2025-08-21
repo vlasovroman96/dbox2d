@@ -1,5 +1,7 @@
 module dbox2d.joint;
 
+import std.math;
+
 import dbox2d.array;
 import dbox2d.solver;
 import dbox2d.body;
@@ -10,7 +12,6 @@ import dbox2d.contact;
 import dbox2d.shape;
 import dbox2d.island;
 import dbox2d.solver_set;
-import std.math;
 import dbox2d.prismatic_joint;
 import dbox2d.revolute_joint;
 import dbox2d.weld_joint;
@@ -18,13 +19,13 @@ import dbox2d.wheel_joint;
 import dbox2d.distance_joint;
 import dbox2d.motor_joint;
 import dbox2d.mouse_joint;
-import dbox2d.math_functions;
 import dbox2d.core;
 import dbox2d.base;
 import dbox2d.constants;
 import dbox2d.id_pool;
 import dbox2d.constraint_graph;
 import dbox2d.broad_phase;
+import dbox2d.math;
 
 import core.stdc.stdio;
 import core.stdc.string;

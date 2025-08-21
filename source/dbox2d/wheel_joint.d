@@ -8,7 +8,7 @@ import dbox2d.solver;
 import dbox2d.solver_set;
 import dbox2d.box2d;
 import dbox2d.id;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.base;
 import dbox2d.array;
 

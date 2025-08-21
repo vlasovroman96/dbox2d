@@ -2,7 +2,7 @@ module dbox2d.core;
 
 import std.stdio;
 
-import dbox2d.math_functions;
+import dbox2d.math.math_functions;
 import dbox2d.timer;
 import dbox2d.base;
 import dbox2d.atomic;

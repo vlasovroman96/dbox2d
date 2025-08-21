@@ -13,7 +13,7 @@ version = _CRT_SECURE_NO_WARNINGS;
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.body;
 import dbox2d.id;
 import dbox2d.core;

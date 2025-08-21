@@ -1,6 +1,6 @@
 module dbox2d.constants;
 
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.core;
 
 // Used to detect bad values. Positions greater than about 16km will have precision

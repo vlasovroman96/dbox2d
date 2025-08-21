@@ -1,4 +1,4 @@
-module dbox2d.math_functions;
+module dbox2d.math.math_functions;
 
 public import std.math;
 public import std.algorithm;

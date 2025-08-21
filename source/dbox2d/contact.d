@@ -15,7 +15,7 @@ import dbox2d.id_pool;
 import dbox2d.id;
 import dbox2d.constants;
 import dbox2d.table;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));

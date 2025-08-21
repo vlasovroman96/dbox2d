@@ -5,7 +5,7 @@ import dbox2d.table;
 import dbox2d.id;
 import dbox2d.constants;
 import dbox2d.ctz;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.atomic;
 import core.stdc.stdlib;
 import core.stdc.stdint;

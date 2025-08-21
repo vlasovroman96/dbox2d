@@ -1,17 +1,17 @@
 module dbox2d.shape;
 
+import std.math;
+
 import dbox2d.array;
 import dbox2d.types;
 import dbox2d.broad_phase;
 import dbox2d.physics_world;
 import dbox2d.body;
 import dbox2d.sensor;
-import std.math;
 import dbox2d.contact;
 import dbox2d.distance;
-import dbox2d.geometry;
+import dbox2d.math;
 import dbox2d.id;
-import dbox2d.math_functions;
 import dbox2d.collision;
 import dbox2d.constants;
 import dbox2d.id_pool;

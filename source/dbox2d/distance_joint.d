@@ -14,7 +14,7 @@ import dbox2d.solver;
 import dbox2d.solver_set;
 import dbox2d.physics_world;
 import dbox2d.id;
-import dbox2d.math_functions;
+import dbox2d.math;
 import dbox2d.array;
 import dbox2d.constants;
 import dbox2d.base;
