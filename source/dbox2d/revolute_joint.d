@@ -1,5 +1,7 @@
 module dbox2d.revolute_joint;
 
+import std.format;
+
 private template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
@@ -24,8 +26,6 @@ import dbox2d.box2d;
 import dbox2d.base;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
-
-import core.stdc.stdio;
 
 // Point-to-point constraint
 // C = pB - pA
@@ -529,7 +529,7 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	{
 		float jointAngle = b2RelativeAngle( frameA.q, frameB.q );
 		char[32] buffer = void;
-		snprintf( buffer.ptr, 32, " %.1f deg", 180.0f * jointAngle / PI );
+		buffer.format(32 ~ " %.1f deg", 180.0f * jointAngle / PI );
 		draw.DrawStringFcn( frameA.p + r, buffer.ptr, b2_colorWhite, draw.context );
 	}
 
