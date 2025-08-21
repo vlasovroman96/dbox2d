@@ -103,8 +103,6 @@ void b2CreateBroadPhase(b2BroadPhase* bp)
 	}
 }
 
-import core.stdc.string;
-
 void b2DestroyBroadPhase(b2BroadPhase* bp)
 {
 	for ( int i = 0; i < b2_bodyTypeCount; ++i )
@@ -116,7 +114,7 @@ void b2DestroyBroadPhase(b2BroadPhase* bp)
 	b2IntArray_Destroy( bp.moveArray );
 	b2DestroySet( &bp.pairSet );
 
-	memset( bp, 0, b2BroadPhase.sizeof );
+	bp[0..b2BroadPhase.sizeof] = null;
 
 	// if (s_file != NULL)
 	//{
