@@ -1,12 +1,12 @@
 module dbox2d.core;
 
+import std.stdio;
+
 import dbox2d.math_functions;
 import dbox2d.timer;
 import dbox2d.base;
 import dbox2d.atomic;
 import dbox2d.timer;
-
-import core.stdc.stdio;
 
 import core.stdc.string;
 import core.stdc.stdlib;
@@ -160,7 +160,7 @@ float b2GetLengthUnitsPerMeter()
 
 static int b2DefaultAssertFcn( const char* condition, const char* fileName, int lineNumber )
 {
-	printf( "BOX2D ASSERTION: %s, %s, line %d\n", condition, fileName, lineNumber );
+	writeln( "BOX2D ASSERTION: %s, %s, line %d\n", condition, fileName, lineNumber );
 
 	// return non-zero to break to debugger
 	return 1;
