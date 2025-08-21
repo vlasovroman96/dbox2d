@@ -1,8 +1,9 @@
 module dbox2d.body;
 
+import std.math;
+
 import dbox2d.array;
 import dbox2d.box2d;
-
 import dbox2d.math_functions;
 import dbox2d.types;
 import dbox2d.physics_world;
@@ -228,14 +229,12 @@ pragma(inline, true) b2Sweep b2MakeSweep(const(b2BodySim)* bodySim)
 	return s;
 }
 
-import core.stdc.math;
-
 void b2LimitVelocity(b2BodyState* state, float maxLinearSpeed)
 {
 	float v2 = b2LengthSquared( state.linearVelocity );
 	if ( v2 > maxLinearSpeed * maxLinearSpeed )
 	{
-		state.linearVelocity = b2MulSV( maxLinearSpeed / sqrtf( v2 ), state.linearVelocity );
+		state.linearVelocity = b2MulSV( maxLinearSpeed / sqrt( v2 ), state.linearVelocity );
 	}
 }
 
@@ -500,8 +499,7 @@ b2BodyId b2CreateBody(b2WorldId worldId, const(b2BodyDef)* def)
 	}
 	else
 	{
-		import core.stdc.string;
-		memset( body.name.ptr, 0, cast(int)(32 * char.sizeof) );
+		body.name.ptr[0..cast(int)(32 * char.sizeof)] = 0;
 	}
 
 	body.userData = cast(void*)def.userData;
@@ -1500,8 +1498,7 @@ void b2Body_SetName(b2BodyId bodyId, const(char)* name)
 	}
 	else
 	{
-		import core.stdc.string;
-		memset( &body.name, 0, cast(int)(32 * char.sizeof) );
+		body.name.ptr[0..cast(int)(32 * char.sizeof)] = 0;
 	}
 }
 
