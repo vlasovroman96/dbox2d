@@ -1,6 +1,6 @@
 module dbox2d.dynamic_tree;
 
-import dbox2d.math.aabb;
+import dbox2d.math;
 import dbox2d.constants;
 import dbox2d.core;
 import dbox2d.collision;
