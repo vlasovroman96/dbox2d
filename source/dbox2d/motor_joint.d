@@ -199,12 +199,12 @@ void b2PrepareMotorJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, b2Sub( base.localFrameA.p, bodySimA.localCenter ) );
+	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, b2Sub( base.localFrameB.p, bodySimB.localCenter ) );
+	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
-	joint.deltaCenter = b2Sub( bodySimB.center, bodySimA.center );
+	joint.deltaCenter = bodySimB.center - bodySimA.center;
 
 	b2Vec2 rA = joint.frameA.p;
 	b2Vec2 rB = joint.frameB.p;
@@ -328,13 +328,13 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 	{
 		b2Vec2 dcA = stateA.deltaPosition;
 		b2Vec2 dcB = stateB.deltaPosition;
-		b2Vec2 c = (b2Sub( dcB, dcA ) + b2Sub( rB, rA )) + joint.deltaCenter;
+		b2Vec2 c = ((dcB - dcA ) + (rB - rA )) + joint.deltaCenter;
 
 		b2Vec2 bias = b2MulSV( joint.linearSpring.biasRate, c );
 		float massScale = joint.linearSpring.massScale;
 		float impulseScale = joint.linearSpring.impulseScale;
 
-		b2Vec2 cdot = b2Sub( vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA )  );
+		b2Vec2 cdot = ( vB + b2CrossSV( wB, rB )) - (vA + b2CrossSV( wA, rA )  );
 		cdot = cdot + bias;
 
 		// Updating the effective mass here may be overkill
@@ -363,7 +363,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 			joint.linearSpringImpulse.y *= maxImpulse;
 		}
 
-		impulse = b2Sub( joint.linearSpringImpulse, oldImpulse );
+		impulse = joint.linearSpringImpulse - oldImpulse;
 
 		vA = b2MulSub( vA, mA, impulse );
 		wA -= iA * b2Cross( rA, impulse );
@@ -374,8 +374,8 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 	// linear velocity
 	if ( joint.maxVelocityForce > 0.0f )
 	{
-		b2Vec2 cdot = b2Sub( vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA ));
-		cdot = b2Sub( cdot, joint.linearVelocity );
+		b2Vec2 cdot = (vB + b2CrossSV( wB, rB )) - (vA + b2CrossSV( wA, rA ));
+		cdot = cdot - joint.linearVelocity;
 		b2Vec2 b = b2MulMV( joint.linearMass, cdot );
 		b2Vec2 impulse = { -b.x, -b.y };
 
@@ -390,7 +390,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 			joint.linearVelocityImpulse.y *= maxImpulse;
 		}
 
-		impulse = b2Sub( joint.linearVelocityImpulse, oldImpulse );
+		impulse = joint.linearVelocityImpulse - oldImpulse;
 
 		vA = b2MulSub( vA, mA, impulse );
 		wA -= iA * b2Cross( rA, impulse );

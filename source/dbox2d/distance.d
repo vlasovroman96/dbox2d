@@ -23,7 +23,7 @@ b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 	xf.q = b2NormalizeRot( q );
 
 	// Shift to origin
-	xf.p = b2Sub( xf.p, b2RotateVector( xf.q, sweep.localCenter ) );
+	xf.p = xf.p - b2RotateVector( xf.q, sweep.localCenter );
 	return xf;
 }
 
@@ -32,9 +32,9 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 {
 	b2SegmentDistanceResult result;
 
-	b2Vec2 d1 = b2Sub( q1, p1 );
-	b2Vec2 d2 = b2Sub( q2, p2 );
-	b2Vec2 r = b2Sub( p1, p2 );
+	b2Vec2 d1 = q1 - p1;
+	b2Vec2 d2 = q2 - p2;
+	b2Vec2 r = p1 - p2;
 	float dd1 = b2Dot( d1, d1 );
 	float dd2 = b2Dot( d2, d2 );
 	float rd1 = b2Dot( r, d1 );
@@ -179,7 +179,7 @@ private b2Simplex b2MakeSimplexFromCache(const(b2SimplexCache)* cache, const(b2S
 		v.indexB = cache.indexB[i];
 		v.wA = proxyA.points[v.indexA];
 		v.wB = proxyB.points[v.indexB];
-		v.w = b2Sub( v.wA, v.wB );
+		v.w = v.wA - v.wB;
 
 		// invalid
 		v.a = -1.0f;
@@ -193,7 +193,7 @@ private b2Simplex b2MakeSimplexFromCache(const(b2SimplexCache)* cache, const(b2S
 		v.indexB = 0;
 		v.wA = proxyA.points[0];
 		v.wB = proxyB.points[0];
-		v.w = b2Sub( v.wA, v.wB );
+		v.w = v.wA - v.wB;
 		v.a = 1.0f;
 		s.count = 1;
 	}
@@ -270,7 +270,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 {
 	b2Vec2 w1 = s.v1.w;
 	b2Vec2 w2 = s.v2.w;
-	b2Vec2 e12 = b2Sub( w2, w1 );
+	b2Vec2 e12 = w2 - w1;
 
 	// w1 region
 	float d12_2 = -b2Dot( w1, e12 );
@@ -311,7 +311,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [1      1     ][a1] = [1]
 	// [w1.e12 w2.e12][a2] = [0]
 	// a3 = 0
-	b2Vec2 e12 = b2Sub( w2, w1 );
+	b2Vec2 e12 = w2 - w1;
 	float w1e12 = b2Dot( w1, e12 );
 	float w2e12 = b2Dot( w2, e12 );
 	float d12_1 = w2e12;
@@ -321,7 +321,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [1      1     ][a1] = [1]
 	// [w1.e13 w3.e13][a3] = [0]
 	// a2 = 0
-	b2Vec2 e13 = b2Sub( w3, w1 );
+	b2Vec2 e13 = w3 - w1;
 	float w1e13 = b2Dot( w1, e13 );
 	float w3e13 = b2Dot( w3, e13 );
 	float d13_1 = w3e13;
@@ -331,7 +331,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [1      1     ][a2] = [1]
 	// [w2.e23 w3.e23][a3] = [0]
 	// a1 = 0
-	b2Vec2 e23 = b2Sub( w3, w2 );
+	b2Vec2 e23 = w3 - w2;
 	float w2e23 = b2Dot( w2, e23 );
 	float w3e23 = b2Dot( w3, e23 );
 	float d23_1 = w3e23;
@@ -536,7 +536,7 @@ version (NDEBUG) {} else {
 		vertex.wA = proxyA.points[vertex.indexA];
 		vertex.indexB = b2FindSupport( &localProxyB, -d);
 		vertex.wB = localProxyB.points[vertex.indexB];
-		vertex.w = b2Sub( vertex.wA, vertex.wB );
+		vertex.w = vertex.wA - vertex.wB;
 
 		// Iteration count is equated to the number of support point calls.
 		++iteration;
@@ -771,7 +771,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 	// Get an initial point in A - B
 	b2Vec2 wA = proxyA.points[0];
 	b2Vec2 wB = proxyB.points[0];
-	b2Vec2 v = b2Sub( wA, wB );
+	b2Vec2 v = wA - wB;
 	b2Vec2 d = -v;
 
 	// Sigma is the target distance between proxies
@@ -792,7 +792,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 		wA = proxyA.points[indexA];
 		int indexB = b2FindSupport( &proxyB, -d);
 		wB = proxyB.points[indexB];
-		b2Vec2 p0 = b2Sub( wA, wB );
+		b2Vec2 p0 = wA - wB;
 
 		// d is a normal at p, normalize to work with sigma
 		b2Vec2 normal = b2Normalize( d );
@@ -834,7 +834,7 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 		vertex.wA = wA;
 		vertex.indexB = indexA;
 		vertex.wB = b2Vec2( wB.x + lambda * r.x, wB.y + lambda * r.y );
-		vertex.w = b2Sub( vertex.wA, vertex.wB );
+		vertex.w = vertex.wA - vertex.wB;
 		vertex.a = 1.0f;
 		simplex.count += 1;
 
@@ -960,7 +960,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointB = proxyB.points[cache.indexB[0]];
 		b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 		b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
-		f.axis = b2Normalize( b2Sub( pointB, pointA ) );
+		f.axis = b2Normalize( pointB - pointA );
 		f.localPoint = b2Vec2.zero();
 		return f;
 	}
@@ -972,7 +972,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointB1 = proxyB.points[cache.indexB[0]];
 		b2Vec2 localPointB2 = proxyB.points[cache.indexB[1]];
 
-		f.axis = b2CrossVS( b2Sub( localPointB2, localPointB1 ), 1.0f );
+		f.axis = b2CrossVS( localPointB2 - localPointB1, 1.0f );
 		f.axis = b2Normalize( f.axis );
 		b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
 
@@ -982,7 +982,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointA = proxyA.points[cache.indexA[0]];
 		b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-		float s = b2Dot( b2Sub( pointA, pointB ), normal );
+		float s = b2Dot( pointA - pointB, normal );
 		if ( s < 0.0f )
 		{
 			f.axis = -f.axis;
@@ -995,7 +995,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 	b2Vec2 localPointA1 = proxyA.points[cache.indexA[0]];
 	b2Vec2 localPointA2 = proxyA.points[cache.indexA[1]];
 
-	f.axis = b2CrossVS( b2Sub( localPointA2, localPointA1 ), 1.0f );
+	f.axis = b2CrossVS( localPointA2 - localPointA1, 1.0f );
 	f.axis = b2Normalize( f.axis );
 	b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
 
@@ -1005,7 +1005,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 	b2Vec2 localPointB = proxyB.points[cache.indexB[0]];
 	b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-	float s = b2Dot( b2Sub( pointB, pointA ), normal );
+	float s = b2Dot( pointB - pointA, normal );
 	if ( s < 0.0f )
 	{
 		f.axis = -f.axis;
@@ -1034,7 +1034,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( b2Sub( pointB, pointA ), f.axis );
+			float separation = b2Dot( pointB - pointA, f.axis );
 			return separation;
 		}
 
@@ -1051,7 +1051,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 localPointB = f.proxyB.points[*indexB];
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( b2Sub( pointB, pointA ), normal );
+			float separation = b2Dot( pointB - pointA, normal );
 			return separation;
 		}
 
@@ -1068,7 +1068,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 localPointA = f.proxyA.points[*indexA];
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-			float separation = b2Dot( b2Sub( pointA, pointB ), normal );
+			float separation = b2Dot( pointA - pointB, normal );
 			return separation;
 		}
 
@@ -1096,7 +1096,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( b2Sub( pointB, pointA ), f.axis );
+			float separation = b2Dot( pointB - pointA, f.axis );
 			return separation;
 		}
 
@@ -1108,7 +1108,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 localPointB = f.proxyB.points[indexB];
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( b2Sub( pointB, pointA ), normal );
+			float separation = b2Dot( pointB - pointA, normal );
 			return separation;
 		}
 
@@ -1120,7 +1120,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 localPointA = f.proxyA.points[indexA];
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-			float separation = b2Dot( b2Sub( pointA, pointB ), normal );
+			float separation = b2Dot( pointA - pointB, normal );
 			return separation;
 		}
 

@@ -47,7 +47,7 @@ pragma(inline, true) bool b2EnlargeAABB(b2AABB* a, b2AABB b)
 
 bool b2IsValidAABB(b2AABB a)
 {
-	b2Vec2 d = b2Sub( a.upperBound, a.lowerBound );
+	b2Vec2 d = a.upperBound - a.lowerBound;
 	bool valid = d.x >= 0.0f && d.y >= 0.0f;
 	valid = valid && b2IsValidVec2( a.lowerBound ) && b2IsValidVec2( a.upperBound );
 	return valid;
@@ -63,7 +63,7 @@ b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2)
 	float tmax = float.max;
 
 	b2Vec2 p = p1;
-	b2Vec2 d = b2Sub( p2, p1 );
+	b2Vec2 d = p2 - p1 ;
 	b2Vec2 absD = b2Abs( d );
 
 	b2Vec2 normal = b2Vec2.zero();

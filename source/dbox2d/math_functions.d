@@ -37,7 +37,7 @@ struct b2Vec2 {
         return b2Vec2(this.x + b.x, this.y + b.y);
     }
 
-    auto opBinary(string op: "-")(b2Vec2 b) {
+    auto opBinary(string op: "-")(const b2Vec2 b) const {
         return b2Vec2(this.x - b.x, this.y - b.y);
     }
 
@@ -140,12 +140,6 @@ b2Vec2 b2CrossVS( b2Vec2 v, float s )
 b2Vec2 b2CrossSV(float s, b2Vec2 v)
 {
 	return b2Vec2( -s * v.y, s * v.x );
-}
-
-/// Vector subtraction
-b2Vec2 b2Sub( b2Vec2 a, b2Vec2 b )
-{
-	return b2Vec2( a.x - b.x, a.y - b.y );
 }
 
 /// Vector linear interpolation
@@ -473,7 +467,7 @@ b2Transform b2InvMulTransforms(b2Transform A, b2Transform B)
 {
 	b2Transform C = void;
 	C.q = b2InvMulRot( A.q, B.q );
-	C.p = b2InvRotateVector( A.q, b2Sub( B.p, A.p ) );
+	C.p = b2InvRotateVector( A.q, B.p - A.p );
 	return C;
 }
 
@@ -573,7 +567,7 @@ b2AABB b2MakeAABB(const(b2Vec2)* points, int count, float radius)
 	}
 
 	b2Vec2 r = { radius, radius };
-	a.lowerBound = b2Sub( a.lowerBound, r );
+	a.lowerBound = a.lowerBound - r;
 	a.upperBound = a.upperBound + r;
 
 	return a;

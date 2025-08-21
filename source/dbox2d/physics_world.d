@@ -2432,7 +2432,7 @@ void b2World_CollideMover(b2WorldId worldId, const(b2Capsule)* mover, b2QueryFil
 	b2Vec2 r = { mover.radius, mover.radius };
 
 	b2AABB aabb = void;
-	aabb.lowerBound = b2Sub( b2Min( mover.center1, mover.center2 ), r );
+	aabb.lowerBound = b2Min( mover.center1, mover.center2 ) - r;
 	aabb.upperBound = b2Max( mover.center1, mover.center2 ) + r;
 
 	WorldMoverContext worldContext = {
@@ -2594,7 +2594,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 		closestPoint = b2TransformPoint( transform, localCentroid );
 	}
 
-	b2Vec2 direction = b2Sub( closestPoint, explosionContext.position );
+	b2Vec2 direction = closestPoint - explosionContext.position;
 	if ( b2LengthSquared( direction ) > 100.0f * float.epsilon * float.epsilon )
 	{
 		direction = b2Normalize( direction );
@@ -2620,7 +2620,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	b2BodyState* state = b2BodyStateArray_Get( set.bodyStates, localIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, localIndex );
 	state.linearVelocity = b2MulAdd( state.linearVelocity, bodySim.invMass, impulse );
-	state.angularVelocity += bodySim.invInertia * b2Cross( b2Sub( closestPoint, bodySim.center ), impulse );
+	state.angularVelocity += bodySim.invInertia * b2Cross( closestPoint - bodySim.center, impulse );
 
 	return true;
 }

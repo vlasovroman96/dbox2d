@@ -816,7 +816,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 		}
 
 		// Shift to center of mass. This is safe because it can only increase.
-		b2Vec2 offset = b2Sub( localCenter, massData.center );
+		b2Vec2 offset = localCenter - massData.center;
 		float inertia = massData.rotationalInertia + massData.mass * b2Dot( offset, offset );
 		body.inertia += inertia;
 	}
@@ -846,7 +846,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 	b2BodyState* state = b2GetBodyState( world, body );
 	if ( state != null )
 	{
-		b2Vec2 deltaLinear = b2CrossSV( state.angularVelocity, b2Sub( bodySim.center, oldCenter ) );
+		b2Vec2 deltaLinear = b2CrossSV( state.angularVelocity, bodySim.center - oldCenter );
 		state.linearVelocity = state.linearVelocity + deltaLinear;
 	}
 
@@ -1067,7 +1067,7 @@ void b2Body_SetTargetTransform(b2BodyId bodyId, b2Transform target, float timeSt
 	b2Vec2 center1 = sim.center;
 	b2Vec2 center2 = b2TransformPoint( target, sim.localCenter );
 	float invTimeStep = 1.0f / timeStep;
-	b2Vec2 linearVelocity = b2MulSV( invTimeStep, b2Sub( center2, center1 ) );
+	b2Vec2 linearVelocity = b2MulSV( invTimeStep, center2 - center1 );
 
 	// Compute angular velocity
 	b2Rot q1 = sim.transform.q;
@@ -1110,7 +1110,7 @@ b2Vec2 b2Body_GetLocalPointVelocity(b2BodyId bodyId, b2Vec2 localPoint)
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, body.setIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, body.localIndex );
 
-	b2Vec2 r = b2RotateVector( bodySim.transform.q, b2Sub( localPoint, bodySim.localCenter ) );
+	b2Vec2 r = b2RotateVector( bodySim.transform.q, localPoint - bodySim.localCenter );
 	b2Vec2 v = state.linearVelocity + b2CrossSV( state.angularVelocity, r ) ;
 	return v;
 }
@@ -1128,7 +1128,7 @@ b2Vec2 b2Body_GetWorldPointVelocity(b2BodyId bodyId, b2Vec2 worldPoint)
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, body.setIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, body.localIndex );
 
-	b2Vec2 r = b2Sub( worldPoint, bodySim.center );
+	b2Vec2 r = worldPoint - bodySim.center;
 	b2Vec2 v = state.linearVelocity + b2CrossSV( state.angularVelocity, r ) ;
 	return v;
 }
@@ -1152,7 +1152,7 @@ void b2Body_ApplyForce(b2BodyId bodyId, b2Vec2 force, b2Vec2 point, bool wake)
 	{
 		b2BodySim* bodySim = b2GetBodySim( world, body );
 		bodySim.force = bodySim.force + force;
-		bodySim.torque += b2Cross( b2Sub( point, bodySim.center ), force );
+		bodySim.torque += b2Cross( point, bodySim.center - force );
 	}
 }
 
@@ -1222,7 +1222,7 @@ void b2Body_ApplyLinearImpulse(b2BodyId bodyId, b2Vec2 impulse, b2Vec2 point, bo
 		b2BodyState* state = b2BodyStateArray_Get( set.bodyStates, localIndex );
 		b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, localIndex );
 		state.linearVelocity = b2MulAdd( state.linearVelocity, bodySim.invMass, impulse );
-		state.angularVelocity += bodySim.invInertia * b2Cross( b2Sub( point, bodySim.center ), impulse );
+		state.angularVelocity += bodySim.invInertia * b2Cross( point - bodySim.center, impulse );
 
 		b2LimitVelocity( state, world.maxLinearSpeed );
 	}

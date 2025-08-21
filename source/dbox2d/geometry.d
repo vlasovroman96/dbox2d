@@ -35,8 +35,8 @@ b2Vec2 b2ComputePolygonCentroid(const(b2Vec2)* vertices, int count)
 	for ( int i = 1; i < count - 1; ++i )
 	{
 		// Triangle edges
-		b2Vec2 e1 = b2Sub( vertices[i], origin );
-		b2Vec2 e2 = b2Sub( vertices[i + 1], origin );
+		b2Vec2 e1 = vertices[i] - origin;
+		b2Vec2 e2 = vertices[i + 1] - origin;
 		float a = 0.5f * b2Cross( e1, e2 );
 
 		// Area weighted centroid
@@ -80,7 +80,7 @@ b2Polygon b2MakePolygon(const(b2Hull)* hull, float radius)
 	{
 		int i1 = i;
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
-		b2Vec2 edge = b2Sub( shape.vertices[i2], shape.vertices[i1] );
+		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
 		B2_ASSERT( b2Dot( edge, edge ) > float.epsilon * float.epsilon );
 		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
 	}
@@ -122,7 +122,7 @@ b2Polygon b2MakeOffsetRoundedPolygon(const(b2Hull)* hull, b2Vec2 position, b2Rot
 	{
 		int i1 = i;
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
-		b2Vec2 edge = b2Sub( shape.vertices[i2], shape.vertices[i1] );
+		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
 		B2_ASSERT( b2Dot( edge, edge ) > float.epsilon * float.epsilon );
 		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
 	}
@@ -239,7 +239,7 @@ b2MassData b2ComputeCapsuleMass(const(b2Capsule)* shape, float density)
 	float rr = radius * radius;
 	b2Vec2 p1 = shape.center1;
 	b2Vec2 p2 = shape.center2;
-	float length = b2Sub( p2, p1 ).length();
+	float length = (p2 - p1 ).length();
 	float ll = length * length;
 
 	float circleMass = density * ( PI * radius * radius );
@@ -356,8 +356,8 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 	for ( int i = 1; i < count - 1; ++i )
 	{
 		// Triangle edges
-		b2Vec2 e1 = b2Sub( vertices[i], r );
-		b2Vec2 e2 = b2Sub( vertices[i + 1], r );
+		b2Vec2 e1 = vertices[i] - r;
+		b2Vec2 e2 = vertices[i + 1] - r;
 
 		float D = b2Cross( e1, e2 );
 
@@ -415,7 +415,7 @@ b2AABB b2ComputeCapsuleAABB(const(b2Capsule)* shape, b2Transform xf)
 	b2Vec2 v2 = b2TransformPoint( xf, shape.center2 );
 
 	b2Vec2 r = { shape.radius, shape.radius };
-	b2Vec2 lower = b2Sub( b2Min( v1, v2 ), r );
+	b2Vec2 lower = b2Min( v1, v2 ) - r;
 	b2Vec2 upper = b2Max( v1, v2 ) + r;
 
 	b2AABB aabb = { lower, upper };
@@ -436,7 +436,7 @@ b2AABB b2ComputePolygonAABB(const(b2Polygon)* shape, b2Transform xf)
 	}
 
 	b2Vec2 r = { shape.radius, shape.radius };
-	lower = b2Sub( lower, r );
+	lower = lower - r;
 	upper = upper + r;
 
 	b2AABB aabb = { lower, upper };
@@ -467,7 +467,7 @@ bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point)
 	b2Vec2 p1 = shape.center1;
 	b2Vec2 p2 = shape.center2;
 
-	b2Vec2 d = b2Sub( p2, p1 );
+	b2Vec2 d = p2 - p1;
 	float dd = b2Dot( d, d );
 	if ( dd == 0.0f )
 	{
@@ -480,7 +480,7 @@ bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point)
 	// dot(point - c, d) = 0
 	// dot(point - p1 - t * d, d) = 0
 	// t = dot(point - p1, d) / dot(d, d)
-	float t = b2Dot( b2Sub( point, p1 ), d ) / dd;
+	float t = b2Dot( point - p1, d ) / dd;
 	t = clamp( t, 0.0f, 1.0f );
 	b2Vec2 c = b2MulAdd( p1, t, d );
 
@@ -515,7 +515,7 @@ b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* inpu
 	b2CastOutput output;
 
 	// Shift ray so circle center is the origin
-	b2Vec2 s = b2Sub( input.origin, p );
+	b2Vec2 s = input.origin - p;
 
 	float r = shape.radius;
 	float rr = r * r;
@@ -591,7 +591,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	b2Vec2 v1 = shape.center1;
 	b2Vec2 v2 = shape.center2;
 
-	b2Vec2 e = b2Sub( v2, v1 );
+	b2Vec2 e = v2 - v1;
 
 	float capsuleLength = void;
 	b2Vec2 a = b2GetLengthAndNormalize( &capsuleLength, e );
@@ -607,7 +607,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	b2Vec2 d = input.translation;
 
 	// Ray from capsule start to ray start
-	b2Vec2 q = b2Sub( p1, v1 );
+	b2Vec2 q = p1 - v1;
 	float qa = b2Dot( q, a );
 
 	// Vector to ray start that is perpendicular to capsule axis
@@ -723,7 +723,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	if ( oneSided )
 	{
 		// Skip left-side collision
-		float offset = b2Cross( b2Sub( input.origin, shape.point1 ), b2Sub( shape.point2, shape.point1 ) );
+		float offset = b2Cross( input.origin - shape.point1, shape.point2 - shape.point1 );
 		if ( offset < 0.0f )
 		{
 			b2CastOutput output;
@@ -737,7 +737,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 
 	b2Vec2 v1 = shape.point1;
 	b2Vec2 v2 = shape.point2;
-	b2Vec2 e = b2Sub( v2, v1 );
+	b2Vec2 e = v2 - v1;
 
 	b2CastOutput output;
 
@@ -756,7 +756,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	// p = p1 + t * d
 	// dot(normal, p - v1) = 0
 	// dot(normal, p1 - v1) + t * dot(normal, d) = 0
-	float numerator = b2Dot( normal, b2Sub( v1, p1 ) );
+	float numerator = b2Dot( normal, v1 - p1 );
 	float denominator = b2Dot( normal, d );
 
 	if ( denominator == 0.0f )
@@ -779,7 +779,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	// p = v1 + s * e
 	// s = dot(p - v1, e) / dot(e, e)
 
-	float s = b2Dot( b2Sub( p, v1 ), eUnit );
+	float s = b2Dot( p - v1, eUnit );
 	if ( s < 0.0f || length < s )
 	{
 		// out of segment range
@@ -809,7 +809,7 @@ b2CastOutput b2RayCastPolygon(const(b2Polygon)* shape, const(b2RayCastInput)* in
 		// from the origin.
 		b2Vec2 base = shape.vertices[0];
 
-		b2Vec2 p1 = b2Sub( input.origin, base );
+		b2Vec2 p1 = input.origin - base;
 		b2Vec2 d = input.translation;
 
 		float lower = 0.0f, upper = input.maxFraction;
@@ -823,8 +823,8 @@ b2CastOutput b2RayCastPolygon(const(b2Polygon)* shape, const(b2RayCastInput)* in
 			// p = p1 + a * d
 			// dot(normal, p - v) = 0
 			// dot(normal, p1 - v) + a * dot(normal, d) = 0
-			b2Vec2 vertex = b2Sub( shape.vertices[edgeIndex], base );
-			float numerator = b2Dot( shape.normals[edgeIndex], b2Sub( vertex, p1 ) );
+			b2Vec2 vertex = shape.vertices[edgeIndex] - base;
+			float numerator = b2Dot( shape.normals[edgeIndex] - vertex, p1 );
 			float denominator = b2Dot( shape.normals[edgeIndex], d );
 
 			if ( denominator == 0.0f )

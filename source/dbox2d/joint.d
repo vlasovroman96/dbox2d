@@ -1366,7 +1366,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 
 	b2Vec2 pA = b2TransformPoint( xfA, base.localFrameA.p );
 	b2Vec2 pB = b2TransformPoint( xfB, base.localFrameB.p );
-	b2Vec2 dp = b2Sub( pB, pA );
+	b2Vec2 dp =  pB - pA;
 
 	switch ( joint.type )
 	{

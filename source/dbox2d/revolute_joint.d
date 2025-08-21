@@ -252,12 +252,12 @@ void b2PrepareRevoluteJoint(b2JointSim* base, b2StepContext* context)
 	// pf = xf.p - (xf.p + rot(xf.q, lc)) + rot(xf.q, f.p)
 	// pf = rot(xf.q, f.p - lc)
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, b2Sub( base.localFrameA.p, bodySimA.localCenter ) );
+	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, b2Sub( base.localFrameB.p, bodySimB.localCenter ) );
+	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
-	joint.deltaCenter = b2Sub( bodySimB.center, bodySimA.center );
+	joint.deltaCenter = bodySimB.center - bodySimA.center;
 
 	float k = iA + iB;
 	joint.axialMass = k > 0.0f ? 1.0f / k : 0.0f;
@@ -439,7 +439,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 		b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-		b2Vec2 Cdot = b2Sub( (vB + b2CrossSV( wB, rB )), (vA + b2CrossSV( wA, rA)) );
+		b2Vec2 Cdot = (vB + b2CrossSV( wB, rB )) - (vA + b2CrossSV( wA, rA));
 
 		b2Vec2 bias = b2Vec2.zero();
 		float massScale = 1.0f;
@@ -449,7 +449,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			b2Vec2 dcA = stateA.deltaPosition;
 			b2Vec2 dcB = stateB.deltaPosition;
 
-			b2Vec2 separation = (b2Sub( dcB, dcA ) + b2Sub( rB, rA ) ) + joint.deltaCenter;
+			b2Vec2 separation = (( dcB - dcA ) + ( rB - rA ) ) + joint.deltaCenter;
 			bias = b2MulSV( base.constraintSoftness.biasRate, separation );
 			massScale = base.constraintSoftness.massScale;
 			impulseScale = base.constraintSoftness.impulseScale;

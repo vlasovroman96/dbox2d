@@ -224,17 +224,17 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, b2Sub( base.localFrameA.p, bodySimA.localCenter ) );
+	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, b2Sub( base.localFrameB.p, bodySimB.localCenter ) );
+	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
-	joint.deltaCenter = b2Sub( bodySimB.center, bodySimA.center );
+	joint.deltaCenter = bodySimB.center - bodySimA.center;
 
 	b2Vec2 rA = joint.frameA.p;
 	b2Vec2 rB = joint.frameB.p;
 
-	b2Vec2 d = joint.deltaCenter + b2Sub( rB, rA );
+	b2Vec2 d = joint.deltaCenter + ( rB - rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	b2Vec2 perpA = axisA.leftPerp();
 
@@ -287,7 +287,7 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-	b2Vec2 d = ( b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + joint.deltaCenter ) + b2Sub( rB, rA );
+	b2Vec2 d = ( ( stateB.deltaPosition - stateA.deltaPosition ) + joint.deltaCenter ) + ( rB - rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
 	b2Vec2 perpA = axisA.leftPerp();
@@ -337,7 +337,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
-	b2Vec2 d = ( b2Sub( stateB.deltaPosition, stateA.deltaPosition ) + joint.deltaCenter ) + b2Sub( rB, rA );
+	b2Vec2 d = ( ( stateB.deltaPosition - stateA.deltaPosition ) + joint.deltaCenter ) + ( rB - rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
 	float translation = b2Dot( axisA, d );
@@ -368,7 +368,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		float massScale = joint.springSoftness.massScale;
 		float impulseScale = joint.springSoftness.impulseScale;
 
-		float Cdot = b2Dot( axisA, b2Sub( vB, vA ) ) + a2 * wB - a1 * wA;
+		float Cdot = b2Dot( axisA, vB - vA ) + a2 * wB - a1 * wA;
 		float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.springImpulse;
 		joint.springImpulse += impulse;
 
@@ -403,7 +403,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 				impulseScale = base.constraintSoftness.impulseScale;
 			}
 
-			float Cdot = b2Dot( axisA, b2Sub( vB, vA ) ) + a2 * wB - a1 * wA;
+			float Cdot = b2Dot( axisA, vB - vA ) + a2 * wB - a1 * wA;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.lowerImpulse;
 			float oldImpulse = joint.lowerImpulse;
 			joint.lowerImpulse = max( oldImpulse + impulse, 0.0f );
@@ -442,7 +442,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			}
 
 			// sign flipped on Cdot
-			float Cdot = b2Dot( axisA, b2Sub( vA, vB ) ) + a1 * wA - a2 * wB;
+			float Cdot = b2Dot( axisA, vA - vB ) + a1 * wA - a2 * wB;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.upperImpulse;
 			float oldImpulse = joint.upperImpulse;
 			joint.upperImpulse = max( oldImpulse + impulse, 0.0f );
@@ -477,7 +477,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 
 		float s1 = b2Cross( d + rA, perpA );
 		float s2 = b2Cross( rB, perpA );
-		float Cdot = b2Dot( perpA, b2Sub( vB, vA ) ) + s2 * wB - s1 * wA;
+		float Cdot = b2Dot( perpA, vB - vA ) + s2 * wB - s1 * wA;
 
 		float impulse = -massScale * joint.perpMass * ( Cdot + bias ) - impulseScale * joint.perpImpulse;
 		joint.perpImpulse += impulse;

@@ -725,7 +725,7 @@ float b2GetShapePerimeter(const(b2Shape)* shape)
 	switch ( shape.type )
 	{
 		case b2_capsuleShape:
-			return 2.0f * b2Sub( shape.capsule.center1, shape.capsule.center2 ).length() +
+			return 2.0f * ( shape.capsule.center1 - shape.capsule.center2 ).length() +
 				   2.0f * PI * shape.capsule.radius;
 		case b2_circleShape:
 			return 2.0f * PI * shape.circle.radius;
@@ -739,16 +739,16 @@ float b2GetShapePerimeter(const(b2Shape)* shape)
 			for ( int i = 0; i < count; ++i )
 			{
 				b2Vec2 next = points[i];
-				perimeter += b2Sub( next, prev ).length;
+				perimeter += ( next - prev ).length;
 				prev = next;
 			}
 
 			return perimeter;
 		}
 		case b2_segmentShape:
-			return 2.0f * b2Sub( shape.segment.point1, shape.segment.point2).length();
+			return 2.0f * ( shape.segment.point1 - shape.segment.point2).length();
 		case b2_chainSegmentShape:
-			return 2.0f * b2Sub( shape.chainSegment.segment.point1, shape.chainSegment.segment.point2 ).length();
+			return 2.0f * ( shape.chainSegment.segment.point1 - shape.chainSegment.segment.point2 ).length();
 		default:
 			return 0.0f;
 	}
@@ -761,7 +761,7 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 	{
 		case b2_capsuleShape:
 		{
-			b2Vec2 axis = b2Sub( shape.capsule.center2, shape.capsule.center1 );
+			b2Vec2 axis = shape.capsule.center2 - shape.capsule.center1;
 			float projectedLength = abs( b2Dot( axis, line ) );
 			return projectedLength + 2.0f * shape.capsule.radius;
 		}
@@ -831,8 +831,8 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 		{
 			float radius = shape.capsule.radius;
 			extent.minExtent = radius;
-			b2Vec2 c1 = b2Sub( shape.capsule.center1, localCenter );
-			b2Vec2 c2 = b2Sub( shape.capsule.center2, localCenter );
+			b2Vec2 c1 = shape.capsule.center1 - localCenter;
+			b2Vec2 c2 = shape.capsule.center2 - localCenter;
 			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) ) + radius;
 		}
 		break;
@@ -841,7 +841,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 		{
 			float radius = shape.circle.radius;
 			extent.minExtent = radius;
-			extent.maxExtent = b2Sub( shape.circle.center, localCenter ).length() + radius;
+			extent.maxExtent = ( shape.circle.center - localCenter ).length() + radius;
 		}
 		break;
 
@@ -854,10 +854,10 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			for ( int i = 0; i < count; ++i )
 			{
 				b2Vec2 v = poly.vertices[i];
-				float planeOffset = b2Dot( poly.normals[i], b2Sub( v, poly.centroid ) );
+				float planeOffset = b2Dot( poly.normals[i], v - poly.centroid );
 				minExtent = min( minExtent, planeOffset );
 
-				float distanceSqr = b2LengthSquared( b2Sub( v, localCenter ) );
+				float distanceSqr = b2LengthSquared( v - localCenter );
 				maxExtentSqr = max( maxExtentSqr, distanceSqr );
 			}
 
@@ -869,8 +869,8 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 		case b2_segmentShape:
 		{
 			extent.minExtent = 0.0f;
-			b2Vec2 c1 = b2Sub( shape.segment.point1, localCenter );
-			b2Vec2 c2 = b2Sub( shape.segment.point2, localCenter );
+			b2Vec2 c1 = shape.segment.point1 - localCenter;
+			b2Vec2 c2 = shape.segment.point2 - localCenter;
 			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
 		}
 		break;
@@ -878,8 +878,8 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 		case b2_chainSegmentShape:
 		{
 			extent.minExtent = 0.0f;
-			b2Vec2 c1 = b2Sub( shape.chainSegment.segment.point1, localCenter );
-			b2Vec2 c2 = b2Sub( shape.chainSegment.segment.point2, localCenter );
+			b2Vec2 c1 = shape.chainSegment.segment.point1 - localCenter;
+			b2Vec2 c2 = shape.chainSegment.segment.point2 - localCenter;
 			extent.maxExtent = sqrt( max( b2LengthSquared( c1 ), b2LengthSquared( c2 ) ) );
 		}
 		break;
@@ -967,8 +967,8 @@ b2CastOutput b2ShapeCastShape(const(b2ShapeCastInput)* input, const(b2Shape)* sh
 
 			approximateCentroid = b2MulSV( 1.0f / localInput.proxy.count, approximateCentroid );
 
-			b2Vec2 edge = b2Sub( shape.chainSegment.segment.point2, shape.chainSegment.segment.point1 );
-			b2Vec2 r = b2Sub( approximateCentroid, shape.chainSegment.segment.point1 );
+			b2Vec2 edge = shape.chainSegment.segment.point2 - shape.chainSegment.segment.point1;
+			b2Vec2 r = approximateCentroid - shape.chainSegment.segment.point1;
 
 			if ( b2Cross( r, edge ) < 0.0f )
 			{

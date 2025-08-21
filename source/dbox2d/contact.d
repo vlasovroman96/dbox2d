@@ -707,8 +707,8 @@ bool b2UpdateContact(b2World* world, b2ContactSim* contactSim, b2Shape* shapeA, 
 		b2ManifoldPoint* mp2 = contactSim.manifold.points.ptr + i;
 
 		// shift anchors to be center of mass relative
-		mp2.anchorA = b2Sub( mp2.anchorA, centerOffsetA );
-		mp2.anchorB = b2Sub( mp2.anchorB, centerOffsetB );
+		mp2.anchorA = mp2.anchorA - centerOffsetA;
+		mp2.anchorB = mp2.anchorB - centerOffsetB;
 
 		mp2.normalImpulse = 0.0f;
 		mp2.tangentImpulse = 0.0f;

@@ -526,15 +526,15 @@ private bool b2ContinuousQueryCallback(int proxyId, ulong userData, void* contex
 		b2Transform transform = bodySim.transform;
 		b2Vec2 p1 = b2TransformPoint( transform, shape.chainSegment.segment.point1 );
 		b2Vec2 p2 = b2TransformPoint( transform, shape.chainSegment.segment.point2 );
-		b2Vec2 e = b2Sub( p2, p1 );
+		b2Vec2 e = p2 - p1;
 		float length = void;
 		e = b2GetLengthAndNormalize( &length, e );
 		if ( length > B2_LINEAR_SLOP )
 		{
 			b2Vec2 c1 = continuousContext.centroid1;
-			float separation1 = b2Cross( b2Sub( c1, p1 ), e );
+			float separation1 = b2Cross( c1 - p1, e );
 			b2Vec2 c2 = continuousContext.centroid2;
-			float separation2 = b2Cross( b2Sub( c2, p1 ), e );
+			float separation2 = b2Cross( c2 - p1, e );
 
 			float coreDistance = B2_CORE_FRACTION * fastBodySim.minExtent;
 			
@@ -554,11 +554,11 @@ version (none) {
 		b2Transform transform = bodySim.transform;
 		b2Vec2 p1 = b2TransformPoint( transform, shape.segment.point1 );
 		b2Vec2 p2 = b2TransformPoint( transform, shape.segment.point2 );
-		b2Vec2 e = b2Sub( p2, p1 );
+		b2Vec2 e = p2 - p1;
 		b2Vec2 c1 = continuousContext.centroid1;
 		b2Vec2 c2 = continuousContext.centroid2;
-		float offset1 = b2Cross( b2Sub( c1, p1 ), e );
-		float offset2 = b2Cross( b2Sub( c2, p1 ), e );
+		float offset1 = b2Cross( c1 - p1, e );
+		float offset2 = b2Cross( c2 - p1, e );
 
 		if ( offset1 > 0.0f && offset2 > 0.0f )
 		{
@@ -653,11 +653,11 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 
 	b2Transform xf1 = void;
 	xf1.q = sweep.q1;
-	xf1.p = b2Sub( sweep.c1, b2RotateVector( sweep.q1, sweep.localCenter ) );
+	xf1.p = sweep.c1 - b2RotateVector( sweep.q1, sweep.localCenter );
 
 	b2Transform xf2 = void;
 	xf2.q = sweep.q2;
-	xf2.p = b2Sub( sweep.c2, b2RotateVector( sweep.q2, sweep.localCenter ) );
+	xf2.p = sweep.c2 - b2RotateVector( sweep.q2, sweep.localCenter );
 
 	b2DynamicTree* staticTree = world.broadPhase.trees.ptr + b2_staticBody;
 	b2DynamicTree* kinematicTree = world.broadPhase.trees.ptr + b2_kinematicBody;
@@ -713,7 +713,7 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 		// Handle time of impact event
 		b2Rot q = b2NLerp( sweep.q1, sweep.q2, context.fraction );
 		b2Vec2 c = b2Lerp( sweep.c1, sweep.c2, context.fraction );
-		b2Vec2 origin = b2Sub( c, b2RotateVector( q, sweep.localCenter ) );
+		b2Vec2 origin = c - b2RotateVector( q, sweep.localCenter );
 
 		// Advance body
 		b2Transform transform = { origin, q };
@@ -874,7 +874,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		state.deltaPosition = b2Vec2.zero();
 		state.deltaRotation = b2Rot.identity();
 
-		sim.transform.p = b2Sub( sim.center, b2RotateVector( sim.transform.q, sim.localCenter ) );
+		sim.transform.p = sim.center - b2RotateVector( sim.transform.q, sim.localCenter );
 
 		// cache miss here, however I need the shape list below
 		b2Body* body = bodies + sim.bodyId;

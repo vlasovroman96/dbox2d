@@ -331,8 +331,8 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 
 			// No clear choice based on lower bound surface area. This can happen when both
 			// children fully contain D. Fall back to node distance.
-			b2Vec2 d1 = b2Sub( b2AABB_Center( box1 ), centerD );
-			b2Vec2 d2 = b2Sub( b2AABB_Center( box2 ), centerD );
+			b2Vec2 d1 = b2AABB_Center( box1 ) - centerD;
+			b2Vec2 d2 = b2AABB_Center( box2 ) - centerD;
 			lowerCost1 = b2LengthSquared( d1 );
 			lowerCost2 = b2LengthSquared( d2 );
 		}
@@ -1267,7 +1267,7 @@ b2TreeStats b2DynamicTree_RayCast(const(b2DynamicTree)* tree, const(b2RayCastInp
 		// radius extension is added to the node in this case
 		b2Vec2 c = b2AABB_Center( nodeAABB );
 		b2Vec2 h = b2AABB_Extents( nodeAABB );
-		float term1 = abs( b2Dot( v, b2Sub( p1, c ) ) );
+		float term1 = abs( b2Dot( v, p1 - c ) );
 		float term2 = b2Dot( abs_v, h );
 		if ( term2 < term1 )
 		{
@@ -1343,7 +1343,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 
 	b2Vec2 radius = { input.proxy.radius, input.proxy.radius };
 
-	originAABB.lowerBound = b2Sub( originAABB.lowerBound, radius );
+	originAABB.lowerBound = originAABB.lowerBound - radius;
 	originAABB.upperBound = originAABB.upperBound + radius;
 
 	b2Vec2 p1 = b2AABB_Center( originAABB );
@@ -1396,7 +1396,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 		// radius extension is added to the node in this case
 		b2Vec2 c = b2AABB_Center( node.aabb );
 		b2Vec2 h = b2AABB_Extents( node.aabb ) + extension;
-		float term1 = abs( b2Dot( v, b2Sub( p1, c ) ) );
+		float term1 = abs( b2Dot( v, p1 - c ) );
 		float term2 = b2Dot( abs_v, h );
 		if ( term2 < term1 )
 		{
@@ -1475,7 +1475,7 @@ private int b2PartitionMid(int* indices, b2Vec2* centers, int count)
 		upperBound = b2Max( upperBound, centers[i] );
 	}
 
-	b2Vec2 d = b2Sub( upperBound, lowerBound );
+	b2Vec2 d = upperBound - lowerBound;
 	b2Vec2 c = { 0.5f * ( lowerBound.x + upperBound.x ), 0.5f * ( lowerBound.y + upperBound.y ) };
 
 	// Partition longest axis using the Hoare partition scheme
@@ -1603,7 +1603,7 @@ private int b2PartitionSAH(int* indices, int* binIndices, b2AABB* boxes, int cou
 		centroidAABB.upperBound = b2Max( centroidAABB.upperBound, center );
 	}
 
-	b2Vec2 d = b2Sub( centroidAABB.upperBound, centroidAABB.lowerBound );
+	b2Vec2 d = centroidAABB.upperBound - centroidAABB.lowerBound;
 
 	// Find longest axis
 	int axisIndex = void;

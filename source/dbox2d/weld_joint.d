@@ -129,12 +129,12 @@ void b2PrepareWeldJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, b2Sub( base.localFrameA.p, bodySimA.localCenter ) );
+	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, b2Sub( base.localFrameB.p, bodySimB.localCenter ) );
+	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
-	joint.deltaCenter = b2Sub( bodySimB.center, bodySimA.center );
+	joint.deltaCenter = bodySimB.center - bodySimA.center;
 
 	float ka = iA + iB;
 	joint.axialMass = ka > 0.0f ? 1.0f / ka : 0.0f;
@@ -249,14 +249,14 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		{
 			b2Vec2 dcA = stateA.deltaPosition;
 			b2Vec2 dcB = stateB.deltaPosition;
-			b2Vec2 C = ( b2Sub( dcB, dcA ) + b2Sub( rB, rA ) ) + joint.deltaCenter;
+			b2Vec2 C = ( ( dcB - dcA ) + ( rB - rA ) ) + joint.deltaCenter;
 
 			bias = b2MulSV( joint.linearSpring.biasRate, C );
 			massScale = joint.linearSpring.massScale;
 			impulseScale = joint.linearSpring.impulseScale;
 		}
 
-		b2Vec2 Cdot = b2Sub(vB + b2CrossSV( wB, rB ), vA + b2CrossSV( wA, rA ) );
+		b2Vec2 Cdot = (vB + b2CrossSV( wB, rB )) - (vA + b2CrossSV( wA, rA ) );
 
 		b2Mat22 K = void;
 		K.cx.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
