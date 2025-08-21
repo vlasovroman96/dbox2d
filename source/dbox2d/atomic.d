@@ -1,11 +1,10 @@
 module dbox2d.atomic;
 
-import core.stdc.config: c_long, c_ulong;
-
-import dbox2d.core;
 import core.atomic;
 
-import core.stdc.stdint;
+import std.stdint;
+
+import dbox2d.core;
 
 version (_MSC_VER) {
 	import intrin;
