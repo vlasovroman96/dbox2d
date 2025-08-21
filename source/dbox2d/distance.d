@@ -7,9 +7,6 @@ import dbox2d.collision;
 import dbox2d.math_functions;
 import dbox2d.base;
 
-import core.stdc.float_;
-import core.stdc.stddef;
-
 b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 {
 	// https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/
