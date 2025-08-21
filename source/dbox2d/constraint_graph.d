@@ -1,5 +1,8 @@
 module dbox2d.constraint_graph;
 
+import std.math;
+import std.algorithm;;
+
 import dbox2d.core;
 import dbox2d.array;
 import dbox2d.bitset;
@@ -15,7 +18,6 @@ import dbox2d.broad_phase;
 import dbox2d.constraint_graph;
 import dbox2d.id_pool;
 import dbox2d.arena_allocator;
-import std.math;
 import dbox2d.ctz;
 import dbox2d.body;
 import dbox2d.solver_set;
@@ -29,8 +31,6 @@ import dbox2d.atomic;
 import dbox2d.physics_world;
 import dbox2d.dynamic_tree;
 import dbox2d.distance;
-import core.stdc.string;
-import core.stdc.stdio;
 import dbox2d.timer;
 import dbox2d.base;
 
@@ -206,7 +206,7 @@ static if (B2_FORCE_OVERFLOW == 0) {
 	contact.localIndex = cast(int)color.contactSims.count;
 
 	b2ContactSim* newContact = b2ContactSimArray_Add( color.contactSims );
-	memcpy( newContact, contactSim, b2ContactSim.sizeof );
+	*newContact = *contactSim;
 
 	// todo perhaps skip this if the contact is already awake
 
@@ -351,7 +351,7 @@ b2JointSim* b2CreateJointInGraph(b2World* world, b2Joint* joint)
 	int colorIndex = b2AssignJointColor( graph, bodyIdA, bodyIdB, staticA, staticB );
 
 	b2JointSim* jointSim = b2JointSimArray_Add( graph.colors[colorIndex].jointSims );
-	memset( jointSim, 0, b2JointSim.sizeof );
+	jointSim = new b2JointSim;
 
 	joint.colorIndex = colorIndex;
 	joint.localIndex = cast(int)(graph.colors[colorIndex].jointSims.count - 1);
@@ -361,7 +361,7 @@ b2JointSim* b2CreateJointInGraph(b2World* world, b2Joint* joint)
 void b2AddJointToGraph(b2World* world, b2JointSim* jointSim, b2Joint* joint)
 {
 	b2JointSim* jointDst = b2CreateJointInGraph( world, joint );
-	memcpy( jointDst, jointSim, b2JointSim.sizeof );
+	(*jointDst) = *jointSim;
 }
 
 void b2RemoveJointFromGraph(b2World* world, int bodyIdA, int bodyIdB, int colorIndex, int localIndex)
