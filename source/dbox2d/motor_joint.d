@@ -261,9 +261,9 @@ void b2WarmStartMotorJoint(b2JointSim* base, b2StepContext* context)
 	float angularImpulse = joint.angularVelocityImpulse + joint.angularSpringImpulse;
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, linearImpulse );
-	stateA.angularVelocity -= iA * ( b2Cross( rA, linearImpulse ) + angularImpulse );
+	stateA.angularVelocity -= iA * ( rA.cross( linearImpulse ) + angularImpulse );
 	stateB.linearVelocity = b2MulAdd( stateB.linearVelocity, mB, linearImpulse );
-	stateB.angularVelocity += iB * ( b2Cross( rB, linearImpulse ) + angularImpulse );
+	stateB.angularVelocity += iB * ( rB.cross( linearImpulse ) + angularImpulse );
 }
 
 void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
@@ -372,9 +372,9 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		impulse = joint.linearSpringImpulse - oldImpulse;
 
 		vA = b2MulSub( vA, mA, impulse );
-		wA -= iA * b2Cross( rA, impulse );
+		wA -= iA * rA.cross( impulse );
 		vB = b2MulAdd( vB, mB, impulse );
-		wB += iB * b2Cross( rB, impulse );
+		wB += iB * rB.cross( impulse );
 	}
 
 	// linear velocity
@@ -399,9 +399,9 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		impulse = joint.linearVelocityImpulse - oldImpulse;
 
 		vA = b2MulSub( vA, mA, impulse );
-		wA -= iA * b2Cross( rA, impulse );
+		wA -= iA * rA.cross( impulse );
 		vB = b2MulAdd( vB, mB, impulse );
-		wB += iB * b2Cross( rB, impulse );
+		wB += iB * rB.cross( impulse );
 	}
 
 	stateA.linearVelocity = vA;

@@ -285,8 +285,8 @@ void b2PrepareDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 axis = b2Normalize( separation );
 
 	// compute effective mass
-	float crA = b2Cross( rA, axis );
-	float crB = b2Cross( rB, axis );
+	float crA = rA.cross( axis );
+	float crB = rB.cross( axis );
 	float k = mA + mB + iA * crA * crA + iB * crB * crB;
 	joint.axialMass = k > 0.0f ? 1.0f / k : 0.0f;
 
@@ -328,9 +328,9 @@ void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 P = b2MulSV( axialImpulse, axis );
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, P );
-	stateA.angularVelocity -= iA * b2Cross( rA, P );
+	stateA.angularVelocity -= iA * rA.cross( P );
 	stateB.linearVelocity = b2MulAdd( stateB.linearVelocity, mB, P );
-	stateB.angularVelocity += iB * b2Cross( rB, P );
+	stateB.angularVelocity += iB * rB.cross( P );
 }
 
 void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias)
@@ -375,7 +375,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		{
 			// Cdot = dot(u, v + cross(w, r))
 			b2Vec2 vr = ( vB - vA ) + ( b2CrossSV( wB, rB ) - b2CrossSV( wA, rA ) );
-			float Cdot = b2Dot( axis, vr );
+			float Cdot = axis.dot( vr );
 			float C = length - joint.length;
 			float bias = joint.distanceSoftness.biasRate * C;
 
@@ -389,9 +389,9 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 			b2Vec2 P = b2MulSV( impulse, axis );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * b2Cross( rA, P );
+			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * b2Cross( rB, P );
+			wB += iB * rB.cross( P );
 		}
 
 		if ( joint.enableLimit )
@@ -399,7 +399,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			// lower limit
 			{
 				b2Vec2 vr = ( vB - vA ) + ( b2CrossSV( wB, rB ) - b2CrossSV( wA, rA ) );
-				float Cdot = b2Dot( axis, vr );
+				float Cdot = axis.dot( vr );
 
 				float C = length - joint.minLength;
 
@@ -425,15 +425,15 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 				b2Vec2 P = b2MulSV( impulse, axis );
 				vA = b2MulSub( vA, mA, P );
-				wA -= iA * b2Cross( rA, P );
+				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );
-				wB += iB * b2Cross( rB, P );
+				wB += iB * rB.cross( P );
 			}
 
 			// upper
 			{
 				b2Vec2 vr = ( vA - vB ) + ( b2CrossSV( wA, rA ) - b2CrossSV( wB, rB ) );
-				float Cdot = b2Dot( axis, vr );
+				float Cdot = axis.dot( vr );
 
 				float C = joint.maxLength - length;
 
@@ -459,16 +459,16 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 				b2Vec2 P = b2MulSV( -impulse, axis );
 				vA = b2MulSub( vA, mA, P );
-				wA -= iA * b2Cross( rA, P );
+				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );
-				wB += iB * b2Cross( rB, P );
+				wB += iB * rB.cross( P );
 			}
 		}
 
 		if ( joint.enableMotor )
 		{
 			b2Vec2 vr = ( vB - vA ) + ( b2CrossSV( wB, rB ) - b2CrossSV( wA, rA ) );
-			float Cdot = b2Dot( axis, vr );
+			float Cdot = axis.dot( vr );
 			float impulse = joint.axialMass * ( joint.motorSpeed - Cdot );
 			float oldImpulse = joint.motorImpulse;
 			float maxImpulse = context.h * joint.maxMotorForce;
@@ -477,16 +477,16 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 			b2Vec2 P = b2MulSV( impulse, axis );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * b2Cross( rA, P );
+			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * b2Cross( rB, P );
+			wB += iB * rB.cross( P );
 		}
 	}
 	else
 	{
 		// rigid constraint
 		b2Vec2 vr = ( vB - vA ) + ( b2CrossSV( wB, rB ) - b2CrossSV( wA, rA ) );
-		float Cdot = b2Dot( axis, vr );
+		float Cdot = axis.dot( vr );
 
 		float C = length - joint.length;
 
@@ -505,9 +505,9 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 		b2Vec2 P = b2MulSV( impulse, axis );
 		vA = b2MulSub( vA, mA, P );
-		wA -= iA * b2Cross( rA, P );
+		wA -= iA * rA.cross( P );
 		vB = b2MulAdd( vB, mB, P );
-		wB += iB * b2Cross( rB, P );
+		wB += iB * rB.cross( P );
 	}
 
 	stateA.linearVelocity = vA;

@@ -95,8 +95,8 @@ b2Manifold b2CollideCapsuleAndCircle(const(b2Capsule)* capsuleA, b2Transform xfA
 	// dot(p - (p1 + s1 * e), e) = 0
 	// s1 = dot(p - p1, e)
 	b2Vec2 pA = void;
-	float s1 = b2Dot( pB - p1, e );
-	float s2 = b2Dot( p2 -  pB , e );
+	float s1 = ( pB - p1).dot( e );
+	float s2 = ( p2 -  pB).dot( e );
 	if ( s1 < 0.0f )
 	{
 		// p1 region
@@ -110,7 +110,7 @@ b2Manifold b2CollideCapsuleAndCircle(const(b2Capsule)* capsuleA, b2Transform xfA
 	else
 	{
 		// circle colliding with segment interior
-		float s = s1 / b2Dot( e, e );
+		float s = s1 / e.dot( e );
 		pA = b2MulAdd( p1, s, e );
 	}
 
@@ -162,7 +162,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 
 	for ( int i = 0; i < vertexCount; ++i )
 	{
-		float s = b2Dot( normals[i], center - vertices[i] );
+		float s = normals[i].dot( center - vertices[i] );
 		if ( s > separation )
 		{
 			separation = s;
@@ -182,14 +182,14 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 	b2Vec2 v2 = vertices[vertIndex2];
 
 	// Compute barycentric coordinates
-	float u1 = b2Dot( center - v1, v2 - v1 );
-	float u2 = b2Dot( center - v2, v1 - v2 );
+	float u1 = (center - v1).dot( v2 - v1 );
+	float u2 = (center - v2).dot( v1 - v2 );
 
 	if ( u1 < 0.0f && separation > float.epsilon )
 	{
 		// Circle center is closest to v1 and safely outside the polygon
 		b2Vec2 normal = b2Normalize( center - v1 );
-		separation = b2Dot( center - v1, normal );
+		separation = ( center - v1 ).dot( normal );
 		if ( separation > radius + speculativeDistance )
 		{
 			return manifold;
@@ -204,7 +204,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 		mp.anchorA = b2RotateVector( xfA.q, contactPointA );
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
-		mp.separation = b2Dot( cB - cA , normal );
+		mp.separation = ( cB - cA ).dot( normal );
 		mp.id = 0;
 		manifold.pointCount = 1;
 	}
@@ -212,7 +212,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 	{
 		// Circle center is closest to v2 and safely outside the polygon
 		b2Vec2 normal = b2Normalize( center - v2 );
-		separation = b2Dot( center - v2, normal );
+		separation = ( center - v2 ).dot( normal );
 		if ( separation > radius + speculativeDistance )
 		{
 			return manifold;
@@ -227,7 +227,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 		mp.anchorA = b2RotateVector( xfA.q, contactPointA );
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
-		mp.separation = b2Dot( cB - cA , normal );
+		mp.separation = ( cB - cA ).dot( normal );
 		mp.id = 0;
 		manifold.pointCount = 1;
 	}
@@ -238,7 +238,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 		manifold.normal = b2RotateVector( xfA.q, normal );
 
 		// cA is the projection of the circle center onto to the reference edge
-		b2Vec2 cA = b2MulAdd( center, radiusA - b2Dot( center - v1, normal ), normal );
+		b2Vec2 cA = b2MulAdd( center, radiusA - ( center - v1 ).dot( normal ), normal );
 
 		// cB is the deepest point on the circle with respect to the reference edge
 		b2Vec2 cB = b2MulSub( center, radiusB, normal );
@@ -280,17 +280,17 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	b2Vec2 d1 = q1 - p1;
 	b2Vec2 d2 = q2 - p2;
 
-	float dd1 = b2Dot( d1, d1 );
-	float dd2 = b2Dot( d2, d2 );
+	float dd1 = d1.dot( d1 );
+	float dd2 = d2.dot( d2 );
 
 	const(float) epsSqr = float.epsilon * float.epsilon;
 	B2_ASSERT( dd1 > epsSqr && dd2 > epsSqr );
 
 	b2Vec2 r = p1 - p2;
-	float rd1 = b2Dot( r, d1 );
-	float rd2 = b2Dot( r, d2 );
+	float rd1 = r.dot( d1 );
+	float rd2 = r.dot( d2 );
 
-	float d12 = b2Dot( d1, d2 );
+	float d12 = d1.dot( d2 );
 
 	float denom = dd1 * dd2 - d12 * d12;
 
@@ -339,13 +339,13 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	b2Vec2 u2 = b2GetLengthAndNormalize( &length2, d2 );
 
 	// Does segment B project outside segment A?
-	float fp2 = b2Dot( p2 - p1, u1 );
-	float fq2 = b2Dot( q2 - p1, u1 );
+	float fp2 = (p2 - p1).dot( u1 );
+	float fq2 = (q2 - p1).dot( u1 );
 	bool outsideA = ( fp2 <= 0.0f && fq2 <= 0.0f ) || ( fp2 >= length1 && fq2 >= length1 );
 
 	// Does segment A project outside segment B?
-	float fp1 = b2Dot( p1 - p2, u2 );
-	float fq1 = b2Dot( q1 - p2, u2 );
+	float fp1 = (p1 - p2).dot( u2 );
+	float fq1 = (q1 - p2).dot( u2 );
 	bool outsideB = ( fp1 <= 0.0f && fq1 <= 0.0f ) || ( fp1 >= length2 && fq1 >= length2 );
 
 	if ( outsideA == false && outsideB == false )
@@ -360,8 +360,8 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 
 		{
 			normalA = u1.leftPerp();
-			float ss1 = b2Dot( p2 - p1, normalA );
-			float ss2 = b2Dot( q2 - p1, normalA );
+			float ss1 = ( p2 - p1 ).dot( normalA );
+			float ss2 = ( q2 - p1 ).dot( normalA );
 			float s1p = ss1 < ss2 ? ss1 : ss2;
 			float s1n = -ss1 < -ss2 ? -ss1 : -ss2;
 
@@ -380,8 +380,8 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		float separationB = void;
 		{
 			normalB = u2.leftPerp();
-			float ss1 = b2Dot( p1 - p2, normalB );
-			float ss2 = b2Dot( q1 - p2, normalB );
+			float ss1 = ( p1 - p2 ).dot( normalB );
+			float ss2 = ( q1 - p2 ).dot( normalB );
 			float s1p = ss1 < ss2 ? ss1 : ss2;
 			float s1n = -ss1 < -ss2 ? -ss1 : -ss2;
 
@@ -425,8 +425,8 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 				cq = b2Lerp( q2, p2, ( fq2 - length1 ) / ( fq2 - fp2 ) );
 			}
 
-			float sp = b2Dot( cp - p1, normalA );
-			float sq = b2Dot( cq - p1, normalA );
+			float sp = ( cp - p1 ).dot( normalA );
+			float sq = ( cq - p1 ).dot( normalA );
 
 			if ( sp <= distance + B2_LINEAR_SLOP || sq <= distance + B2_LINEAR_SLOP )
 			{
@@ -471,8 +471,8 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 				cq = b2Lerp( q1, p1, ( fq1 - length2 ) / ( fq1 - fp1 ) );
 			}
 
-			float sp = b2Dot( cp - p2, normalB );
-			float sq = b2Dot( cq - p2, normalB );
+			float sp = ( cp - p2 ).dot( normalB );
+			float sq = ( cq - p2 ).dot( normalB );
 
 			if ( sp <= distance + B2_LINEAR_SLOP || sq <= distance + B2_LINEAR_SLOP )
 			{
@@ -494,7 +494,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	{
 		// single point collision
 		b2Vec2 normal = closest2 - closest1;
-		if ( b2Dot( normal, normal ) > epsSqr )
+		if ( normal.dot( normal ) > epsSqr )
 		{
 			normal = b2Normalize( normal );
 		}
@@ -588,11 +588,11 @@ private b2Manifold b2ClipPolygons(const(b2Polygon)* polyA, const(b2Polygon)* pol
 	b2Vec2 tangent = b2CrossSV( 1.0f, normal );
 
 	float lower1 = 0.0f;
-	float upper1 = b2Dot( v12 - v11, tangent );
+	float upper1 = ( v12 - v11 ).dot( tangent );
 
 	// Incident edge points opposite of tangent due to CCW winding
-	float upper2 = b2Dot( v21 - v11, tangent );
-	float lower2 = b2Dot( v22 - v11, tangent );
+	float upper2 = ( v21 - v11 ).dot( tangent );
+	float lower2 = ( v22 - v11 ).dot( tangent );
 
 	// Are the segments disjoint?
 	if ( upper2 < lower1 || upper1 < lower2 )
@@ -622,8 +622,8 @@ private b2Manifold b2ClipPolygons(const(b2Polygon)* polyA, const(b2Polygon)* pol
 
 	// todo vLower can be very close to vUpper, reduce to one point?
 
-	float separationLower = b2Dot( vLower - v11, normal );
-	float separationUpper = b2Dot( vUpper - v11, normal );
+	float separationLower = ( vLower - v11 ).dot( normal );
+	float separationUpper = ( vUpper - v11 ).dot( normal );
 
 	float r1 = poly1.radius;
 	float r2 = poly2.radius;
@@ -699,7 +699,7 @@ private float b2FindMaxSeparation(int* edgeIndex, const(b2Polygon)* poly1, const
 		float si = float.max;
 		for ( int j = 0; j < count2; ++j )
 		{
-			float sij = b2Dot( n, v2s[j] - v1 );
+			float sij = n.dot( v2s[j] - v1 );
 			if ( sij < si )
 			{
 				si = sij;
@@ -797,7 +797,7 @@ b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(
 		float minDot = float.max;
 		for ( int i = 0; i < count; ++i )
 		{
-			float dot = b2Dot( searchDirection, normals[i] );
+			float dot = searchDirection.dot( normals[i] );
 			if ( dot < minDot )
 			{
 				minDot = dot;
@@ -818,7 +818,7 @@ b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(
 		float minDot = float.max;
 		for ( int i = 0; i < count; ++i )
 		{
-			float dot = b2Dot( searchDirection, normals[i] );
+			float dot = searchDirection.dot( normals[i] );
 			if ( dot < minDot )
 			{
 				minDot = dot;
@@ -1102,7 +1102,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	b2Vec2 e = p2 - p1;
 
 	// Normal points to the right
-	float offset = b2Dot( e.rightPerp(), pB - p1);
+	float offset = e.rightPerp().dot( pB - p1 );
 	if ( offset < 0.0f )
 	{
 		// collision is one-sided
@@ -1110,8 +1110,8 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	}
 
 	// Barycentric coordinates
-	float u = b2Dot( e, p2 -  pB  );
-	float v = b2Dot( e, pB - p1);
+	float u = e.dot( p2 - pB );
+	float v = e.dot( pB - p1 );
 
 	b2Vec2 pA = void;
 
@@ -1120,7 +1120,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 		// Behind point1?
 		// Is pB in the Voronoi region of the previous edge?
 		b2Vec2 prevEdge = p1 - segmentA.ghost1;
-		float uPrev = b2Dot( prevEdge, pB - p1);
+		float uPrev = prevEdge.dot( pB - p1);
 		if ( uPrev <= 0.0f )
 		{
 			return manifold;
@@ -1132,7 +1132,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	{
 		// Ahead of point2?
 		b2Vec2 nextEdge = segmentA.ghost2 - p2;
-		float vNext = b2Dot( nextEdge, pB - p2 );
+		float vNext = nextEdge.dot( pB - p2 );
 
 		// Is pB in the Voronoi region of the next edge?
 		if ( vNext > 0.0f )
@@ -1144,7 +1144,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	}
 	else
 	{
-		float ee = b2Dot( e, e );
+		float ee = e.dot( e );
 		pA = b2Vec2( u * p1.x + v * p2.x, u * p1.y + v * p2.y );
 		pA = ee > 0.0f ? b2MulSV( 1.0f / ee, pA ) : p1;
 	}
@@ -1189,11 +1189,11 @@ private b2Manifold b2ClipSegments(b2Vec2 a1, b2Vec2 a2, b2Vec2 b1, b2Vec2 b2, b2
 
 	// Barycentric coordinates of each point relative to a1 along tangent
 	float lower1 = 0.0f;
-	float upper1 = b2Dot( a2 - a1, tangent );
+	float upper1 = ( a2 - a1 ).dot( tangent );
 
 	// Incident edge points opposite of tangent due to CCW winding
-	float upper2 = b2Dot( b1 - a1, tangent );
-	float lower2 = b2Dot( b2 - a1, tangent );
+	float upper2 = ( b1 - a1 ).dot( tangent );
+	float lower2 = ( b2 - a1 ).dot( tangent );
 
 	// Do segments overlap?
 	if ( upper2 < lower1 || upper1 < lower2 )
@@ -1223,8 +1223,8 @@ private b2Manifold b2ClipSegments(b2Vec2 a1, b2Vec2 a2, b2Vec2 b1, b2Vec2 b2, b2
 
 	// todo vLower can be very close to vUpper, reduce to one point?
 
-	float separationLower = b2Dot( vLower - a1, normal );
-	float separationUpper = b2Dot( vUpper - a1, normal );
+	float separationLower = ( vLower - a1 ).dot( normal );
+	float separationUpper = ( vUpper - a1 ).dot( normal );
 
 	// Put contact points at midpoint, accounting for radii
 	vLower = b2MulAdd( vLower, 0.5f * ( ra - rb - separationLower ), normal );
@@ -1283,12 +1283,12 @@ private b2NormalType b2ClassifyNormal(b2ChainSegmentParams params, b2Vec2 normal
 {
 	const(float) sinTol = 0.01f;
 
-	if ( b2Dot( normal, params.edge1 ) <= 0.0f )
+	if ( normal.dot( params.edge1 ) <= 0.0f )
 	{
 		// Normal points towards the segment tail
 		if ( params.convex1 )
 		{
-			if ( b2Cross( normal, params.normal0 ) > sinTol )
+			if ( normal.cross( params.normal0 ) > sinTol )
 			{
 				return b2_normalSkip;
 			}
@@ -1305,7 +1305,7 @@ private b2NormalType b2ClassifyNormal(b2ChainSegmentParams params, b2Vec2 normal
 		// Normal points towards segment head
 		if ( params.convex2 )
 		{
-			if ( b2Cross( params.normal2, normal ) > sinTol )
+			if ( params.normal2.cross( normal ) > sinTol )
 			{
 				return b2_normalSkip;
 			}
@@ -1339,25 +1339,25 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	const(float) convexTol = 0.01f;
 	b2Vec2 edge0 = b2Normalize( p1 - segmentA.ghost1 );
 	smoothParams.normal0 = edge0.rightPerp();
-	smoothParams.convex1 = b2Cross( edge0, edge1 ) >= convexTol;
+	smoothParams.convex1 = edge0.cross( edge1 ) >= convexTol;
 
 	b2Vec2 edge2 = b2Normalize( segmentA.ghost2 - p2 );
 	smoothParams.normal2 = edge2.rightPerp();
-	smoothParams.convex2 = b2Cross( edge1, edge2 ) >= convexTol;
+	smoothParams.convex2 = edge1.cross( edge2 ) >= convexTol;
 
 	// Normal points to the right
 	b2Vec2 normal1 = edge1.rightPerp();
-	bool behind1 = b2Dot( normal1, centroidB - p1 ) < 0.0f;
+	bool behind1 = normal1.dot( centroidB - p1 ) < 0.0f;
 	bool behind0 = true;
 	bool behind2 = true;
 	if ( smoothParams.convex1 )
 	{
-		behind0 = b2Dot( smoothParams.normal0, centroidB - p1 ) < 0.0f;
+		behind0 = smoothParams.normal0.dot( centroidB - p1 ) < 0.0f;
 	}
 
 	if ( smoothParams.convex2 )
 	{
-		behind2 = b2Dot( smoothParams.normal2, centroidB - p2 ) < 0.0f;
+		behind2 = smoothParams.normal2.dot( centroidB - p2 ) < 0.0f;
 	}
 
 	if ( behind1 && behind0 && behind2 )
@@ -1452,8 +1452,8 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 				// Find polygon normal most aligned with vector between closest points.
 				// This effectively sorts ib1 and ib2
 				b2Vec2 normalB = output.pointA - output.pointB;
-				float dot1 = b2Dot( normalB, normals[ib1] );
-				float dot2 = b2Dot( normalB, normals[ib2] );
+				float dot1 = normalB.dot( normals[ib1] );
+				float dot2 = normalB.dot( normals[ib2] );
 				int ib = dot1 > dot2 ? ib1 : ib2;
 
 				// Use accurate normal
@@ -1475,12 +1475,12 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 					b2Vec2 b2 = vertices[ib2];
 
 					// Find incident segment vertex
-					dot1 = b2Dot( normalB, p1 - b1 );
-					dot2 = b2Dot( normalB, p2 - b1 );
+					dot1 = normalB.dot( p1 - b1 );
+					dot2 = normalB.dot( p2 - b1 );
 
 					if ( dot1 < dot2 )
 					{
-						if ( b2Dot( n0, normalB ) < b2Dot( normal1, normalB ) )
+						if ( n0.dot( normalB ) < normal1.dot( normalB ) )
 						{
 							// Neighbor is incident
 							return manifold;
@@ -1488,7 +1488,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 					}
 					else
 					{
-						if ( b2Dot( n2, normalB ) < b2Dot( normal1, normalB ) )
+						if ( n2.dot( normalB ) < normal1.dot( normalB ) )
 						{
 							// Neighbor is incident
 							return manifold;
@@ -1519,8 +1519,8 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			else
 			{
 				// Get index of incident polygonB vertex
-				float dot1 = b2Dot( normal1, vertices[ib1] - p1 );
-				float dot2 = b2Dot( normal1, vertices[ib2] - p2 );
+				float dot1 = normal1.dot( vertices[ib1] - p1 );
+				float dot2 = normal1.dot( vertices[ib2] - p2 );
 				incidentIndex = dot1 < dot2 ? ib1 : ib2;
 			}
 		}
@@ -1532,7 +1532,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 		for ( int i = 0; i < count; ++i )
 		{
-			float s = b2Dot( normal1, vertices[i] - p1 );
+			float s = normal1.dot( vertices[i] - p1 );
 			if ( s < edgeSeparation )
 			{
 				edgeSeparation = s;
@@ -1547,7 +1547,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 			for ( int i = 0; i < count; ++i )
 			{
-				float s = b2Dot( smoothParams.normal0, vertices[i] - p1 );
+				float s = smoothParams.normal0.dot( vertices[i] - p1 );
 				if ( s < s0 )
 				{
 					s0 = s;
@@ -1570,7 +1570,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 			for ( int i = 0; i < count; ++i )
 			{
-				float s = b2Dot( smoothParams.normal2, vertices[i] - p2 );
+				float s = smoothParams.normal2.dot( vertices[i] - p2 );
 				if ( s < s2 )
 				{
 					s2 = s;
@@ -1607,7 +1607,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			//}
 
 			b2Vec2 p = vertices[i];
-			float s = min( b2Dot( n, p2 - p  ), b2Dot( n, p1 - p ) );
+			float s = min( n.dot( p2 - p  ), n.dot( p1 - p ) );
 
 			if ( s > polygonSeparation )
 			{
@@ -1625,12 +1625,12 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 			b2Vec2 n = normals[ia1];
 
-			float dot1 = b2Dot( n, p1 - a1 );
-			float dot2 = b2Dot( n, p2 - a1 );
+			float dot1 = n.dot( p1 - a1 );
+			float dot2 = n.dot( p2 - a1 );
 
 			if ( dot1 < dot2 )
 			{
-				if ( b2Dot( n0, n ) < b2Dot( normal1, n ) )
+				if ( n0.dot( n ) < normal1.dot( n ) )
 				{
 					// Neighbor is incident
 					return manifold;
@@ -1638,7 +1638,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			}
 			else
 			{
-				if ( b2Dot( n2, n ) < b2Dot( normal1, n ) )
+				if ( n2.dot( n ) < normal1.dot( n ) )
 				{
 					// Neighbor is incident
 					return manifold;
@@ -1692,8 +1692,8 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	{
 		int i2 = incidentIndex;
 		int i1 = i2 > 0 ? i2 - 1 : count - 1;
-		float d1 = b2Dot( normal1, normals[i1] );
-		float d2 = b2Dot( normal1, normals[i2] );
+		float d1 = normal1.dot( normals[i1] );
+		float d2 = normal1.dot( normals[i2] );
 		if ( d1 < d2 )
 		{
 			ib1 = i1, ib2 = i2;

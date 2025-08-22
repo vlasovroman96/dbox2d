@@ -2629,7 +2629,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	b2BodyState* state = b2BodyStateArray_Get( set.bodyStates, localIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, localIndex );
 	state.linearVelocity = b2MulAdd( state.linearVelocity, bodySim.invMass, impulse );
-	state.angularVelocity += bodySim.invInertia * b2Cross( closestPoint - bodySim.center, impulse );
+	state.angularVelocity += bodySim.invInertia * (closestPoint - bodySim.center).cross( impulse );
 
 	return true;
 }

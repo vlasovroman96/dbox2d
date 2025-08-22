@@ -311,7 +311,7 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		w = angularVelocityDelta + angularDamping * w;
 
 		// Clamp to max linear speed
-		if ( b2Dot( v, v ) > maxLinearSpeedSquared )
+		if ( v.dot( v ) > maxLinearSpeedSquared )
 		{
 			float ratio = maxLinearSpeed / v.length();
 			v = b2MulSV( ratio, v );
@@ -540,9 +540,9 @@ private bool b2ContinuousQueryCallback(int proxyId, ulong userData, void* contex
 		if ( length > B2_LINEAR_SLOP )
 		{
 			b2Vec2 c1 = continuousContext.centroid1;
-			float separation1 = b2Cross( c1 - p1, e );
+			float separation1 = ( c1 - p1 ).cross( e );
 			b2Vec2 c2 = continuousContext.centroid2;
-			float separation2 = b2Cross( c2 - p1, e );
+			float separation2 = ( c2 - p1 ).cross( e );
 
 			float coreDistance = B2_CORE_FRACTION * fastBodySim.minExtent;
 			
@@ -565,8 +565,8 @@ version (none) {
 		b2Vec2 e = p2 - p1;
 		b2Vec2 c1 = continuousContext.centroid1;
 		b2Vec2 c2 = continuousContext.centroid2;
-		float offset1 = b2Cross( c1 - p1, e );
-		float offset2 = b2Cross( c2 - p1, e );
+		float offset1 = ( c1 - p1 ).cross( e );
+		float offset2 = ( c2 - p1 ).cross( e );
 
 		if ( offset1 > 0.0f && offset2 > 0.0f )
 		{

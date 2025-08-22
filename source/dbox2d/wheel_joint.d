@@ -243,15 +243,15 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 perpA = axisA.leftPerp();
 
 	// perpendicular constraint (keep wheel on line)
-	float s1 = b2Cross( d + rA, perpA );
-	float s2 = b2Cross( rB, perpA );
+	float s1 = ( d + rA).cross( perpA );
+	float s2 = rB.cross( perpA );
 
 	float kp = mA + mB + iA * s1 * s1 + iB * s2 * s2;
 	joint.perpMass = kp > 0.0f ? 1.0f / kp : 0.0f;
 
 	// spring constraint
-	float a1 = b2Cross( d + rA, axisA );
-	float a2 = b2Cross( rB, axisA );
+	float a1 = ( d + rA ).cross( axisA );
+	float a2 = rB.cross( axisA );
 
 	float ka = mA + mB + iA * a1 * a1 + iB * a2 * a2;
 	joint.axialMass = ka > 0.0f ? 1.0f / ka : 0.0f;
@@ -296,10 +296,10 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
 	b2Vec2 perpA = axisA.leftPerp();
 
-	float a1 = b2Cross( d + rA, axisA );
-	float a2 = b2Cross( rB, axisA );
-	float s1 = b2Cross( d + rA, perpA );
-	float s2 = b2Cross( rB, perpA );
+	float a1 = ( d + rA ).cross( axisA );
+	float a2 = rB.cross( axisA );
+	float s1 = ( d + rA).cross( perpA );
+	float s2 = rB.cross( perpA );
 
 	float axialImpulse = joint.springImpulse + joint.lowerImpulse - joint.upperImpulse;
 
@@ -344,10 +344,10 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 	b2Vec2 d = ( ( stateB.deltaPosition - stateA.deltaPosition ) + joint.deltaCenter ) + ( rB - rA );
 	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
 	axisA = b2RotateVector( stateA.deltaRotation, axisA );
-	float translation = b2Dot( axisA, d );
+	float translation = axisA.dot( d );
 
-	float a1 = b2Cross( d + rA, axisA );
-	float a2 = b2Cross( rB, axisA );
+	float a1 = ( d + rA ).cross( axisA );
+	float a2 = rB.cross( axisA );
 
 	// motor constraint
 	if ( joint.enableMotor && fixedRotation == false )
@@ -372,7 +372,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		float massScale = joint.springSoftness.massScale;
 		float impulseScale = joint.springSoftness.impulseScale;
 
-		float Cdot = b2Dot( axisA, vB - vA ) + a2 * wB - a1 * wA;
+		float Cdot = axisA.dot( vB - vA ) + a2 * wB - a1 * wA;
 		float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.springImpulse;
 		joint.springImpulse += impulse;
 
@@ -407,7 +407,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 				impulseScale = base.constraintSoftness.impulseScale;
 			}
 
-			float Cdot = b2Dot( axisA, vB - vA ) + a2 * wB - a1 * wA;
+			float Cdot = axisA.dot( vB - vA ) + a2 * wB - a1 * wA;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.lowerImpulse;
 			float oldImpulse = joint.lowerImpulse;
 			joint.lowerImpulse = max( oldImpulse + impulse, 0.0f );
@@ -446,7 +446,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			}
 
 			// sign flipped on Cdot
-			float Cdot = b2Dot( axisA, vA - vB ) + a1 * wA - a2 * wB;
+			float Cdot = axisA.dot( vA - vB ) + a1 * wA - a2 * wB;
 			float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.upperImpulse;
 			float oldImpulse = joint.upperImpulse;
 			joint.upperImpulse = max( oldImpulse + impulse, 0.0f );
@@ -473,15 +473,15 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		float impulseScale = 0.0f;
 		if ( useBias )
 		{
-			float C = b2Dot( perpA, d );
+			float C = perpA.dot( d );
 			bias = base.constraintSoftness.biasRate * C;
 			massScale = base.constraintSoftness.massScale;
 			impulseScale = base.constraintSoftness.impulseScale;
 		}
 
-		float s1 = b2Cross( d + rA, perpA );
-		float s2 = b2Cross( rB, perpA );
-		float Cdot = b2Dot( perpA, vB - vA ) + s2 * wB - s1 * wA;
+		float s1 = ( d + rA).cross( perpA );
+		float s2 = rB.cross( perpA );
+		float Cdot = perpA.dot( vB - vA ) + s2 * wB - s1 * wA;
 
 		float impulse = -massScale * joint.perpMass * ( Cdot + bias ) - impulseScale * joint.perpImpulse;
 		joint.perpImpulse += impulse;

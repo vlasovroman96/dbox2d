@@ -37,7 +37,7 @@ b2Vec2 b2ComputePolygonCentroid(const(b2Vec2)* vertices, int count)
 		// Triangle edges
 		b2Vec2 e1 = vertices[i] - origin;
 		b2Vec2 e2 = vertices[i + 1] - origin;
-		float a = 0.5f * b2Cross( e1, e2 );
+		float a = 0.5f * e1.cross( e2 );
 
 		// Area weighted centroid
 		center = b2MulAdd( center, a * inv3, e1 + e2 );
@@ -81,7 +81,7 @@ b2Polygon b2MakePolygon(const(b2Hull)* hull, float radius)
 		int i1 = i;
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
 		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
-		B2_ASSERT( b2Dot( edge, edge ) > float.epsilon * float.epsilon );
+		B2_ASSERT( edge.dot( edge ) > float.epsilon * float.epsilon );
 		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
 	}
 
@@ -123,7 +123,7 @@ b2Polygon b2MakeOffsetRoundedPolygon(const(b2Hull)* hull, b2Vec2 position, b2Rot
 		int i1 = i;
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
 		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
-		B2_ASSERT( b2Dot( edge, edge ) > float.epsilon * float.epsilon );
+		B2_ASSERT( edge.dot( edge ) > float.epsilon * float.epsilon );
 		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
 	}
 
@@ -359,7 +359,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 		b2Vec2 e1 = vertices[i] - r;
 		b2Vec2 e2 = vertices[i + 1] - r;
 
-		float D = b2Cross( e1, e2 );
+		float D = e1.cross( e2 );
 
 		float triangleArea = 0.5f * D;
 		area += triangleArea;
@@ -392,7 +392,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 	massData.rotationalInertia = density * rotationalInertia;
 
 	// Shift inertia to center of mass
-	massData.rotationalInertia -= massData.mass * b2Dot( center, center );
+	massData.rotationalInertia -= massData.mass * center.dot( center );
 
 	// If this goes negative we are hosed
 	B2_ASSERT( massData.rotationalInertia >= 0.0f );
@@ -468,7 +468,7 @@ bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point)
 	b2Vec2 p2 = shape.center2;
 
 	b2Vec2 d = p2 - p1;
-	float dd = b2Dot( d, d );
+	float dd = d.dot( d );
 	if ( dd == 0.0f )
 	{
 		// Capsule is really a circle
@@ -480,7 +480,7 @@ bool b2PointInCapsule(const(b2Capsule)* shape, b2Vec2 point)
 	// dot(point - c, d) = 0
 	// dot(point - p1 - t * d, d) = 0
 	// t = dot(point - p1, d) / dot(d, d)
-	float t = b2Dot( point - p1, d ) / dd;
+	float t = ( point - p1 ).dot( d ) / dd;
 	t = clamp( t, 0.0f, 1.0f );
 	b2Vec2 c = b2MulAdd( p1, t, d );
 
@@ -539,12 +539,12 @@ b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* inpu
 	// Find closest point on ray to origin
 
 	// solve: dot(s + t * d, d) = 0
-	float t = -b2Dot( s, d );
+	float t = -s.dot( d );
 
 	// c is the closest point on the line to the origin
 	b2Vec2 c = b2MulAdd( s, t, d );
 
-	float cc = b2Dot( c, c );
+	float cc = c.dot( c );
 
 	if ( cc > rr )
 	{
@@ -608,7 +608,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 
 	// Ray from capsule start to ray start
 	b2Vec2 q = p1 - v1;
-	float qa = b2Dot( q, a );
+	float qa = q.dot( a );
 
 	// Vector to ray start that is perpendicular to capsule axis
 	b2Vec2 qp = b2MulAdd( q, -qa, a );
@@ -616,7 +616,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	float radius = shape.radius;
 
 	// Does the ray start within the infinite length capsule?
-	if ( b2Dot( qp, qp ) < radius * radius )
+	if ( qp.dot( qp ) < radius * radius )
 	{
 		if ( qa < 0.0f )
 		{
@@ -723,7 +723,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	if ( oneSided )
 	{
 		// Skip left-side collision
-		float offset = b2Cross( input.origin - shape.point1, shape.point2 - shape.point1 );
+		float offset = ( input.origin - shape.point1).cross( shape.point2 - shape.point1 );
 		if ( offset < 0.0f )
 		{
 			b2CastOutput output;
@@ -756,8 +756,8 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	// p = p1 + t * d
 	// dot(normal, p - v1) = 0
 	// dot(normal, p1 - v1) + t * dot(normal, d) = 0
-	float numerator = b2Dot( normal, v1 - p1 );
-	float denominator = b2Dot( normal, d );
+	float numerator = normal.dot( v1 - p1 );
+	float denominator = normal.dot( d );
 
 	if ( denominator == 0.0f )
 	{
@@ -779,7 +779,7 @@ b2CastOutput b2RayCastSegment(const(b2Segment)* shape, const(b2RayCastInput)* in
 	// p = v1 + s * e
 	// s = dot(p - v1, e) / dot(e, e)
 
-	float s = b2Dot( p - v1, eUnit );
+	float s = ( p - v1 ).dot( eUnit );
 	if ( s < 0.0f || length < s )
 	{
 		// out of segment range
@@ -824,8 +824,8 @@ b2CastOutput b2RayCastPolygon(const(b2Polygon)* shape, const(b2RayCastInput)* in
 			// dot(normal, p - v) = 0
 			// dot(normal, p1 - v) + a * dot(normal, d) = 0
 			b2Vec2 vertex = shape.vertices[edgeIndex] - base;
-			float numerator = b2Dot( shape.normals[edgeIndex] - vertex, p1 );
-			float denominator = b2Dot( shape.normals[edgeIndex], d );
+			float numerator = ( shape.normals[edgeIndex] - vertex ).dot( p1 );
+			float denominator = shape.normals[edgeIndex].dot( d );
 
 			if ( denominator == 0.0f )
 			{

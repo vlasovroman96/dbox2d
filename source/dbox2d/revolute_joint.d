@@ -299,10 +299,10 @@ void b2WarmStartRevoluteJoint(b2JointSim* base, b2StepContext* context)
 	float axialImpulse = joint.springImpulse + joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse;
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, joint.linearImpulse );
-	stateA.angularVelocity -= iA * ( b2Cross( rA, joint.linearImpulse ) + axialImpulse );
+	stateA.angularVelocity -= iA * ( rA.cross( joint.linearImpulse ) + axialImpulse );
 
 	stateB.linearVelocity = b2MulAdd( stateB.linearVelocity, mB, joint.linearImpulse );
-	stateB.angularVelocity += iB * ( b2Cross( rB, joint.linearImpulse ) + axialImpulse );
+	stateB.angularVelocity += iB * ( rB.cross( joint.linearImpulse ) + axialImpulse );
 }
 
 void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias)
@@ -472,9 +472,9 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		joint.linearImpulse.y += impulse.y;
 
 		vA = b2MulSub( vA, mA, impulse );
-		wA -= iA * b2Cross( rA, impulse );
+		wA -= iA * rA.cross( impulse );
 		vB = b2MulAdd( vB, mB, impulse );
-		wB += iB * b2Cross( rB, impulse );
+		wB += iB * rB.cross( impulse );
 	}
 
 	stateA.linearVelocity = vA;

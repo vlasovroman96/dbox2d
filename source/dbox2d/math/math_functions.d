@@ -63,18 +63,6 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/// Vector dot product
-float b2Dot(b2Vec2 a, b2Vec2 b)
-{
-	return a.x * b.x + a.y * b.y;
-}
-
-/// Vector cross product. In 2D this yields a scalar.
-float b2Cross(b2Vec2 a, b2Vec2 b)
-{
-	return a.x * b.y - a.y * b.x;
-}
-
 /// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
 b2Vec2 b2CrossVS( b2Vec2 v, float s )
 {
@@ -180,7 +168,7 @@ b2Vec2 b2Normalize( b2Vec2 v )
 /// Determines if the provided vector is normalized (norm(a) == 1).
 bool b2IsNormalized(b2Vec2 a)
 {
-	float aa = b2Dot( a, a );
+	float aa = a.dot( a );
 	return abs( 1.0f - aa ) < 100.0f * float.epsilon;
 }
 
@@ -521,7 +509,7 @@ b2AABB b2MakeAABB(const(b2Vec2)* points, int count, float radius)
 /// Signed separation of a point from a plane
 float b2PlaneSeparation(b2Plane plane, b2Vec2 point)
 {
-	return b2Dot( plane.normal, point ) - plane.offset;
+	return plane.normal.dot( point ) - plane.offset;
 }
 
 /// One-dimensional mass-spring-damper simulation. Returns the new velocity given the position and time step.
@@ -692,7 +680,7 @@ b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2)
 	B2_ASSERT( abs( 1.0f - v2.length() ) < 100.0f * float.epsilon );
 
 	b2Rot rot = void;
-	rot.c = b2Dot( v1, v2 );
-	rot.s = b2Cross( v1, v2 );
+	rot.c = v1.dot( v2 );
+	rot.s = v1.cross( v2 );
 	return b2NormalizeRot( rot );
 }

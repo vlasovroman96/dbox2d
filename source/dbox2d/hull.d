@@ -28,7 +28,7 @@ private b2Hull b2RecurseHull(b2Vec2 p1, b2Vec2 p2, b2Vec2* ps, int count)
 	int rightCount = 0;
 
 	int bestIndex = 0;
-	float bestDistance = b2Cross( ps[bestIndex] - p1, e );
+	float bestDistance = (ps[bestIndex] - p1).cross( e );
 	if ( bestDistance > 0.0f )
 	{
 		rightPoints[rightCount++] = ps[bestIndex];
@@ -36,7 +36,7 @@ private b2Hull b2RecurseHull(b2Vec2 p1, b2Vec2 p2, b2Vec2* ps, int count)
 
 	for ( int i = 1; i < count; ++i )
 	{
-		float distance = b2Cross( ps[i] - p1, e );
+		float distance = ( ps[i] - p1).cross( e );
 		if ( distance > bestDistance )
 		{
 			bestIndex = i;
@@ -184,7 +184,7 @@ b2Hull b2ComputeHull(const(b2Vec2)* points, int count)
 
 	for ( int i = 0; i < n; ++i )
 	{
-		float d = b2Cross( ps[i] - p1, e );
+		float d = ( ps[i] - p1 ).cross( e );
 
 		// slop used here to skip points that are very close to the line p1-p2
 		if ( d >= 2.0f * linearSlop )
@@ -243,7 +243,7 @@ b2Hull b2ComputeHull(const(b2Vec2)* points, int count)
 			// unit edge vector for s1-s3
 			b2Vec2 r = b2Normalize( s3 - s1 );
 
-			float distance = b2Cross( s2 - s1, r );
+			float distance = ( s2 - s1 ).cross( r );
 			if ( distance <= 2.0f * linearSlop )
 			{
 				// remove midpoint from hull
@@ -294,7 +294,7 @@ bool b2ValidateHull(const(b2Hull)* hull)
 				continue;
 			}
 
-			float distance = b2Cross( hull.points[j] - p, e );
+			float distance = ( hull.points[j] - p ).cross( e );
 			if ( distance >= 0.0f )
 			{
 				return false;
@@ -316,7 +316,7 @@ bool b2ValidateHull(const(b2Hull)* hull)
 
 		b2Vec2 e = b2Normalize( p3 - p1 );
 
-		float distance = b2Cross( p2 - p1, e );
+		float distance = ( p2 - p1 ).cross( e );
 		if ( distance <= linearSlop )
 		{
 			// p1-p2-p3 are collinear

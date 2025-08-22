@@ -65,7 +65,7 @@ b2Vec2 b2ClipVector(b2Vec2 vector, const(b2CollisionPlane)* planes, int count)
 			continue;
 		}
 
-		v = b2MulSub( v, min( 0.0f, b2Dot( v, plane.plane.normal ) ), plane.plane.normal );
+		v = b2MulSub( v, min( 0.0f, v.dot( plane.plane.normal ) ), plane.plane.normal );
 	}
 
 	return v;

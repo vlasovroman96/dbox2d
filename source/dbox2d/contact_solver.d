@@ -154,22 +154,22 @@ static if (B2_VALIDATE) {
 
 			cp.anchorA = rA;
 			cp.anchorB = rB;
-			cp.baseSeparation = mp.separation - b2Dot( rB - rA , normal );
+			cp.baseSeparation = mp.separation - ( rB - rA ).dot( normal );
 
-			float rnA = b2Cross( rA, normal );
-			float rnB = b2Cross( rB, normal );
+			float rnA = rA.dot( normal );
+			float rnB = rB.dot( normal );
 			float kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 			cp.normalMass = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 
-			float rtA = b2Cross( rA, tangent );
-			float rtB = b2Cross( rB, tangent );
+			float rtA = rA.dot( tangent );
+			float rtB = rB.dot( tangent );
 			float kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 			cp.tangentMass = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 			// Save relative velocity for restitution
 			b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 			b2Vec2 vrB = vB + b2CrossSV( wB, rB );
-			cp.relativeVelocity = b2Dot( normal, vrB - vrA );
+			cp.relativeVelocity = ( normal ).dot( vrB - vrA );
 		}
 	}
 }
@@ -222,9 +222,9 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 			b2Vec2 rB = cp.anchorB;
 
 			b2Vec2 P = b2MulSV( cp.normalImpulse, normal ) + b2MulSV( cp.tangentImpulse, tangent );
-			wA -= iA * b2Cross( rA, P );
+			wA -= iA * rA.dot( P );
 			vA = b2MulAdd( vA, -mA, P );
-			wB += iB * b2Cross( rB, P );
+			wB += iB * rB.dot( P );
 			vB = b2MulAdd( vB, mB, P );
 		}
 
@@ -296,7 +296,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// compute current separation
 			// this is subject to round-off error if the anchor is far from the body center of mass
 			b2Vec2 ds = dp + b2RotateVector( dqB, rB ) - b2RotateVector( dqA, rA );
-			float s = cp.baseSeparation + b2Dot( ds, normal );
+			float s = cp.baseSeparation + ds.dot( normal );
 
 			float velocityBias = 0.0f;
 			float massScale = 1.0f;
@@ -316,7 +316,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// relative normal velocity at contact
 			b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 			b2Vec2 vrB = vB + b2CrossSV( wB, rB );
-			float vn = b2Dot( vrB - vrA , normal );
+			float vn = ( vrB - vrA ).dot( normal );
 
 			// incremental normal impulse
 			float impulse = -cp.normalMass * ( massScale * vn + velocityBias ) - impulseScale * cp.normalImpulse;
@@ -332,10 +332,10 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// apply normal impulse
 			b2Vec2 P = b2MulSV( impulse, normal );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * b2Cross( rA, P );
+			wA -= iA * rA.dot( P );
 
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * b2Cross( rB, P );
+			wB += iB * rB.dot( P );
 		}
 
 		// Friction
@@ -354,7 +354,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// vt = dot(vrB - sB * tangent - (vrA + sA * tangent), tangent)
 			//    = dot(vrB - vrA, tangent) - (sA + sB)
 
-			float vt = b2Dot( vrB - vrA, tangent ) - constraint.tangentSpeed;
+			float vt = ( vrB - vrA ).dot( tangent ) - constraint.tangentSpeed;
 
 			// incremental tangent impulse
 			float impulse = cp.tangentMass * ( -vt );
@@ -368,9 +368,9 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// apply tangent impulse
 			b2Vec2 P = b2MulSV( impulse, tangent );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * b2Cross( rA, P );
+			wA -= iA * rA.dot( P );
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * b2Cross( rB, P );
+			wB += iB * rB.dot( P );
 		}
 
 		// Rolling resistance
@@ -456,7 +456,7 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 				// relative normal velocity at contact
 				b2Vec2 vrB = vB + b2CrossSV( wB, rB );
 				b2Vec2 vrA = vA + b2CrossSV( wA, rA );
-				float vn = b2Dot( vrB - vrA, normal );
+				float vn = ( vrB - vrA ).dot( normal );
 
 				// compute normal impulse
 				float impulse = -cp.normalMass * ( vn + restitution * cp.relativeVelocity );
@@ -473,9 +473,9 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 				// apply contact impulse
 				b2Vec2 P = b2MulSV( impulse, normal );
 				vA = b2MulSub( vA, mA, P );
-				wA -= iA * b2Cross( rA, P );
+				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );
-				wB += iB * b2Cross( rB, P );
+				wB += iB * rB.cross( P );
 			}
 		}
 
@@ -1541,26 +1541,26 @@ static if (B2_VALIDATE) {
 					( cast(float*)&constraint.anchorB1.X )[j] = rB.x;
 					( cast(float*)&constraint.anchorB1.Y )[j] = rB.y;
 
-					( cast(float*)&constraint.baseSeparation1 )[j] = mp.separation - b2Dot( rB - rA, normal );
+					( cast(float*)&constraint.baseSeparation1 )[j] = mp.separation - ( rB - rA ).dot( normal );
 
 					( cast(float*)&constraint.normalImpulse1 )[j] = warmStartScale * mp.normalImpulse;
 					( cast(float*)&constraint.tangentImpulse1 )[j] = warmStartScale * mp.tangentImpulse;
 					( cast(float*)&constraint.totalNormalImpulse1 )[j] = 0.0f;
 
-					float rnA = b2Cross( rA, normal );
-					float rnB = b2Cross( rB, normal );
+					float rnA = rA.cross( normal );
+					float rnB = rB.cross( normal );
 					float kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 					( cast(float*)&constraint.normalMass1 )[j] = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 
-					float rtA = b2Cross( rA, tangent );
-					float rtB = b2Cross( rB, tangent );
+					float rtA = rA.cross( tangent );
+					float rtB = rB.cross( tangent );
 					float kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 					( cast(float*)&constraint.tangentMass1 )[j] = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 					// relative velocity for restitution
 					b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 					b2Vec2 vrB = vB + b2CrossSV( wB, rB );
-					( cast(float*)&constraint.relativeVelocity1 )[j] = b2Dot( normal, vrB - vrA );
+					( cast(float*)&constraint.relativeVelocity1 )[j] = normal.dot( vrB - vrA );
 				}
 
 				int pointCount = manifold.pointCount;
@@ -1578,26 +1578,26 @@ static if (B2_VALIDATE) {
 					( cast(float*)&constraint.anchorB2.X )[j] = rB.x;
 					( cast(float*)&constraint.anchorB2.Y )[j] = rB.y;
 
-					( cast(float*)&constraint.baseSeparation2 )[j] = mp.separation - b2Dot( rB - rA, normal );
+					( cast(float*)&constraint.baseSeparation2 )[j] = mp.separation - ( rB - rA ).dot( normal );
 
 					( cast(float*)&constraint.normalImpulse2 )[j] = warmStartScale * mp.normalImpulse;
 					( cast(float*)&constraint.tangentImpulse2 )[j] = warmStartScale * mp.tangentImpulse;
 					( cast(float*)&constraint.totalNormalImpulse2 )[j] = 0.0f;
 
-					float rnA = b2Cross( rA, normal );
-					float rnB = b2Cross( rB, normal );
+					float rnA = rA.cross( normal );
+					float rnB = rB.cross( normal );
 					float kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 					( cast(float*)&constraint.normalMass2 )[j] = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 
-					float rtA = b2Cross( rA, tangent );
-					float rtB = b2Cross( rB, tangent );
+					float rtA = rA.cross( tangent );
+					float rtB = rB.cross( tangent );
 					float kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 					( cast(float*)&constraint.tangentMass2 )[j] = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
 					// relative velocity for restitution
 					b2Vec2 vrA = vA + b2CrossSV( wA, rA );
 					b2Vec2 vrB = vB + b2CrossSV( wB, rB );
-					( cast(float*)&constraint.relativeVelocity2 )[j] = b2Dot( normal, vrB - vrA );
+					( cast(float*)&constraint.relativeVelocity2 )[j] = normal.dot( vrB - vrA );
 				}
 				else
 				{

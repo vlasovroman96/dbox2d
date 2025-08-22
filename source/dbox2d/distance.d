@@ -33,10 +33,10 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 	b2Vec2 d1 = q1 - p1;
 	b2Vec2 d2 = q2 - p2;
 	b2Vec2 r = p1 - p2;
-	float dd1 = b2Dot( d1, d1 );
-	float dd2 = b2Dot( d2, d2 );
-	float rd1 = b2Dot( r, d1 );
-	float rd2 = b2Dot( r, d2 );
+	float dd1 = d1.dot( d1 );
+	float dd2 = d2.dot( d2 );
+	float rd1 = r.dot( d1 );
+	float rd2 = r.dot( d2 );
 
 	const(float) epsSqr = float.epsilon * float.epsilon;
 
@@ -64,7 +64,7 @@ b2SegmentDistanceResult b2SegmentDistance(b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec
 	else
 	{
 		// Non-degenerate segments
-		float d12 = b2Dot( d1, d2 );
+		float d12 = d1.dot( d2 );
 
 		float denominator = dd1 * dd2 - d12 * d12;
 
@@ -147,10 +147,10 @@ pragma(inline, true) private int b2FindSupport(const(b2ShapeProxy)* proxy, b2Vec
 	int count = proxy.count;
 
 	int bestIndex = 0;
-	float bestValue = b2Dot( points[0], direction );
+	float bestValue = points[0].dot( direction );
 	for ( int i = 1; i < count; ++i )
 	{
-		float value = b2Dot( points[i], direction );
+		float value = points[i].dot( direction );
 		if ( value > bestValue )
 		{
 			bestIndex = i;
@@ -271,7 +271,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 	b2Vec2 e12 = w2 - w1;
 
 	// w1 region
-	float d12_2 = -b2Dot( w1, e12 );
+	float d12_2 = -w1.dot( e12 );
 	if ( d12_2 <= 0.0f )
 	{
 		// a2 <= 0, so we clamp it to 0
@@ -281,7 +281,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 	}
 
 	// w2 region
-	float d12_1 = b2Dot( w2, e12 );
+	float d12_1 = w2.dot( e12 );
 	if ( d12_1 <= 0.0f )
 	{
 		// a1 <= 0, so we clamp it to 0
@@ -296,7 +296,7 @@ private b2Vec2 b2SolveSimplex2(b2Simplex* s)
 	s.v1.a = d12_1 * inv_d12;
 	s.v2.a = d12_2 * inv_d12;
 	s.count = 2;
-	return b2CrossSV( b2Cross( w1 + w2, e12 ), e12 );
+	return b2CrossSV( ( w1 + w2).cross( e12 ), e12 );
 }
 
 private b2Vec2 b2SolveSimplex3(b2Simplex* s)
@@ -310,8 +310,8 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [w1.e12 w2.e12][a2] = [0]
 	// a3 = 0
 	b2Vec2 e12 = w2 - w1;
-	float w1e12 = b2Dot( w1, e12 );
-	float w2e12 = b2Dot( w2, e12 );
+	float w1e12 = w1.dot( e12 );
+	float w2e12 = w2.dot( e12 );
 	float d12_1 = w2e12;
 	float d12_2 = -w1e12;
 
@@ -320,8 +320,8 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [w1.e13 w3.e13][a3] = [0]
 	// a2 = 0
 	b2Vec2 e13 = w3 - w1;
-	float w1e13 = b2Dot( w1, e13 );
-	float w3e13 = b2Dot( w3, e13 );
+	float w1e13 = w1.dot( e13 );
+	float w3e13 = w3.dot( e13 );
 	float d13_1 = w3e13;
 	float d13_2 = -w1e13;
 
@@ -330,17 +330,17 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 	// [w2.e23 w3.e23][a3] = [0]
 	// a1 = 0
 	b2Vec2 e23 = w3 - w2;
-	float w2e23 = b2Dot( w2, e23 );
-	float w3e23 = b2Dot( w3, e23 );
+	float w2e23 = w2.dot( e23 );
+	float w3e23 = w3.dot( e23 );
 	float d23_1 = w3e23;
 	float d23_2 = -w2e23;
 
 	// Triangle123
-	float n123 = b2Cross( e12, e13 );
+	float n123 = e12.cross( e13 );
 
-	float d123_1 = n123 * b2Cross( w2, w3 );
-	float d123_2 = n123 * b2Cross( w3, w1 );
-	float d123_3 = n123 * b2Cross( w1, w2 );
+	float d123_1 = n123 * w2.cross( w3 );
+	float d123_2 = n123 * w3.cross( w1 );
+	float d123_3 = n123 * w1.cross( w2 );
 
 	// w1 region
 	if ( d12_2 <= 0.0f && d13_2 <= 0.0f )
@@ -357,7 +357,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v1.a = d12_1 * inv_d12;
 		s.v2.a = d12_2 * inv_d12;
 		s.count = 2;
-		return b2CrossSV( b2Cross( w1 + w2, e12 ), e12 );
+		return b2CrossSV( (w1 + w2).dot( e12 ), e12 );
 	}
 
 	// e13
@@ -368,7 +368,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v3.a = d13_2 * inv_d13;
 		s.count = 2;
 		s.v2 = s.v3;
-		return b2CrossSV( b2Cross( w1 + w3, e13 ), e13 );
+		return b2CrossSV( (w1 + w3).dot( e13 ), e13 );
 	}
 
 	// w2 region
@@ -397,7 +397,7 @@ private b2Vec2 b2SolveSimplex3(b2Simplex* s)
 		s.v3.a = d23_2 * inv_d23;
 		s.count = 2;
 		s.v1 = s.v3;
-		return b2CrossSV( b2Cross( w2 + w3, e23 ), e23 );
+		return b2CrossSV( (w2 + w3).dot( e23 ), e23 );
 	}
 
 	// Must be in triangle123
@@ -508,7 +508,7 @@ version (NDEBUG) {} else {
 }
 
 		// Ensure the search direction is numerically fit.
-		if ( b2Dot( d, d ) < float.epsilon * float.epsilon )
+		if ( d.dot(d) < float.epsilon * float.epsilon )
 		{
 			// This is unlikely but could lead to bad cycling.
 			// The branch predictor seems to make this check have low cost.
@@ -671,7 +671,7 @@ b2CastOutput b2ShapeCast(const(b2ShapeCastPairInput)* input)
 		B2_ASSERT( b2IsNormalized( distanceOutput.normal ) );
 
 		// Check if shapes are approaching each other
-		float denominator = b2Dot( delta2, distanceOutput.normal );
+		float denominator = delta2.dot( distanceOutput.normal );
 		if ( denominator >= 0.0f )
 		{
 			// Miss
@@ -803,8 +803,8 @@ b2CastOutput b2ShapeCastMerged(const(b2ShapeCastPairInput)* input, b2ShapeCastDa
 		// if t < (dot(n, p0) + sigma) / dot(n, r) then t can be increased
 		// or (flipping sign because dot(n,r) < 0)
 		// dot(n, p0) + sigma < t * dot(n, r) && dot(n, r) < 0
-		float np0 = b2Dot( normal, p0 );
-		float nr = b2Dot( normal, r );
+		float np0 = normal.dot( p0 );
+		float nr = normal.dot( r );
 		if ( np0 + sigma < lambda * nr )
 		{
 			if ( nr >= 0.0f )
@@ -980,7 +980,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointA = proxyA.points[cache.indexA[0]];
 		b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-		float s = b2Dot( pointA - pointB, normal );
+		float s = ( pointA - pointB ).dot( normal );
 		if ( s < 0.0f )
 		{
 			f.axis = -f.axis;
@@ -1003,7 +1003,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 	b2Vec2 localPointB = proxyB.points[cache.indexB[0]];
 	b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-	float s = b2Dot( pointB - pointA, normal );
+	float s = ( pointB - pointA ).dot( normal );
 	if ( s < 0.0f )
 	{
 		f.axis = -f.axis;
@@ -1032,7 +1032,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( pointB - pointA, f.axis );
+			float separation = ( pointB - pointA ).dot( f.axis );
 			return separation;
 		}
 
@@ -1049,7 +1049,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 localPointB = f.proxyB.points[*indexB];
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( pointB - pointA, normal );
+			float separation = ( pointB - pointA ).dot( normal );
 			return separation;
 		}
 
@@ -1066,7 +1066,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 			b2Vec2 localPointA = f.proxyA.points[*indexA];
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-			float separation = b2Dot( pointA - pointB, normal );
+			float separation = ( pointA - pointB ).dot( normal );
 			return separation;
 		}
 
@@ -1094,7 +1094,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( pointB - pointA, f.axis );
+			float separation = ( pointB - pointA ).dot( f.axis );
 			return separation;
 		}
 
@@ -1106,7 +1106,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 localPointB = f.proxyB.points[indexB];
 			b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
 
-			float separation = b2Dot( pointB - pointA, normal );
+			float separation = ( pointB - pointA ).dot( normal );
 			return separation;
 		}
 
@@ -1118,7 +1118,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 			b2Vec2 localPointA = f.proxyA.points[indexA];
 			b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 
-			float separation = b2Dot( pointA - pointB, normal );
+			float separation = ( pointA - pointB ).dot( normal );
 			return separation;
 		}
 

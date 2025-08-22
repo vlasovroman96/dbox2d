@@ -769,7 +769,7 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 		case b2_capsuleShape:
 		{
 			b2Vec2 axis = shape.capsule.center2 - shape.capsule.center1;
-			float projectedLength = abs( b2Dot( axis, line ) );
+			float projectedLength = abs( axis.dot( line ) );
 			return projectedLength + 2.0f * shape.capsule.radius;
 		}
 
@@ -781,12 +781,12 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 			const(b2Vec2)* points = shape.polygon.vertices.ptr;
 			int count = shape.polygon.count;
 			assert( count > 0 );
-			float value = b2Dot( points[0], line );
+			float value = points[0].dot( line );
 			float lower = value;
 			float upper = value;
 			for ( int i = 1; i < count; ++i )
 			{
-				value = b2Dot( points[i], line );
+				value = points[i].dot( line );
 				lower = min( lower, value );
 				upper = max( upper, value );
 			}
@@ -796,15 +796,15 @@ float b2GetShapeProjectedPerimeter(const(b2Shape)* shape, b2Vec2 line)
 
 		case b2_segmentShape:
 		{
-			float value1 = b2Dot( shape.segment.point1, line );
-			float value2 = b2Dot( shape.segment.point2, line );
+			float value1 = shape.segment.point1.dot( line );
+			float value2 = shape.segment.point2.dot( line );
 			return abs( value2 - value1 );
 		}
 
 		case b2_chainSegmentShape:
 		{
-			float value1 = b2Dot( shape.chainSegment.segment.point1, line );
-			float value2 = b2Dot( shape.chainSegment.segment.point2, line );
+			float value1 = shape.chainSegment.segment.point1.dot( line );
+			float value2 = shape.chainSegment.segment.point2.dot( line );
 			return abs( value2 - value1 );
 		}
 
@@ -861,7 +861,7 @@ b2ShapeExtent b2ComputeShapeExtent(const(b2Shape)* shape, b2Vec2 localCenter)
 			for ( int i = 0; i < count; ++i )
 			{
 				b2Vec2 v = poly.vertices[i];
-				float planeOffset = b2Dot( poly.normals[i], v - poly.centroid );
+				float planeOffset = poly.normals[i].dot( v - poly.centroid );
 				minExtent = min( minExtent, planeOffset );
 
 				float distanceSqr = b2LengthSquared( v - localCenter );
@@ -977,7 +977,7 @@ b2CastOutput b2ShapeCastShape(const(b2ShapeCastInput)* input, const(b2Shape)* sh
 			b2Vec2 edge = shape.chainSegment.segment.point2 - shape.chainSegment.segment.point1;
 			b2Vec2 r = approximateCentroid - shape.chainSegment.segment.point1;
 
-			if ( b2Cross( r, edge ) < 0.0f )
+			if ( r.cross( edge ) < 0.0f )
 			{
 				// Shape cast starts behind
 				return output;

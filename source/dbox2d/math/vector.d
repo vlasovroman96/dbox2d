@@ -56,4 +56,14 @@ struct b2Vec2 {
 	float length() {
 		return hypot(this.x, this.y);
 	}
+
+    /// Vector dot product
+    float dot( b2Vec2 b ) const {
+        return this.x * b.x + this.y * b.y;
+    }
+
+    /// Vector cross product. In 2D this yields a scalar.
+    float cross( b2Vec2 b) const {
+        return this.x * b.y - this.y * b.x;
+    }
 }

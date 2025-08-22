@@ -819,7 +819,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 
 		// Shift to center of mass. This is safe because it can only increase.
 		b2Vec2 offset = localCenter - massData.center;
-		float inertia = massData.rotationalInertia + massData.mass * b2Dot( offset, offset );
+		float inertia = massData.rotationalInertia + massData.mass * offset.dot( offset );
 		body.inertia += inertia;
 	}
 
@@ -1154,7 +1154,7 @@ void b2Body_ApplyForce(b2BodyId bodyId, b2Vec2 force, b2Vec2 point, bool wake)
 	{
 		b2BodySim* bodySim = b2GetBodySim( world, body );
 		bodySim.force = bodySim.force + force;
-		bodySim.torque += b2Cross( point, bodySim.center - force );
+		bodySim.torque += point.cross( bodySim.center - force );
 	}
 }
 
@@ -1224,7 +1224,7 @@ void b2Body_ApplyLinearImpulse(b2BodyId bodyId, b2Vec2 impulse, b2Vec2 point, bo
 		b2BodyState* state = b2BodyStateArray_Get( set.bodyStates, localIndex );
 		b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, localIndex );
 		state.linearVelocity = b2MulAdd( state.linearVelocity, bodySim.invMass, impulse );
-		state.angularVelocity += bodySim.invInertia * b2Cross( point - bodySim.center, impulse );
+		state.angularVelocity += bodySim.invInertia * (point - bodySim.center).cross( impulse );
 
 		b2LimitVelocity( state, world.maxLinearSpeed );
 	}

@@ -187,10 +187,10 @@ void b2WarmStartWeldJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, joint.linearImpulse );
-	stateA.angularVelocity -= iA * ( b2Cross( rA, joint.linearImpulse ) + joint.angularImpulse );
+	stateA.angularVelocity -= iA * ( rA.cross( joint.linearImpulse ) + joint.angularImpulse );
 
 	stateB.linearVelocity = b2MulAdd( stateB.linearVelocity, mB, joint.linearImpulse );
-	stateB.angularVelocity += iB * ( b2Cross( rB, joint.linearImpulse ) + joint.angularImpulse );
+	stateB.angularVelocity += iB * ( rB.cross( joint.linearImpulse ) + joint.angularImpulse );
 }
 
 void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
@@ -277,9 +277,9 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		joint.linearImpulse = joint.linearImpulse + impulse;
 
 		vA = b2MulSub( vA, mA, impulse );
-		wA -= iA * b2Cross( rA, impulse );
+		wA -= iA * rA.cross( impulse );
 		vB = b2MulAdd( vB, mB, impulse );
-		wB += iB * b2Cross( rB, impulse );
+		wB += iB * rB.cross( impulse );
 	}
 
 	stateA.linearVelocity = vA;
