@@ -5,4 +5,5 @@ public {
     import dbox2d.math.geometry;
     import dbox2d.math.math_functions;
     import dbox2d.math.vector;
+    import dbox2d.math.transform;
 }

@@ -6,6 +6,7 @@ public import std.stdint;
 
 import dbox2d.base;
 import dbox2d.math.vector;
+import dbox2d.math.transform;
 
 static assert( int32_t.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
 
@@ -25,19 +26,6 @@ struct b2Rot {
 
 	static b2Rot identity() {
 		return b2Rot(1.0f, 0.0f);
-	}
-}
-
-/// A 2D rigid transform
-struct b2Transform {
-	b2Vec2 p;
-	b2Rot q;
-
-	static b2Transform identity() {
-		auto _p = b2Vec2.zero;
-		auto _q = b2Rot.identity;
-
-		return b2Transform(_p, _q);
 	}
 }
 
