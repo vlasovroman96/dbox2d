@@ -1,6 +1,7 @@
 module dbox2d.math.transform;
 
 import dbox2d.math.math_functions;
+import dbox2d.math.rotation;
 import dbox2d.math.vector;
 
 /// A 2D rigid transform

@@ -8,20 +8,9 @@ import dbox2d.base;
 import dbox2d.math.vector;
 import dbox2d.math.transform;
 import dbox2d.math.cossin;
-
+import dbox2d.math.rotation;
 
 static assert( int32_t.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
-
-/// 2D rotation
-/// This is similar to using a complex number for rotation
-struct b2Rot {
-	/// cosine and sine
-	float c = 0, s = 0;
-
-	static b2Rot identity() {
-		return b2Rot(1.0f, 0.0f);
-	}
-}
 
 /// A 2-by-2 Matrix
 struct b2Mat22 {

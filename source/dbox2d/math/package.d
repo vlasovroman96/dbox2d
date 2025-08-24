@@ -7,4 +7,5 @@ public {
     import dbox2d.math.vector;
     import dbox2d.math.transform;
     import dbox2d.math.cossin;
+    import dbox2d.math.rotation;
 }
