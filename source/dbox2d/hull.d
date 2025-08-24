@@ -21,7 +21,7 @@ private b2Hull b2RecurseHull(b2Vec2 p1, b2Vec2 p2, b2Vec2* ps, int count)
 	}
 
 	// create an edge vector pointing from p1 to p2
-	b2Vec2 e = b2Normalize( p2 - p1 );
+	b2Vec2 e = ( p2 - p1 ).normalized;
 
 	// discard points left of e and find point furthest to the right of e
 	b2Vec2[B2_MAX_POLYGON_VERTICES] rightPoints = void;
@@ -180,7 +180,7 @@ b2Hull b2ComputeHull(const(b2Vec2)* points, int count)
 	b2Vec2[B2_MAX_POLYGON_VERTICES - 2] leftPoints = void;
 	int leftCount = 0;
 
-	b2Vec2 e = b2Normalize( p2 - p1 );
+	b2Vec2 e = ( p2 - p1 ).normalized;
 
 	for ( int i = 0; i < n; ++i )
 	{
@@ -241,7 +241,7 @@ b2Hull b2ComputeHull(const(b2Vec2)* points, int count)
 			b2Vec2 s3 = hull.points[i3];
 
 			// unit edge vector for s1-s3
-			b2Vec2 r = b2Normalize( s3 - s1 );
+			b2Vec2 r = ( s3 - s1 ).normalized;
 
 			float distance = ( s2 - s1 ).cross( r );
 			if ( distance <= 2.0f * linearSlop )
@@ -284,7 +284,7 @@ bool b2ValidateHull(const(b2Hull)* hull)
 		int i1 = i;
 		int i2 = i < hull.count - 1 ? i1 + 1 : 0;
 		b2Vec2 p = hull.points[i1];
-		b2Vec2 e = b2Normalize( hull.points[i2] - p );
+		b2Vec2 e = ( hull.points[i2] - p ).normalized;
 
 		for ( int j = 0; j < hull.count; ++j )
 		{
@@ -314,7 +314,7 @@ bool b2ValidateHull(const(b2Hull)* hull)
 		b2Vec2 p2 = hull.points[i2];
 		b2Vec2 p3 = hull.points[i3];
 
-		b2Vec2 e = b2Normalize( p3 - p1 );
+		b2Vec2 e = ( p3 - p1 ).normalized;
 
 		float distance = ( p2 - p1 ).cross( e );
 		if ( distance <= linearSlop )

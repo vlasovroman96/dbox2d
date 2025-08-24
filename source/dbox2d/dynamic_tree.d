@@ -1218,11 +1218,11 @@ b2TreeStats b2DynamicTree_RayCast(const(b2DynamicTree)* tree, const(b2RayCastInp
 	b2Vec2 p1 = input.origin;
 	b2Vec2 d = input.translation;
 
-	b2Vec2 r = b2Normalize( d );
+	b2Vec2 r =  d.normalized;
 
 	// v is perpendicular to the segment.
 	b2Vec2 v = b2CrossSV( 1.0f, r );
-	b2Vec2 abs_v = b2Abs( v );
+	b2Vec2 abs_v = v.abs();
 
 	// Separating axis for segment (Gino, p80).
 	// |dot(v, p1 - c)| > dot(|v|, h)
@@ -1352,7 +1352,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 	// v is perpendicular to the segment.
 	b2Vec2 r = input.translation;
 	b2Vec2 v = b2CrossSV( 1.0f, r );
-	b2Vec2 abs_v = b2Abs( v );
+	b2Vec2 abs_v = v.abs();
 
 	// Separating axis for segment (Gino, p80).
 	// |dot(v, p1 - c)| > dot(|v|, h)

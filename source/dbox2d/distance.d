@@ -569,14 +569,14 @@ version (NDEBUG) {} else {
 }
 
 	// Prepare output
-	b2Vec2 normal = b2Normalize( nonUnitNormal );
+	b2Vec2 normal = nonUnitNormal.normalized;
 	B2_ASSERT( b2IsNormalized( normal ) );
 	normal = b2RotateVector( input.transformA.q, normal );
 
 	b2Vec2 localPointA = void, localPointB = void;
 	b2ComputeSimplexWitnessPoints( &localPointA, &localPointB, &simplex );
 	output.normal = normal;
-	output.distance = b2Distance( localPointA, localPointB );
+	output.distance = localPointA.distanceTo( localPointB );
 	output.pointA = b2TransformPoint( input.transformA, localPointA );
 	output.pointB = b2TransformPoint( input.transformA, localPointB );
 	output.iterations = iteration;
@@ -958,7 +958,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointB = proxyB.points[cache.indexB[0]];
 		b2Vec2 pointA = b2TransformPoint( xfA, localPointA );
 		b2Vec2 pointB = b2TransformPoint( xfB, localPointB );
-		f.axis = b2Normalize( pointB - pointA );
+		f.axis = ( pointB - pointA ).normalized;
 		f.localPoint = b2Vec2.zero();
 		return f;
 	}
@@ -970,8 +970,8 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 		b2Vec2 localPointB1 = proxyB.points[cache.indexB[0]];
 		b2Vec2 localPointB2 = proxyB.points[cache.indexB[1]];
 
-		f.axis = b2CrossVS( localPointB2 - localPointB1, 1.0f );
-		f.axis = b2Normalize( f.axis );
+		f.axis = ( localPointB2 - localPointB1).crossVS( 1.0f );
+		f.axis = f.axis.normalized;
 		b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
 
 		f.localPoint = b2Vec2( 0.5f * ( localPointB1.x + localPointB2.x ), 0.5f * ( localPointB1.y + localPointB2.y ) );
@@ -993,8 +993,8 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 	b2Vec2 localPointA1 = proxyA.points[cache.indexA[0]];
 	b2Vec2 localPointA2 = proxyA.points[cache.indexA[1]];
 
-	f.axis = b2CrossVS( localPointA2 - localPointA1, 1.0f );
-	f.axis = b2Normalize( f.axis );
+	f.axis = ( localPointA2 - localPointA1).crossVS( 1.0f );
+	f.axis = f.axis.normalized;
 	b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
 
 	f.localPoint = b2Vec2( 0.5f * ( localPointA1.x + localPointA2.x ), 0.5f * ( localPointA1.y + localPointA2.y ) );

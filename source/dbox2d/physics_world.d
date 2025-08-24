@@ -2606,7 +2606,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	b2Vec2 direction = closestPoint - explosionContext.position;
 	if ( b2LengthSquared( direction ) > 100.0f * float.epsilon * float.epsilon )
 	{
-		direction = b2Normalize( direction );
+		direction = direction.normalized;
 	}
 	else
 	{

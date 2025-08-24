@@ -232,7 +232,7 @@ void b2SolveMouseJoint(b2JointSim* base, b2StepContext* context)
 		float lengthSquared = b2LengthSquared( joint.linearImpulse );
 		if ( lengthSquared > maxImpulse * maxImpulse )
 		{
-			joint.linearImpulse = b2MulSV( maxImpulse, b2Normalize( joint.linearImpulse ) );
+			joint.linearImpulse = b2MulSV( maxImpulse, joint.linearImpulse.normalized );
 		}
 
 		impulse.x = joint.linearImpulse.x - oldImpulse.x;

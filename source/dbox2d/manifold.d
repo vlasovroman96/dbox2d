@@ -24,7 +24,7 @@ private b2Polygon b2MakeCapsule(b2Vec2 p1, b2Vec2 p2, float radius)
 
 	b2Vec2 d = p2 - p1;
 	B2_ASSERT( b2LengthSquared( d ) > float.epsilon );
-	b2Vec2 axis = b2Normalize( d );
+	b2Vec2 axis = d.normalized;
 	b2Vec2 normal = axis.rightPerp();
 
 	shape.normals[0] = normal;
@@ -188,7 +188,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 	if ( u1 < 0.0f && separation > float.epsilon )
 	{
 		// Circle center is closest to v1 and safely outside the polygon
-		b2Vec2 normal = b2Normalize( center - v1 );
+		b2Vec2 normal = ( center - v1 ).normalized;
 		separation = ( center - v1 ).dot( normal );
 		if ( separation > radius + speculativeDistance )
 		{
@@ -211,7 +211,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 	else if ( u2 < 0.0f && separation > float.epsilon )
 	{
 		// Circle center is closest to v2 and safely outside the polygon
-		b2Vec2 normal = b2Normalize( center - v2 );
+		b2Vec2 normal = ( center - v2 ).normalized;
 		separation = ( center - v2 ).dot( normal );
 		if ( separation > radius + speculativeDistance )
 		{
@@ -496,7 +496,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 		b2Vec2 normal = closest2 - closest1;
 		if ( normal.dot( normal ) > epsSqr )
 		{
-			normal = b2Normalize( normal );
+			normal = normal.normalized;
 		}
 		else
 		{
@@ -1331,17 +1331,17 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	b2Vec2 p1 = segmentA.segment.point1;
 	b2Vec2 p2 = segmentA.segment.point2;
 
-	b2Vec2 edge1 = b2Normalize( p2 - p1 );
+	b2Vec2 edge1 = ( p2 - p1 ).normalized;
 
 	b2ChainSegmentParams smoothParams;
 	smoothParams.edge1 = edge1;
 
 	const(float) convexTol = 0.01f;
-	b2Vec2 edge0 = b2Normalize( p1 - segmentA.ghost1 );
+	b2Vec2 edge0 = ( p1 - segmentA.ghost1 ).normalized;
 	smoothParams.normal0 = edge0.rightPerp();
 	smoothParams.convex1 = edge0.cross( edge1 ) >= convexTol;
 
-	b2Vec2 edge2 = b2Normalize( segmentA.ghost2 - p2 );
+	b2Vec2 edge2 = ( segmentA.ghost2 - p2 ).normalized;
 	smoothParams.normal2 = edge2.rightPerp();
 	smoothParams.convex2 = edge1.cross( edge2 ) >= convexTol;
 
@@ -1410,7 +1410,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			b2Vec2 pA = output.pointA;
 			b2Vec2 pB = output.pointB;
 
-			b2Vec2 normal = b2Normalize( pB - pA );
+			b2Vec2 normal = ( pB - pA ).normalized;
 
 			b2NormalType type = b2ClassifyNormal( smoothParams, normal );
 			if ( type == b2_normalSkip )

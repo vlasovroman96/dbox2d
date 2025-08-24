@@ -81,7 +81,7 @@ b2Polygon b2MakePolygon(const(b2Hull)* hull, float radius)
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
 		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
 		B2_ASSERT( edge.dot( edge ) > float.epsilon * float.epsilon );
-		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
+		shape.normals[i] = b2CrossVS( edge, 1.0f ).normalized ;
 	}
 
 	shape.centroid = b2ComputePolygonCentroid( shape.vertices.ptr, shape.count );
@@ -123,7 +123,7 @@ b2Polygon b2MakeOffsetRoundedPolygon(const(b2Hull)* hull, b2Vec2 position, b2Rot
 		int i2 = i + 1 < shape.count ? i + 1 : 0;
 		b2Vec2 edge = shape.vertices[i2] - shape.vertices[i1];
 		B2_ASSERT( edge.dot( edge ) > float.epsilon * float.epsilon );
-		shape.normals[i] = b2Normalize( b2CrossVS( edge, 1.0f ) );
+		shape.normals[i] = b2CrossVS( edge, 1.0f ).normalized;
 	}
 
 	shape.centroid = b2ComputePolygonCentroid( shape.vertices.ptr, shape.count );
@@ -330,7 +330,7 @@ b2MassData b2ComputePolygonMass(const(b2Polygon)* shape, float density)
 			b2Vec2 n1 = shape.normals[j];
 			b2Vec2 n2 = shape.normals[i];
 
-			b2Vec2 mid = b2Normalize( n1 + n2 );
+			b2Vec2 mid = ( n1 + n2 ).normalized;
 			vertices[i] = b2MulAdd( shape.vertices[i], sqrt2 * radius, mid );
 		}
 	}
@@ -574,7 +574,7 @@ b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* inpu
 	b2Vec2 hitPoint = b2MulAdd( s, fraction, d );
 
 	output.fraction = fraction / length;
-	output.normal = b2Normalize( hitPoint );
+	output.normal = hitPoint.normalized;
 	output.point = b2MulAdd( p, shape.radius, output.normal );
 	output.hit = true;
 

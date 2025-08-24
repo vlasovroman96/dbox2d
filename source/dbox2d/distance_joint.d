@@ -216,7 +216,7 @@ b2Vec2 b2GetDistanceJointForce(b2World* world, b2JointSim* base)
 	b2Vec2 pA = b2TransformPoint( transformA, base.localFrameA.p );
 	b2Vec2 pB = b2TransformPoint( transformB, base.localFrameB.p );
 	b2Vec2 d = pB - pA;
-	b2Vec2 axis = b2Normalize( d );
+	b2Vec2 axis =  d.normalized;
 	float force = ( joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse ) * world.inv_h;
 	return b2MulSV( force, axis );
 }
@@ -282,7 +282,7 @@ void b2PrepareDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rA = joint.anchorA;
 	b2Vec2 rB = joint.anchorB;
 	b2Vec2 separation = rB - rA + joint.deltaCenter;
-	b2Vec2 axis = b2Normalize( separation );
+	b2Vec2 axis = separation.normalized;
 
 	// compute effective mass
 	float crA = rA.cross( axis );
@@ -322,7 +322,7 @@ void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context)
 
 	b2Vec2 ds = ( stateB.deltaPosition - stateA.deltaPosition ) + ( rB - rA );
 	b2Vec2 separation = joint.deltaCenter + ds;
-	b2Vec2 axis = b2Normalize( separation );
+	b2Vec2 axis = separation.normalized;
 
 	float axialImpulse = joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse;
 	b2Vec2 P = b2MulSV( axialImpulse, axis );
@@ -363,7 +363,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	b2Vec2 separation = joint.deltaCenter + ds;
 
 	float length = separation.length();
-	b2Vec2 axis = b2Normalize( separation );
+	b2Vec2 axis = separation.normalized;
 
 	// joint is soft if
 	// - spring is enabled
@@ -374,7 +374,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		if ( joint.hertz > 0.0f )
 		{
 			// Cdot = dot(u, v + cross(w, r))
-			b2Vec2 vr = ( vB - vA ) + ( b2CrossSV( wB, rB ) - b2CrossSV( wA, rA ) );
+			b2Vec2 vr = ( vB - vA ) + (rB.crossSV(wB)  - rA.crossSV(wA));
 			float Cdot = axis.dot( vr );
 			float C = length - joint.length;
 			float bias = joint.distanceSoftness.biasRate * C;
@@ -547,7 +547,7 @@ void b2DrawDistanceJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	b2Vec2 pA = b2TransformPoint( transformA, base.localFrameA.p );
 	b2Vec2 pB = b2TransformPoint( transformB, base.localFrameB.p );
 
-	b2Vec2 axis = b2Normalize( pB - pA );
+	b2Vec2 axis = ( pB - pA ).normalized;
 
 	if ( joint.minLength < joint.maxLength && joint.enableLimit )
 	{

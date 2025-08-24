@@ -25,29 +25,11 @@ struct b2Plane {
 	float offset = 0;
 }
 
-/// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
-b2Vec2 b2CrossVS( b2Vec2 v, float s )
-{
-	return b2Vec2( s * v.y, -s * v.x );
-}
-
-/// Perform the cross product on a scalar and a vector. In 2D this produces a vector.
-b2Vec2 b2CrossSV(float s, b2Vec2 v)
-{
-	return b2Vec2( -s * v.y, s * v.x );
-}
-
 /// Vector linear interpolation
 /// https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/
 b2Vec2 b2Lerp(b2Vec2 a, b2Vec2 b, float t)
 {
 	return b2Vec2( ( 1.0f - t ) * a.x + t * b.x, ( 1.0f - t ) * a.y + t * b.y );
-}
-
-/// Component-wise multiplication
-b2Vec2 b2Mul( b2Vec2 a, b2Vec2 b )
-{
-	return b2Vec2( a.x * b.x, a.y * b.y );
 }
 
 /// Multiply a scalar and vector
@@ -68,15 +50,6 @@ b2Vec2 b2MulSub( b2Vec2 a, float s, b2Vec2 b )
 	return b2Vec2( a.x - s * b.x, a.y - s * b.y );
 }
 
-/// Component-wise absolute vector
-b2Vec2 b2Abs(b2Vec2 a)
-{
-	b2Vec2 b = void;
-	b.x = abs( a.x );
-	b.y = abs( a.y );
-	return b;
-}
-
 /// Component-wise minimum vector
 b2Vec2 b2Min(b2Vec2 a, b2Vec2 b)
 {
@@ -93,38 +66,6 @@ b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
 	c.x = max( a.x, b.x );
 	c.y = max( a.y, b.y );
 	return c;
-}
-
-/// Component-wise clamp vector v into the range [a, b]
-b2Vec2 b2Clamp(b2Vec2 v, b2Vec2 a, b2Vec2 b)
-{
-	b2Vec2 c = void;
-	c.x = clamp( v.x, a.x, b.x );
-	c.y = clamp( v.y, a.y, b.y );
-	return c;
-}
-
-/// Get the distance between two points
-float b2Distance(b2Vec2 a, b2Vec2 b)
-{
-	float dx = b.x - a.x;
-	float dy = b.y - a.y;
-	return sqrt( dx * dx + dy * dy );
-}
-
-/// Convert a vector into a unit vector if possible, otherwise returns the zero vector.
-/// todo MSVC is not inlining this function in several places per warning 4710
-b2Vec2 b2Normalize( b2Vec2 v )
-{
-	float length = sqrt( v.x * v.x + v.y * v.y );
-	if ( length < float.epsilon )
-	{
-		return b2Vec2( 0.0f, 0.0f );
-	}
-
-	float invLength = 1.0f / length;
-	b2Vec2 n = { invLength * v.x, invLength * v.y };
-	return n;
 }
 
 /// Determines if the provided vector is normalized (norm(a) == 1).

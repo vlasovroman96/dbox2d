@@ -364,7 +364,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 
 		if ( b2LengthSquared( joint.linearSpringImpulse ) > maxImpulse * maxImpulse )
 		{
-			joint.linearSpringImpulse = b2Normalize( joint.linearSpringImpulse );
+			joint.linearSpringImpulse = joint.linearSpringImpulse.normalized;
 			joint.linearSpringImpulse.x *= maxImpulse;
 			joint.linearSpringImpulse.y *= maxImpulse;
 		}
@@ -391,7 +391,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 
 		if ( b2LengthSquared( joint.linearVelocityImpulse ) > maxImpulse * maxImpulse )
 		{
-			joint.linearVelocityImpulse = b2Normalize( joint.linearVelocityImpulse );
+			joint.linearVelocityImpulse = joint.linearVelocityImpulse.normalized;
 			joint.linearVelocityImpulse.x *= maxImpulse;
 			joint.linearVelocityImpulse.y *= maxImpulse;
 		}

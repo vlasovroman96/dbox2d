@@ -67,7 +67,7 @@ b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2)
 
 	b2Vec2 p = p1;
 	b2Vec2 d = p2 - p1 ;
-	b2Vec2 absD = b2Abs( d );
+	b2Vec2 absD = d.abs();
 
 	b2Vec2 normal = b2Vec2.zero();
 
