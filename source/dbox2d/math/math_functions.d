@@ -7,16 +7,10 @@ public import std.stdint;
 import dbox2d.base;
 import dbox2d.math.vector;
 import dbox2d.math.transform;
+import dbox2d.math.cossin;
+
 
 static assert( int32_t.sizeof == int.sizeof, "Box2D expects int32_t and int to be the same" );
-
-/// Cosine and sine pair
-/// This uses a custom implementation designed for cross-platform determinism
-struct b2CosSin {
-	/// cosine and sine
-	float cosine = 0;
-	float sine = 0;
-}
 
 /// 2D rotation
 /// This is similar to using a complex number for rotation
