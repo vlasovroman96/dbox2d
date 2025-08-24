@@ -8,4 +8,5 @@ public {
     import dbox2d.math.transform;
     import dbox2d.math.cossin;
     import dbox2d.math.rotation;
+    import dbox2d.math.mat22;
 }
