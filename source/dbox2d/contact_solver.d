@@ -156,13 +156,13 @@ static if (B2_VALIDATE) {
 			cp.anchorB = rB;
 			cp.baseSeparation = mp.separation - ( rB - rA ).dot( normal );
 
-			float rnA = rA.dot( normal );
-			float rnB = rB.dot( normal );
+			float rnA = rA.cross( normal );
+			float rnB = rB.cross( normal );
 			float kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 			cp.normalMass = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 
-			float rtA = rA.dot( tangent );
-			float rtB = rB.dot( tangent );
+			float rtA = rA.cross( tangent );
+			float rtB = rB.cross( tangent );
 			float kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 			cp.tangentMass = kTangent > 0.0f ? 1.0f / kTangent : 0.0f;
 
@@ -222,9 +222,9 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 			b2Vec2 rB = cp.anchorB;
 
 			b2Vec2 P = b2MulSV( cp.normalImpulse, normal ) + b2MulSV( cp.tangentImpulse, tangent );
-			wA -= iA * rA.dot( P );
+			wA -= iA * rA.cross( P );
 			vA = b2MulAdd( vA, -mA, P );
-			wB += iB * rB.dot( P );
+			wB += iB * rB.cross( P );
 			vB = b2MulAdd( vB, mB, P );
 		}
 
@@ -332,10 +332,10 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// apply normal impulse
 			b2Vec2 P = b2MulSV( impulse, normal );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * rA.dot( P );
+			wA -= iA * rA.cross( P );
 
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * rB.dot( P );
+			wB += iB * rB.cross( P );
 		}
 
 		// Friction
@@ -368,9 +368,9 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			// apply tangent impulse
 			b2Vec2 P = b2MulSV( impulse, tangent );
 			vA = b2MulSub( vA, mA, P );
-			wA -= iA * rA.dot( P );
+			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
-			wB += iB * rB.dot( P );
+			wB += iB * rB.cross( P );
 		}
 
 		// Rolling resistance
