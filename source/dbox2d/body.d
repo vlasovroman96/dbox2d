@@ -733,7 +733,7 @@ b2AABB b2Body_ComputeAABB(b2BodyId bodyId)
 	while ( shape.nextShapeId != B2_NULL_INDEX )
 	{
 		shape = b2ShapeArray_Get( world.shapes, shape.nextShapeId );
-		aabb = b2AABB_Union( aabb, shape.aabb );
+		aabb = aabb._union( shape.aabb );
 	}
 
 	return aabb;

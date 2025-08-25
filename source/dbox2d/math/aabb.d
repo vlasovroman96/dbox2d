@@ -176,17 +176,16 @@ struct b2AABB {
 		b2Vec2 b = { 0.5f * ( this.upperBound.x - this.lowerBound.x ), 0.5f * ( this.upperBound.y - this.lowerBound.y ) };
 		return b;
 	}
-}
 
-/// Union of two AABBs
-b2AABB b2AABB_Union(b2AABB a, b2AABB b)
-{
-	b2AABB c = void;
-	c.lowerBound.x = min( a.lowerBound.x, b.lowerBound.x );
-	c.lowerBound.y = min( a.lowerBound.y, b.lowerBound.y );
-	c.upperBound.x = max( a.upperBound.x, b.upperBound.x );
-	c.upperBound.y = max( a.upperBound.y, b.upperBound.y );
-	return c;
+	/// Union of two AABBs
+	b2AABB _union(b2AABB b) {
+		b2AABB c;
+		c.lowerBound.x = min( this.lowerBound.x, b.lowerBound.x );
+		c.lowerBound.y = min( this.lowerBound.y, b.lowerBound.y );
+		c.upperBound.x = max( this.upperBound.x, b.upperBound.x );
+		c.upperBound.y = max( this.upperBound.y, b.upperBound.y );
+		return c;
+	}
 }
 
 /// Do a and b overlap

@@ -231,7 +231,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 	float areaBase = rootBox.perimeter;
 
 	// Area of inflated node
-	float directCost = b2AABB_Union( rootBox, boxD ).perimeter();
+	float directCost = rootBox._union( boxD ).perimeter();
 	float inheritedCost = 0.0f;
 
 	int bestSibling = rootIndex;
@@ -264,7 +264,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		// Cost of descending into child 1
 		float lowerCost1 = float.max;
 		b2AABB box1 = nodes[child1].aabb;
-		float directCost1 = b2AABB_Union( box1, boxD ).perimeter();
+		float directCost1 = box1._union( boxD ).perimeter();
 		float area1 = 0.0f;
 		if ( leaf1 )
 		{
@@ -295,7 +295,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		// Cost of descending into child 2
 		float lowerCost2 = float.max;
 		b2AABB box2 = nodes[child2].aabb;
-		float directCost2 = b2AABB_Union( box2, boxD ).perimeter();
+		float directCost2 = box2._union(boxD).perimeter();
 		float area2 = 0.0f;
 		if ( leaf2 )
 		{
@@ -409,11 +409,11 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		float costBase = C.aabb.perimeter();
 
 		// Cost of swapping B and F
-		b2AABB aabbBG = b2AABB_Union( B.aabb, G.aabb );
+		b2AABB aabbBG = B.aabb._union( G.aabb );
 		float costBF = aabbBG.perimeter();
 
 		// Cost of swapping B and G
-		b2AABB aabbBF = b2AABB_Union( B.aabb, F.aabb );
+		b2AABB aabbBF = B.aabb._union( F.aabb );
 		float costBG = aabbBF.perimeter();
 
 		if ( costBase < costBF && costBase < costBG )
@@ -475,11 +475,11 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		float costBase = B.aabb.perimeter();
 
 		// Cost of swapping C and D
-		b2AABB aabbCE = b2AABB_Union( C.aabb, E.aabb );
+		b2AABB aabbCE = C.aabb._union( E.aabb );
 		float costCD = aabbCE.perimeter();
 
 		// Cost of swapping C and E
-		b2AABB aabbCD = b2AABB_Union( C.aabb, D.aabb );
+		b2AABB aabbCD = C.aabb._union( D.aabb );
 		float costCE = aabbCD.perimeter();
 
 		if ( costBase < costCD && costBase < costCE )
@@ -549,7 +549,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		float bestCost = costBase;
 
 		// Cost of swapping B and F
-		b2AABB aabbBG = b2AABB_Union( B.aabb, G.aabb );
+		b2AABB aabbBG = B.aabb._union( G.aabb );
 		float costBF = areaB + aabbBG.perimeter();
 		if ( costBF < bestCost )
 		{
@@ -558,7 +558,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		}
 
 		// Cost of swapping B and G
-		b2AABB aabbBF = b2AABB_Union( B.aabb, F.aabb );
+		b2AABB aabbBF = B.aabb._union( F.aabb );
 		float costBG = areaB + aabbBF.perimeter();
 		if ( costBG < bestCost )
 		{
@@ -567,7 +567,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		}
 
 		// Cost of swapping C and D
-		b2AABB aabbCE = b2AABB_Union( C.aabb, E.aabb );
+		b2AABB aabbCE = C.aabb._union( E.aabb );
 		float costCD = areaC + aabbCE.perimeter();
 		if ( costCD < bestCost )
 		{
@@ -576,7 +576,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		}
 
 		// Cost of swapping C and E
-		b2AABB aabbCD = b2AABB_Union( C.aabb, D.aabb );
+		b2AABB aabbCD = C.aabb._union( D.aabb );
 		float costCE = areaC + aabbCD.perimeter();
 		if ( costCE < bestCost )
 		{
@@ -681,7 +681,7 @@ private void b2InsertLeaf(b2DynamicTree* tree, int leaf, bool shouldRotate)
 	b2TreeNode* nodes = tree.nodes;
 	nodes[newParent].parent = oldParent;
 	nodes[newParent].userData = UINT64_MAX;
-	nodes[newParent].aabb = b2AABB_Union( leafAABB, nodes[sibling].aabb );
+	nodes[newParent].aabb = leafAABB._union( nodes[sibling].aabb );
 	nodes[newParent].categoryBits = nodes[leaf].categoryBits | nodes[sibling].categoryBits;
 	nodes[newParent].height = cast(ushort)(nodes[sibling].height + 1);
 
@@ -722,7 +722,7 @@ private void b2InsertLeaf(b2DynamicTree* tree, int leaf, bool shouldRotate)
 		B2_ASSERT( child1 != B2_NULL_INDEX );
 		B2_ASSERT( child2 != B2_NULL_INDEX );
 
-		nodes[index].aabb = b2AABB_Union( nodes[child1].aabb, nodes[child2].aabb );
+		nodes[index].aabb = nodes[child1].aabb._union( nodes[child2].aabb );
 		nodes[index].categoryBits = nodes[child1].categoryBits | nodes[child2].categoryBits;
 		nodes[index].height = cast(ushort)(1 + b2MaxUInt16( nodes[child1].height, nodes[child2].height ));
 		nodes[index].flags |= ( nodes[child1].flags | nodes[child2].flags ) & b2_enlargedNode;
@@ -788,7 +788,7 @@ private void b2RemoveLeaf(b2DynamicTree* tree, int leaf)
 			//__m128 aabb = _mm_shuffle_ps(lower, upper, _MM_SHUFFLE(3, 2, 1, 0));
 			//_mm_store_ps(&node->aabb.lowerBound.x, aabb);
 
-			node.aabb = b2AABB_Union( child1.aabb, child2.aabb );
+			node.aabb = child1.aabb._union( child2.aabb );
 			node.categoryBits = child1.categoryBits | child2.categoryBits;
 			node.height = cast(ushort)(1 + b2MaxUInt16( child1.height, child2.height ));
 
@@ -1819,7 +1819,7 @@ static if (B2_TREE_HEURISTIC == 0) {
 			b2TreeNode* child1 = nodes + node.children.child1;
 			b2TreeNode* child2 = nodes + node.children.child2;
 
-			node.aabb = b2AABB_Union( child1.aabb, child2.aabb );
+			node.aabb = child1.aabb._union( child2.aabb );
 			node.height = cast(ushort)(1 + b2MaxUInt16( child1.height, child2.height ));
 			node.categoryBits = child1.categoryBits | child2.categoryBits;
 
@@ -1894,7 +1894,7 @@ static if (B2_TREE_HEURISTIC == 0) {
 	b2TreeNode* child1 = nodes + rootNode.children.child1;
 	b2TreeNode* child2 = nodes + rootNode.children.child2;
 
-	rootNode.aabb = b2AABB_Union( child1.aabb, child2.aabb );
+	rootNode.aabb = child1.aabb._union( child2.aabb );
 	rootNode.height = cast(ushort)(1 + b2MaxUInt16( child1.height, child2.height ));
 	rootNode.categoryBits = child1.categoryBits | child2.categoryBits;
 

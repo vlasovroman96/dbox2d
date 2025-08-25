@@ -704,7 +704,7 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 			continue;
 		}
 
-		b2AABB sweptBox = b2AABB_Union( box1, box2 );
+		b2AABB sweptBox = box1._union( box2 );
 
 		b2DynamicTree_Query( staticTree, sweptBox, B2_DEFAULT_MASK_BITS, &b2ContinuousQueryCallback, &context );
 
