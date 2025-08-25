@@ -17,42 +17,38 @@ struct b2AABB {
 		auto wy = this.upperBound.y - this.lowerBound.y;
 		return 2.0f * ( wx + wy );
 	}
+
+	/// Enlarge a to contain b
+	/// @return true if the AABB grew
+	bool enlargeAABB(b2AABB b) {
+		bool changed = false;
+
+		if ( b.lowerBound.x < this.lowerBound.x ) {
+			this.lowerBound.x = b.lowerBound.x;
+			changed = true;
+		}
+
+		if ( b.lowerBound.y < this.lowerBound.y ) {
+			this.lowerBound.y = b.lowerBound.y;
+			changed = true;
+		}
+
+		if ( this.upperBound.x < b.upperBound.x ) {
+			this.upperBound.x = b.upperBound.x;
+			changed = true;
+		}
+
+		if ( this.upperBound.y < b.upperBound.y ) {
+			this.upperBound.y = b.upperBound.y;
+			changed = true;
+		}
+
+		return changed;
+	}
 }
 
 // Ray cast an AABB
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2);
-
-/// Enlarge a to contain b
-/// @return true if the AABB grew
-pragma(inline, true) bool b2EnlargeAABB(b2AABB* a, b2AABB b)
-{
-	bool changed = false;
-	if ( b.lowerBound.x < a.lowerBound.x )
-	{
-		a.lowerBound.x = b.lowerBound.x;
-		changed = true;
-	}
-
-	if ( b.lowerBound.y < a.lowerBound.y )
-	{
-		a.lowerBound.y = b.lowerBound.y;
-		changed = true;
-	}
-
-	if ( a.upperBound.x < b.upperBound.x )
-	{
-		a.upperBound.x = b.upperBound.x;
-		changed = true;
-	}
-
-	if ( a.upperBound.y < b.upperBound.y )
-	{
-		a.upperBound.y = b.upperBound.y;
-		changed = true;
-	}
-
-	return changed;
-}
 
 bool b2IsValidAABB(b2AABB a)
 {

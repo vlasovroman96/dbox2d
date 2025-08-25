@@ -880,7 +880,7 @@ void b2DynamicTree_EnlargeProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb)
 	int parentIndex = nodes[proxyId].parent;
 	while (parentIndex != B2_NULL_INDEX)
 	{
-		bool changed = b2EnlargeAABB( &nodes[parentIndex].aabb, aabb );
+		bool changed = nodes[parentIndex].aabb.enlargeAABB( aabb );
 		nodes[parentIndex].flags |= b2_enlargedNode;
 		parentIndex = nodes[parentIndex].parent;
 
