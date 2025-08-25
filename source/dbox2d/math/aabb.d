@@ -170,13 +170,12 @@ struct b2AABB {
 		b2Vec2 b = { 0.5f * ( this.lowerBound.x + this.upperBound.x ), 0.5f * ( this.lowerBound.y + this.upperBound.y ) };
 		return b;
 	}
-}
 
-/// Get the extents of the AABB (half-widths).
-b2Vec2 b2AABB_Extents(b2AABB a)
-{
-	b2Vec2 b = { 0.5f * ( a.upperBound.x - a.lowerBound.x ), 0.5f * ( a.upperBound.y - a.lowerBound.y ) };
-	return b;
+	/// Get the extents of the AABB (half-widths).
+	b2Vec2 extents() const {
+		b2Vec2 b = { 0.5f * ( this.upperBound.x - this.lowerBound.x ), 0.5f * ( this.upperBound.y - this.lowerBound.y ) };
+		return b;
+	}
 }
 
 /// Union of two AABBs

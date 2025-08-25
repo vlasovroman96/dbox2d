@@ -1266,7 +1266,7 @@ b2TreeStats b2DynamicTree_RayCast(const(b2DynamicTree)* tree, const(b2RayCastInp
 		// |dot(v, p1 - c)| > dot(|v|, h)
 		// radius extension is added to the node in this case
 		b2Vec2 c = nodeAABB.center();
-		b2Vec2 h = b2AABB_Extents( nodeAABB );
+		b2Vec2 h = nodeAABB.extents();
 		float term1 = abs( v.dot( p1 - c ) );
 		float term2 = abs_v.dot( h );
 		if ( term2 < term1 )
@@ -1347,7 +1347,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 	originAABB.upperBound = originAABB.upperBound + radius;
 
 	b2Vec2 p1 = originAABB.center();
-	b2Vec2 extension = b2AABB_Extents( originAABB );
+	b2Vec2 extension = originAABB.extents();
 
 	// v is perpendicular to the segment.
 	b2Vec2 r = input.translation;
@@ -1395,7 +1395,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 		// |dot(v, p1 - c)| > dot(|v|, h)
 		// radius extension is added to the node in this case
 		b2Vec2 c = node.aabb.center();
-		b2Vec2 h = b2AABB_Extents( node.aabb ) + extension;
+		b2Vec2 h = node.aabb.extents() + extension;
 		float term1 = abs( v.dot( p1 - c ) );
 		float term2 = abs_v.dot( h );
 		if ( term2 < term1 )
