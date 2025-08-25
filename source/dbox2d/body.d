@@ -3,9 +3,11 @@ module dbox2d.body;
 import std.math;
 
 import dbox2d.array;
-import dbox2d.box2d;
-import dbox2d.math;
+// import dbox2d.box2d;
 import dbox2d.types;
+import dbox2d.math;
+// import dbox2d.math.vector;
+// import dbox2d.types;
 import dbox2d.physics_world;
 import dbox2d.island;
 import dbox2d.contact;

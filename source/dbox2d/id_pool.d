@@ -2,7 +2,7 @@ module dbox2d.id_pool;
 
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));
 
-public import dbox2d.array;
+import dbox2d.array;
 import dbox2d.core;
 import dbox2d.base;
 

@@ -5,8 +5,8 @@ template HasVersion(string versionId) {
 }
 import core.stdc.config: c_long, c_ulong;
 
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
+import core.stdc.stdlib;
+import core.stdc.stdint;
 import core.builtins;
 import core.bitop;
 

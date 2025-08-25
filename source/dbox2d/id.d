@@ -1,6 +1,6 @@
 module dbox2d.id;
 
-public import core.stdc.stdint;
+import core.stdc.stdint;
 
 // Note: this file should be stand-alone
 

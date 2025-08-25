@@ -1,5 +1,7 @@
 module dbox2d.solver;
 
+import dbox2d.array;
+import dbox2d.types;
 import dbox2d.core;
 import dbox2d.table;
 import dbox2d.id;

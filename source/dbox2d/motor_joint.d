@@ -12,9 +12,10 @@ import dbox2d.math;
 import dbox2d.array;
 import dbox2d.base;
 import dbox2d.constants;
+import dbox2d.types;
 
 // needed for dll export
-import dbox2d.box2d;
+// import dbox2d.box2d;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));

@@ -2,8 +2,16 @@ module dbox2d.math.aabb;
 
 import dbox2d.types;
 import dbox2d.math.vector;
-import dbox2d.math.math_functions;
+import dbox2d.math.funcs;
 import dbox2d.collision;
+import dbox2d.core;
+import dbox2d.base;
+
+/// Axis-aligned bounding box
+struct b2AABB {
+	b2Vec2 lowerBound;
+	b2Vec2 upperBound;
+}
 
 // Ray cast an AABB
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2);
@@ -172,3 +180,63 @@ b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2)
 	return output;
 }
 
+/// Does a fully contain b
+bool b2AABB_Contains(b2AABB a, b2AABB b)
+{
+	bool s = true;
+	s = s && a.lowerBound.x <= b.lowerBound.x;
+	s = s && a.lowerBound.y <= b.lowerBound.y;
+	s = s && b.upperBound.x <= a.upperBound.x;
+	s = s && b.upperBound.y <= a.upperBound.y;
+	return s;
+}
+
+/// Get the center of the AABB.
+b2Vec2 b2AABB_Center(b2AABB a)
+{
+	b2Vec2 b = { 0.5f * ( a.lowerBound.x + a.upperBound.x ), 0.5f * ( a.lowerBound.y + a.upperBound.y ) };
+	return b;
+}
+
+/// Get the extents of the AABB (half-widths).
+b2Vec2 b2AABB_Extents(b2AABB a)
+{
+	b2Vec2 b = { 0.5f * ( a.upperBound.x - a.lowerBound.x ), 0.5f * ( a.upperBound.y - a.lowerBound.y ) };
+	return b;
+}
+
+/// Union of two AABBs
+b2AABB b2AABB_Union(b2AABB a, b2AABB b)
+{
+	b2AABB c = void;
+	c.lowerBound.x = min( a.lowerBound.x, b.lowerBound.x );
+	c.lowerBound.y = min( a.lowerBound.y, b.lowerBound.y );
+	c.upperBound.x = max( a.upperBound.x, b.upperBound.x );
+	c.upperBound.y = max( a.upperBound.y, b.upperBound.y );
+	return c;
+}
+
+/// Do a and b overlap
+bool b2AABB_Overlaps(b2AABB a, b2AABB b)
+{
+	return !( b.lowerBound.x > a.upperBound.x || b.lowerBound.y > a.upperBound.y || a.lowerBound.x > b.upperBound.x ||
+			  a.lowerBound.y > b.upperBound.y );
+}
+
+/// Compute the bounding box of an array of circles
+b2AABB b2MakeAABB(const(b2Vec2)* points, int count, float radius)
+{
+	B2_ASSERT( count > 0 );
+	b2AABB a = { points[0], points[0] };
+	for ( int i = 1; i < count; ++i )
+	{
+		a.lowerBound = b2Min( a.lowerBound, points[i] );
+		a.upperBound = b2Max( a.upperBound, points[i] );
+	}
+
+	b2Vec2 r = { radius, radius };
+	a.lowerBound = a.lowerBound - r;
+	a.upperBound = a.upperBound + r;
+
+	return a;
+}

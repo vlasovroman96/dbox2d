@@ -131,3 +131,97 @@ b2Vec2 b2CrossVS( b2Vec2 v, float s )
 b2Vec2 b2CrossSV(float s, b2Vec2 v) {
 	return v.crossSV(s);
 }
+
+/// Vector linear interpolation
+/// https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/
+b2Vec2 b2Lerp(b2Vec2 a, b2Vec2 b, float t)
+{
+	return b2Vec2( ( 1.0f - t ) * a.x + t * b.x, ( 1.0f - t ) * a.y + t * b.y );
+}
+
+/// Multiply a scalar and vector
+b2Vec2 b2MulSV( float s, b2Vec2 v )
+{
+	return b2Vec2( s * v.x, s * v.y );
+}
+
+/// a + s * b
+b2Vec2 b2MulAdd( b2Vec2 a, float s, b2Vec2 b )
+{
+	return b2Vec2( a.x + s * b.x, a.y + s * b.y );
+}
+
+/// a - s * b
+b2Vec2 b2MulSub( b2Vec2 a, float s, b2Vec2 b )
+{
+	return b2Vec2( a.x - s * b.x, a.y - s * b.y );
+}
+
+/// Component-wise minimum vector
+b2Vec2 b2Min(b2Vec2 a, b2Vec2 b)
+{
+	b2Vec2 c = void;
+	c.x = min( a.x, b.x );
+	c.y = min( a.y, b.y );
+	return c;
+}
+
+/// Component-wise maximum vector
+b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
+{
+	b2Vec2 c = void;
+	c.x = max( a.x, b.x );
+	c.y = max( a.y, b.y );
+	return c;
+}
+
+/// Determines if the provided vector is normalized (norm(a) == 1).
+bool b2IsNormalized(b2Vec2 a)
+{
+	float aa = a.dot( a );
+	return abs( 1.0f - aa ) < 100.0f * float.epsilon;
+}
+
+
+bool b2IsValidVec2(b2Vec2 v)
+{
+	if ( isNaN( v.x ) || isNaN( v.y ) )
+	{
+		return false;
+	}
+
+	if ( isInfinity( v.x ) || isInfinity( v.y ) )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+/// Convert a vector into a unit vector if possible, otherwise returns the zero vector. Also
+/// outputs the length.
+b2Vec2 b2GetLengthAndNormalize( float* length, b2Vec2 v )
+{
+	*length = sqrt( v.x * v.x + v.y * v.y );
+	if ( *length < float.epsilon )
+	{
+		return b2Vec2( 0.0f, 0.0f );
+	}
+
+	float invLength = 1.0f / *length;
+	b2Vec2 n = { invLength * v.x, invLength * v.y };
+	return n;
+}
+
+/// Get the length squared of this vector
+float b2LengthSquared(b2Vec2 v)
+{
+	return v.x * v.x + v.y * v.y;
+}
+
+/// Get the distance squared between points
+float b2DistanceSquared(b2Vec2 a, b2Vec2 b)
+{
+	b2Vec2 c = { b.x - a.x, b.y - a.y };
+	return c.x * c.x + c.y * c.y;
+}

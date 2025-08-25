@@ -2,6 +2,7 @@ module dbox2d.collision;
 
 import dbox2d.base;
 import dbox2d.math;
+import dbox2d.math.plane;
 import dbox2d.types;
 import dbox2d.core;
 import dbox2d.constants;
@@ -1230,7 +1231,7 @@ static if (B2_VALIDATE) {
 private int b2ComputeHeight(const(b2DynamicTree)* tree, int nodeId)
 {
 	B2_ASSERT( 0 <= nodeId && nodeId < tree.nodeCapacity );
-	b2TreeNode* node = tree.nodes + nodeId;
+	b2TreeNode* node = &tree.nodes[nodeId];
 
 	if ( b2IsLeaf( node ) )
 	{

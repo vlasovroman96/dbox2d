@@ -4,10 +4,11 @@ module dbox2d.island;
 
 //#pragma once
 
-public import dbox2d.array;
+import dbox2d.array;
 
-public import core.stdc.stdlib;
-public import core.stdc.stdint;
+import core.stdc.stdlib;
+import core.stdc.stddef;
+import core.stdc.stdint;
 
 import dbox2d.physics_world;
 import dbox2d.contact;
@@ -90,8 +91,6 @@ void b2ValidateIsland(b2World* world, int islandId);
 
 // alias b2IslandSimArray = b2IslandSim[];
 // B2_ARRAY_INLINE( b2IslandSim, b2IslandSim )
-
-import core.stdc.stddef;
 
 mixin(B2_ARRAY_SOURCE!( "b2Island", "b2Island" ));
 mixin(B2_ARRAY_SOURCE!( "b2IslandSim", "b2IslandSim" ));

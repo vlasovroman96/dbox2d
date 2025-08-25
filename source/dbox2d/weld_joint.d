@@ -1,5 +1,6 @@
 module dbox2d.weld_joint;
 
+import dbox2d.types;
 import dbox2d.body;
 import dbox2d.core;
 import dbox2d.joint;
@@ -7,7 +8,7 @@ import dbox2d.solver;
 import dbox2d.solver_set;
 import dbox2d.physics_world;
 import dbox2d.math;
-import dbox2d.box2d;
+// import dbox2d.box2d;
 import dbox2d.id;
 import dbox2d.collision;
 import dbox2d.array;

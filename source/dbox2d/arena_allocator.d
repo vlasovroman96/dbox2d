@@ -4,16 +4,10 @@ import std.stdint;
 
 import dbox2d.array;
 import dbox2d.core;
+import dbox2d.arenaEntry;
 import dbox2d.base;
 
-struct b2ArenaEntry {
-	char* data;
-	const(char)* name;
-	int size;
-	bool usedMalloc;
-}
-
-mixin(B2_ARRAY_SOURCE!("b2ArenaEntry","b2ArenaEntry"));
+// mixin(B2_ARRAY_SOURCE!("b2ArenaEntry","b2ArenaEntry"));
 
 // This is a stack-like arena allocator used for fast per step allocations.
 // You must nest allocate/free pairs. The code will B2_ASSERT
@@ -87,7 +81,7 @@ void* b2AllocateArenaItem(b2ArenaAllocator* alloc, int size, const(char)* name)
 
 void b2FreeArenaItem(b2ArenaAllocator* alloc, void* mem)
 {
-	int entryCount = cast(int)alloc.entries.count;
+	int entryCount = cast(int)alloc.entries.length;
 	B2_ASSERT( entryCount > 0 );
 	b2ArenaEntry* entry = alloc.entries.ptr + ( entryCount - 1 );
 	B2_ASSERT( mem == entry.data );

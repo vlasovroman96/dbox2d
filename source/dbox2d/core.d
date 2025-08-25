@@ -2,11 +2,11 @@ module dbox2d.core;
 
 import std.stdio;
 
-import dbox2d.math.math_functions;
+import dbox2d.math;
 import dbox2d.timer;
 import dbox2d.base;
 import dbox2d.atomic;
-import dbox2d.timer;
+// import dbox2d.timer;
 
 import core.stdc.string;
 import core.stdc.stdlib;
@@ -25,11 +25,13 @@ version (NDEBUG) {
 	enum B2_DEBUG = 1;
 }
 
-static if (HasVersion!"BOX2D_VALIDATE" && !HasVersion!"NDEBUG") {
-	enum B2_VALIDATE = 1;
-} else {
-	enum B2_VALIDATE = 0;
-}
+// static if (HasVersion!"BOX2D_VALIDATE" && !HasVersion!"NDEBUG") {
+// 	enum B2_VALIDATE = 1;
+// } else {
+// 	enum B2_VALIDATE = 0;
+// }
+
+enum B2_VALIDATE = 0;
 
 // Define platform
 static if (HasVersion!"Windows" || HasVersion!"_WIN64") {
@@ -114,7 +116,7 @@ version (BOX2D_PROFILE) {
 // clang-format on
 
 // Returns the number of elements of an array
-enum string B2_ARRAY_COUNT( string A ) = `cast(int)( A.sizeof / typeof( ` ~ A ~ `[0] ).sizeof )`;
+// enum string B2_ARRAY_COUNT( string A ) = `cast(int)( A.sizeof / typeof( ` ~ A ~ `[0] ).sizeof )`;
 
 // Used to prevent the compiler from warning about unused variables
 enum string B2_UNUSED = "";

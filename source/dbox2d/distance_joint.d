@@ -7,6 +7,8 @@ private template HasVersion(string versionId) {
 static if (HasVersion!"_MSC_VER" && !HasVersion!"_CRT_SECURE_NO_WARNINGS") {
 version = _CRT_SECURE_NO_WARNINGS;
 }
+
+import dbox2d.types;
 import dbox2d.body;
 import dbox2d.core;
 import dbox2d.joint;
@@ -20,7 +22,7 @@ import dbox2d.constants;
 import dbox2d.base;
 
 // needed for dll export
-import dbox2d.box2d;
+// import dbox2d.box2d;
 
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2SolverSet","b2SolverSet"));

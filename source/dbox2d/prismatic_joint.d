@@ -1,6 +1,7 @@
 module dbox2d.prismatic_joint;
 
 import dbox2d.body;
+import dbox2d.array;
 import dbox2d.core;
 import dbox2d.joint;
 import dbox2d.physics_world;
@@ -12,6 +13,7 @@ import dbox2d.island;
 import dbox2d.id;
 import dbox2d.math;
 import dbox2d.base;
+import dbox2d.types;
 
 mixin(B2_ARRAY_SOURCE!("b2Body", "b2Body"));
 mixin(B2_ARRAY_SOURCE!("b2Int", "int"));

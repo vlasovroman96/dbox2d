@@ -2,13 +2,14 @@ module dbox2d.broad_phase;
 
 import dbox2d.array;
 import dbox2d.table;
-import std.conv;
+// import std.conv;
 import dbox2d.shape;
 import dbox2d.body;
+import dbox2d.types;
 import dbox2d.atomic;
 
 import dbox2d.collision;
-import dbox2d.types;
+// import dbox2d.types;
 import dbox2d.base;
 import dbox2d.core;
 import dbox2d.physics_world;
@@ -555,7 +556,7 @@ void b2ValidateNoEnlarged(const(b2BroadPhase)* bp)
 static if (B2_VALIDATE == 1) {
 	for ( int j = 0; j < b2_bodyTypeCount; ++j )
 	{
-		const(b2DynamicTree)* tree = bp.trees + j;
+		const(b2DynamicTree)* tree = &bp.trees[j];
 		b2DynamicTree_ValidateNoEnlarged( tree );
 	}
 } else {

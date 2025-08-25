@@ -21,12 +21,12 @@ import dbox2d.island;
 import dbox2d.shape;
 import dbox2d.sensor;
 import dbox2d.types;
-import dbox2d.atomic;
-import dbox2d.physics_world;
+// import dbox2d.atomic;
+// import dbox2d.physics_world;
 import dbox2d.dynamic_tree;
 import dbox2d.distance;
 import dbox2d.timer;
-import dbox2d.arena_allocator;
+// import dbox2d.arena_allocator;
 import dbox2d.solver;
 import dbox2d.collision;
 import dbox2d.constants;
@@ -56,8 +56,6 @@ mixin(B2_ARRAY_SOURCE!("b2BodyMoveEvent","b2BodyMoveEvent"));
 mixin(B2_ARRAY_SOURCE!("b2BodySim","b2BodySim"));
 mixin(B2_ARRAY_SOURCE!("b2Joint","b2Joint"));
 mixin(B2_ARRAY_SOURCE!("b2Contact","b2Contact"));
-
-public import dbox2d.types;
 
 enum b2SetType : int
 {

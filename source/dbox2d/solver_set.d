@@ -11,6 +11,7 @@ import dbox2d.core;
 import dbox2d.constraint_graph;
 import dbox2d.constants;
 import dbox2d.bitset;
+import dbox2d.types;
 
 import core.stdc.string;
 
