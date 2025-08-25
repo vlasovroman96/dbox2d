@@ -1156,7 +1156,7 @@ bool DrawQueryCallback(int proxyId, ulong userData, void* context)
 // solution: display order by shape id modulus 3, keep 3 buckets in GLSolid* and flush in 3 passes.
 void b2DrawWithBounds(b2World* world, b2DebugDraw* draw)
 {
-	assert( b2IsValidAABB( draw.drawingBounds ) );
+	assert( draw.drawingBounds.isValid() );
 
 	const(float) k_impulseScale = 1.0f;
 	const(float) k_axisScale = 0.3f;
@@ -2005,7 +2005,7 @@ b2TreeStats b2World_OverlapAABB(b2WorldId worldId, b2AABB aabb, b2QueryFilter fi
 		return treeStats;
 	}
 
-	assert( b2IsValidAABB( aabb ) );
+	assert( aabb.isValid() );
 
 	WorldQueryContext worldContext = { world, fcn, filter, context };
 

@@ -848,7 +848,7 @@ int b2DynamicTree_GetProxyCount(const(b2DynamicTree)* tree)
 
 void b2DynamicTree_MoveProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb)
 {
-	B2_ASSERT( b2IsValidAABB( aabb ) );
+	B2_ASSERT( aabb.isValid() );
 	B2_ASSERT( aabb.upperBound.x - aabb.lowerBound.x < B2_HUGE );
 	B2_ASSERT( aabb.upperBound.y - aabb.lowerBound.y < B2_HUGE );
 	B2_ASSERT( 0 <= proxyId && proxyId < tree.nodeCapacity );
@@ -866,7 +866,7 @@ void b2DynamicTree_EnlargeProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb)
 {
 	b2TreeNode* nodes = tree.nodes;
 
-	B2_ASSERT( b2IsValidAABB( aabb ) );
+	B2_ASSERT( aabb.isValid() );
 	B2_ASSERT( aabb.upperBound.x - aabb.lowerBound.x < B2_HUGE );
 	B2_ASSERT( aabb.upperBound.y - aabb.lowerBound.y < B2_HUGE );
 	B2_ASSERT( 0 <= proxyId && proxyId < tree.nodeCapacity );

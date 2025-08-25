@@ -45,18 +45,17 @@ struct b2AABB {
 
 		return changed;
 	}
+
+	bool isValid()	{
+		b2Vec2 d = this.upperBound - this.lowerBound;
+		bool valid = d.x >= 0.0f && d.y >= 0.0f;
+		valid = valid && b2IsValidVec2( this.lowerBound ) && b2IsValidVec2( this.upperBound );
+		return valid;
+	}
 }
 
 // Ray cast an AABB
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2);
-
-bool b2IsValidAABB(b2AABB a)
-{
-	b2Vec2 d = a.upperBound - a.lowerBound;
-	bool valid = d.x >= 0.0f && d.y >= 0.0f;
-	valid = valid && b2IsValidVec2( a.lowerBound ) && b2IsValidVec2( a.upperBound );
-	return valid;
-}
 
 // From Real-time Collision Detection, p179.
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2)
