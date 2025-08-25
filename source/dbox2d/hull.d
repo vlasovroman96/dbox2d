@@ -138,7 +138,7 @@ b2Hull b2ComputeHull(const(b2Vec2)* points, int count)
 	}
 
 	// Find an extreme point as the first point on the hull
-	b2Vec2 c = b2AABB_Center( aabb );
+	b2Vec2 c = aabb.center;
 	int f1 = 0;
 	float dsq1 = b2DistanceSquared( c, ps[f1] );
 	for ( int i = 1; i < n; ++i )

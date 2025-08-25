@@ -164,13 +164,12 @@ struct b2AABB {
 		s = s && b.upperBound.y <= this.upperBound.y;
 		return s;
 	}
-}
 
-/// Get the center of the AABB.
-b2Vec2 b2AABB_Center(b2AABB a)
-{
-	b2Vec2 b = { 0.5f * ( a.lowerBound.x + a.upperBound.x ), 0.5f * ( a.lowerBound.y + a.upperBound.y ) };
-	return b;
+	/// Get the center of the AABB.
+	b2Vec2 center() const {
+		b2Vec2 b = { 0.5f * ( this.lowerBound.x + this.upperBound.x ), 0.5f * ( this.lowerBound.y + this.upperBound.y ) };
+		return b;
+	}
 }
 
 /// Get the extents of the AABB (half-widths).

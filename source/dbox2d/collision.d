@@ -641,7 +641,7 @@ private void b2FreeNode(b2DynamicTree* tree, int nodeId)
 // case2: D becomes a descendant of B along with a new internal node of area(D).
 private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 {
-	b2Vec2 centerD = b2AABB_Center( boxD );
+	b2Vec2 centerD = boxD.center();
 	float areaD = boxD.perimeter;
 
 	const(b2TreeNode)* nodes = tree.nodes;
@@ -753,8 +753,8 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 
 			// No clear choice based on lower bound surface area. This can happen when both
 			// children fully contain D. Fall back to node distance.
-			b2Vec2 d1 = b2AABB_Center( box1) - centerD;
-			b2Vec2 d2 = b2AABB_Center( box2) - centerD;
+			b2Vec2 d1 = box1.center() - centerD;
+			b2Vec2 d2 = box2.center() - centerD;
 			lowerCost1 = b2LengthSquared( d1 );
 			lowerCost2 = b2LengthSquared( d2 );
 		}
