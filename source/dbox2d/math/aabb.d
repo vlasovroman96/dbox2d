@@ -186,13 +186,12 @@ struct b2AABB {
 		c.upperBound.y = max( this.upperBound.y, b.upperBound.y );
 		return c;
 	}
-}
 
-/// Do a and b overlap
-bool b2AABB_Overlaps(b2AABB a, b2AABB b)
-{
-	return !( b.lowerBound.x > a.upperBound.x || b.lowerBound.y > a.upperBound.y || a.lowerBound.x > b.upperBound.x ||
-			  a.lowerBound.y > b.upperBound.y );
+	/// Do a and b overlap
+	bool overlaps(b2AABB b) {
+		return !( b.lowerBound.x > this.upperBound.x || b.lowerBound.y > this.upperBound.y || this.lowerBound.x > b.upperBound.x ||
+				this.lowerBound.y > b.upperBound.y );
+	}
 }
 
 /// Compute the bounding box of an array of circles
