@@ -2079,8 +2079,7 @@ b2TreeStats b2World_OverlapShape(b2WorldId worldId, const(b2ShapeProxy)* proxy, 
 		return treeStats;
 	}
 
-
-	b2AABB aabb = b2AABB.make( proxy.points.ptr, proxy.count, proxy.radius );
+	b2AABB aabb = b2AABB.make( proxy.points, proxy.radius );
 	WorldOverlapContext worldContext = {
 		world, fcn, filter, proxy, context,
 	};
