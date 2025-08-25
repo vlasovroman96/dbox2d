@@ -526,7 +526,7 @@ bool b2BroadPhase_TestOverlap(const(b2BroadPhase)* bp, int proxyKeyA, int proxyK
 
 	b2AABB aabbA = b2DynamicTree_GetAABB( &(bp.trees[typeIndexA]), proxyIdA );
 	b2AABB aabbB = b2DynamicTree_GetAABB( &(bp.trees[typeIndexB]), proxyIdB );
-	return b2AABB_Overlaps( aabbA, aabbB );
+	return aabbA.overlaps( aabbB );
 }
 
 void b2BroadPhase_RebuildTrees(b2BroadPhase* bp)

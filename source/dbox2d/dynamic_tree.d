@@ -1175,7 +1175,7 @@ b2TreeStats b2DynamicTree_Query(const(b2DynamicTree)* tree, b2AABB aabb, ulong m
 		const(b2TreeNode)* node = tree.nodes + nodeId;
 		result.nodeVisits += 1;
 
-		if ( b2AABB_Overlaps( node.aabb, aabb ) && ( node.categoryBits & maskBits ) != 0 )
+		if ( node.aabb.overlaps( aabb ) && ( node.categoryBits & maskBits ) != 0 )
 		{
 			if ( b2IsLeaf( node ) )
 			{
@@ -1257,7 +1257,7 @@ b2TreeStats b2DynamicTree_RayCast(const(b2DynamicTree)* tree, const(b2RayCastInp
 
 		b2AABB nodeAABB = node.aabb;
 
-		if ( ( node.categoryBits & maskBits ) == 0 || b2AABB_Overlaps( nodeAABB, segmentAABB ) == false )
+		if ( ( node.categoryBits & maskBits ) == 0 || nodeAABB.overlaps( segmentAABB ) == false )
 		{
 			continue;
 		}
@@ -1386,7 +1386,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 		const(b2TreeNode)* node = nodes + nodeId;
 		stats.nodeVisits += 1;
 
-		if ( ( node.categoryBits & maskBits ) == 0 || b2AABB_Overlaps( node.aabb, totalAABB ) == false )
+		if ( ( node.categoryBits & maskBits ) == 0 || node.aabb.overlaps( totalAABB ) == false )
 		{
 			continue;
 		}

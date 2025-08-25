@@ -581,7 +581,7 @@ void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context
 		b2Shape* shapeB = shapes + contactSim.shapeIdB;
 
 		// Do proxies still overlap?
-		bool overlap = b2AABB_Overlaps( shapeA.fatAABB, shapeB.fatAABB );
+		bool overlap = shapeA.fatAABB.overlaps( shapeB.fatAABB );
 		if ( overlap == false )
 		{
 			contactSim.simFlags |= b2_simDisjoint;
@@ -2080,7 +2080,7 @@ b2TreeStats b2World_OverlapShape(b2WorldId worldId, const(b2ShapeProxy)* proxy, 
 	}
 
 
-	b2AABB aabb = b2MakeAABB( proxy.points.ptr, proxy.count, proxy.radius );
+	b2AABB aabb = b2AABB.make( proxy.points.ptr, proxy.count, proxy.radius );
 	WorldOverlapContext worldContext = {
 		world, fcn, filter, proxy, context,
 	};

@@ -188,26 +188,26 @@ struct b2AABB {
 	}
 
 	/// Do a and b overlap
-	bool overlaps(b2AABB b) {
+	bool overlaps(b2AABB b) const {
 		return !( b.lowerBound.x > this.upperBound.x || b.lowerBound.y > this.upperBound.y || this.lowerBound.x > b.upperBound.x ||
 				this.lowerBound.y > b.upperBound.y );
 	}
-}
 
-/// Compute the bounding box of an array of circles
-b2AABB b2MakeAABB(const(b2Vec2)* points, int count, float radius)
-{
-	B2_ASSERT( count > 0 );
-	b2AABB a = { points[0], points[0] };
-	for ( int i = 1; i < count; ++i )
+	/// Compute the bounding box of an array of circles
+	static b2AABB make(const(b2Vec2)* points, int count, float radius)
 	{
-		a.lowerBound = b2Min( a.lowerBound, points[i] );
-		a.upperBound = b2Max( a.upperBound, points[i] );
+		B2_ASSERT( count > 0 );
+		b2AABB a = { points[0], points[0] };
+		for ( int i = 1; i < count; ++i )
+		{
+			a.lowerBound = b2Min( a.lowerBound, points[i] );
+			a.upperBound = b2Max( a.upperBound, points[i] );
+		}
+
+		b2Vec2 r = { radius, radius };
+		a.lowerBound = a.lowerBound - r;
+		a.upperBound = a.upperBound + r;
+
+		return a;
 	}
-
-	b2Vec2 r = { radius, radius };
-	a.lowerBound = a.lowerBound - r;
-	a.upperBound = a.upperBound + r;
-
-	return a;
 }
