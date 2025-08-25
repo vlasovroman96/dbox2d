@@ -873,7 +873,7 @@ void b2DynamicTree_EnlargeProxy(b2DynamicTree* tree, int proxyId, b2AABB aabb)
 	B2_ASSERT( b2IsLeaf( tree.nodes + proxyId ) );
 
 	// Caller must ensure this
-	B2_ASSERT( b2AABB_Contains( nodes[proxyId].aabb, aabb ) == false );
+	B2_ASSERT( nodes[proxyId].aabb.contains( aabb ) == false );
 
 	nodes[proxyId].aabb = aabb;
 

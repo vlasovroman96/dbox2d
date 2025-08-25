@@ -958,7 +958,7 @@ void b2Body_SetTransform(b2BodyId bodyId, b2Vec2 position, b2Rot rotation)
 		aabb.upperBound.y += speculativeDistance;
 		shape.aabb = aabb;
 
-		if ( b2AABB_Contains( shape.fatAABB, aabb ) == false )
+		if ( shape.fatAABB.contains( aabb ) == false )
 		{
 			b2AABB fatAABB = void;
 			fatAABB.lowerBound.x = aabb.lowerBound.x - margin;

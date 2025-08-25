@@ -752,7 +752,7 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 			aabb.upperBound.y += speculativeDistance;
 			shape.aabb = aabb;
 
-			if ( b2AABB_Contains( shape.fatAABB, aabb ) == false )
+			if ( shape.fatAABB.contains( aabb ) == false )
 			{
 				b2AABB fatAABB = void;
 				fatAABB.lowerBound.x = aabb.lowerBound.x - aabbMargin;
@@ -784,7 +784,7 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 
 			// shape->aabb is still valid from above
 
-			if ( b2AABB_Contains( shape.fatAABB, shape.aabb ) == false )
+			if ( shape.fatAABB.contains( shape.aabb ) == false )
 			{
 				b2AABB fatAABB = void;
 				fatAABB.lowerBound.x = shape.aabb.lowerBound.x - aabbMargin;
@@ -986,7 +986,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 
 				B2_ASSERT( shape.enlargedAABB == false );
 
-				if ( b2AABB_Contains( shape.fatAABB, aabb ) == false )
+				if ( shape.fatAABB.contains( aabb ) == false )
 				{
 					b2AABB fatAABB = void;
 					fatAABB.lowerBound.x = aabb.lowerBound.x - aabbMargin;

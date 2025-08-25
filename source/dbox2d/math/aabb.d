@@ -54,8 +54,7 @@ struct b2AABB {
 	}
 
 	// From Real-time Collision Detection, p179.
-	b2CastOutput rayCast(b2Vec2 p1, b2Vec2 p2)
-	{
+	b2CastOutput rayCast(b2Vec2 p1, b2Vec2 p2) {
 		// Radius not handled
 		b2CastOutput output;
 
@@ -69,16 +68,13 @@ struct b2AABB {
 		b2Vec2 normal = b2Vec2.zero();
 
 		// x-coordinate
-		if ( absD.x < float.epsilon )
-		{
+		if ( absD.x < float.epsilon ) {
 			// parallel
-			if ( p.x < this.lowerBound.x || this.upperBound.x < p.x )
-			{
+			if ( p.x < this.lowerBound.x || this.upperBound.x < p.x ) {
 				return output;
 			}
 		}
-		else
-		{
+		else {
 			float inv_d = 1.0f / d.x;
 			float t1 = ( this.lowerBound.x - p.x ) * inv_d;
 			float t2 = ( this.upperBound.x - p.x ) * inv_d;
@@ -86,8 +82,7 @@ struct b2AABB {
 			// Sign of the normal vector.
 			float s = -1.0f;
 
-			if ( t1 > t2 )
-			{
+			if ( t1 > t2 ) {
 				float tmp = t1;
 				t1 = t2;
 				t2 = tmp;
@@ -95,8 +90,7 @@ struct b2AABB {
 			}
 
 			// Push the min up
-			if ( t1 > tmin )
-			{
+			if ( t1 > tmin ) {
 				normal.y = 0.0f;
 				normal.x = s;
 				tmin = t1;
@@ -105,23 +99,19 @@ struct b2AABB {
 			// Pull the max down
 			tmax = min( tmax, t2 );
 
-			if ( tmin > tmax )
-			{
+			if ( tmin > tmax ) {
 				return output;
 			}
 		}
 
 		// y-coordinate
-		if ( absD.y < float.epsilon )
-		{
+		if ( absD.y < float.epsilon ) {
 			// parallel
-			if ( p.y < this.lowerBound.y || this.upperBound.y < p.y )
-			{
+			if ( p.y < this.lowerBound.y || this.upperBound.y < p.y ) {
 				return output;
 			}
 		}
-		else
-		{
+		else {
 			float inv_d = 1.0f / d.y;
 			float t1 = ( this.lowerBound.y - p.y ) * inv_d;
 			float t2 = ( this.upperBound.y - p.y ) * inv_d;
@@ -129,8 +119,7 @@ struct b2AABB {
 			// Sign of the normal vector.
 			float s = -1.0f;
 
-			if ( t1 > t2 )
-			{
+			if ( t1 > t2 ) {
 				float tmp = t1;
 				t1 = t2;
 				t2 = tmp;
@@ -138,8 +127,7 @@ struct b2AABB {
 			}
 
 			// Push the min up
-			if ( t1 > tmin )
-			{
+			if ( t1 > tmin ) {
 				normal.x = 0.0f;
 				normal.y = s;
 				tmin = t1;
@@ -148,16 +136,14 @@ struct b2AABB {
 			// Pull the max down
 			tmax = min( tmax, t2 );
 
-			if ( tmin > tmax )
-			{
+			if ( tmin > tmax ) {
 				return output;
 			}
 		}
 
 		// Does the ray start inside the box?
 		// Does the ray intersect beyond the max fraction?
-		if ( tmin < 0.0f || 1.0f < tmin )
-		{
+		if ( tmin < 0.0f || 1.0f < tmin ) {
 			return output;
 		}
 
@@ -168,17 +154,16 @@ struct b2AABB {
 		output.hit = true;
 		return output;
 	}
-}
 
-/// Does a fully contain b
-bool b2AABB_Contains(b2AABB a, b2AABB b)
-{
-	bool s = true;
-	s = s && a.lowerBound.x <= b.lowerBound.x;
-	s = s && a.lowerBound.y <= b.lowerBound.y;
-	s = s && b.upperBound.x <= a.upperBound.x;
-	s = s && b.upperBound.y <= a.upperBound.y;
-	return s;
+	/// Does a fully contain b
+	bool contains(b2AABB b) {
+		bool s = true;
+		s = s && this.lowerBound.x <= b.lowerBound.x;
+		s = s && this.lowerBound.y <= b.lowerBound.y;
+		s = s && b.upperBound.x <= this.upperBound.x;
+		s = s && b.upperBound.y <= this.upperBound.y;
+		return s;
+	}
 }
 
 /// Get the center of the AABB.
