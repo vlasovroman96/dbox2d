@@ -11,18 +11,16 @@ import dbox2d.base;
 struct b2AABB {
 	b2Vec2 lowerBound;
 	b2Vec2 upperBound;
+
+	auto perimeter() const {
+		auto wx = this.upperBound.x - this.lowerBound.x;
+		auto wy = this.upperBound.y - this.lowerBound.y;
+		return 2.0f * ( wx + wy );
+	}
 }
 
 // Ray cast an AABB
 b2CastOutput b2AABB_RayCast(b2AABB a, b2Vec2 p1, b2Vec2 p2);
-
-// Get surface area of an AABB (the perimeter length)
-pragma(inline, true) float b2Perimeter(b2AABB a)
-{
-	float wx = a.upperBound.x - a.lowerBound.x;
-	float wy = a.upperBound.y - a.lowerBound.y;
-	return 2.0f * ( wx + wy );
-}
 
 /// Enlarge a to contain b
 /// @return true if the AABB grew

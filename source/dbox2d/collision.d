@@ -642,7 +642,7 @@ private void b2FreeNode(b2DynamicTree* tree, int nodeId)
 private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 {
 	b2Vec2 centerD = b2AABB_Center( boxD );
-	float areaD = b2Perimeter( boxD );
+	float areaD = boxD.perimeter;
 
 	const(b2TreeNode)* nodes = tree.nodes;
 	int rootIndex = tree.root;
@@ -650,10 +650,10 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 	b2AABB rootBox = nodes[rootIndex].aabb;
 
 	// Area of current node
-	float areaBase = b2Perimeter( rootBox );
+	float areaBase = rootBox.perimeter;
 
 	// Area of inflated node
-	float directCost = b2Perimeter( b2AABB_Union( rootBox, boxD ) );
+	float directCost = b2AABB_Union( rootBox, boxD ).perimeter;
 	float inheritedCost = 0.0f;
 
 	int bestSibling = rootIndex;
@@ -686,7 +686,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		// Cost of descending into child 1
 		float lowerCost1 = float.max;
 		b2AABB box1 = nodes[child1].aabb;
-		float directCost1 = b2Perimeter( b2AABB_Union( box1, boxD ) );
+		float directCost1 = b2AABB_Union( box1, boxD ).perimeter;
 		float area1 = 0.0f;
 		if ( leaf1 )
 		{
@@ -704,7 +704,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		else
 		{
 			// Child 1 is an internal node
-			area1 = b2Perimeter( box1 );
+			area1 = box1.perimeter();
 
 			// Lower bound cost of inserting under child 1. The minimum accounts for two possibilities:
 			// 1. Child1 could be the sibling with cost1 = inheritedCost + directCost1
@@ -717,7 +717,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		// Cost of descending into child 2
 		float lowerCost2 = float.max;
 		b2AABB box2 = nodes[child2].aabb;
-		float directCost2 = b2Perimeter( b2AABB_Union( box2, boxD ) );
+		float directCost2 = b2AABB_Union( box2, boxD ).perimeter;
 		float area2 = 0.0f;
 		if ( leaf2 )
 		{
@@ -731,7 +731,7 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 		}
 		else
 		{
-			area2 = b2Perimeter( box2 );
+			area2 = box2.perimeter();
 			lowerCost2 = inheritedCost + directCost2 + min( areaD - area2, 0.0f );
 		}
 
@@ -829,15 +829,15 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		B2_ASSERT( 0 <= iG && iG < tree.nodeCapacity );
 
 		// Base cost
-		float costBase = b2Perimeter( C.aabb );
+		float costBase = C.aabb.perimeter();
 
 		// Cost of swapping B and F
 		b2AABB aabbBG = b2AABB_Union( B.aabb, G.aabb );
-		float costBF = b2Perimeter( aabbBG );
+		float costBF = aabbBG.perimeter;
 
 		// Cost of swapping B and G
 		b2AABB aabbBF = b2AABB_Union( B.aabb, F.aabb );
-		float costBG = b2Perimeter( aabbBF );
+		float costBG = aabbBF.perimeter;
 
 		if ( costBase < costBF && costBase < costBG )
 		{
@@ -895,15 +895,15 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		B2_ASSERT( 0 <= iE && iE < tree.nodeCapacity );
 
 		// Base cost
-		float costBase = b2Perimeter( B.aabb );
+		float costBase = B.aabb.perimeter();
 
 		// Cost of swapping C and D
 		b2AABB aabbCE = b2AABB_Union( C.aabb, E.aabb );
-		float costCD = b2Perimeter( aabbCE );
+		float costCD = aabbCE.perimeter();
 
 		// Cost of swapping C and E
 		b2AABB aabbCD = b2AABB_Union( C.aabb, D.aabb );
-		float costCE = b2Perimeter( aabbCD );
+		float costCE = aabbCD.perimeter();
 
 		if ( costBase < costCD && costBase < costCE )
 		{
@@ -965,15 +965,15 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 		b2TreeNode* G = nodes + iG;
 
 		// Base cost
-		float areaB = b2Perimeter( B.aabb );
-		float areaC = b2Perimeter( C.aabb );
+		float areaB = B.aabb.perimeter();
+		float areaC = C.aabb.perimeter();
 		float costBase = areaB + areaC;
 		b2RotateType bestRotation = b2_rotateNone;
 		float bestCost = costBase;
 
 		// Cost of swapping B and F
 		b2AABB aabbBG = b2AABB_Union( B.aabb, G.aabb );
-		float costBF = areaB + b2Perimeter( aabbBG );
+		float costBF = areaB + aabbBG.perimeter();
 		if ( costBF < bestCost )
 		{
 			bestRotation = b2_rotateBF;
@@ -982,7 +982,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 
 		// Cost of swapping B and G
 		b2AABB aabbBF = b2AABB_Union( B.aabb, F.aabb );
-		float costBG = areaB + b2Perimeter( aabbBF );
+		float costBG = areaB + aabbBF.perimeter();
 		if ( costBG < bestCost )
 		{
 			bestRotation = b2_rotateBG;
@@ -991,7 +991,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 
 		// Cost of swapping C and D
 		b2AABB aabbCE = b2AABB_Union( C.aabb, E.aabb );
-		float costCD = areaC + b2Perimeter( aabbCE );
+		float costCD = areaC + aabbCE.perimeter();
 		if ( costCD < bestCost )
 		{
 			bestRotation = b2_rotateCD;
@@ -1000,7 +1000,7 @@ private void b2RotateNodes(b2DynamicTree* tree, int iA)
 
 		// Cost of swapping C and E
 		b2AABB aabbCD = b2AABB_Union( C.aabb, D.aabb );
-		float costCE = areaC + b2Perimeter( aabbCD );
+		float costCE = areaC + aabbCD.perimeter();
 		if ( costCE < bestCost )
 		{
 			bestRotation = b2_rotateCE;
@@ -1545,8 +1545,8 @@ private int b2PartitionSAH(int* indices, int* binIndices, b2AABB* boxes, int cou
 	int bestPlane = 0;
 	for ( int i = 0; i < planeCount; ++i )
 	{
-		float leftArea = b2Perimeter( planes[i].leftAABB );
-		float rightArea = b2Perimeter( planes[i].rightAABB );
+		float leftArea = planes[i].leftAABB.perimeter();
+		float rightArea = planes[i].rightAABB.perimeter();
 		int leftCount = planes[i].leftCount;
 		int rightCount = planes[i].rightCount;
 
