@@ -277,8 +277,8 @@ void b2PrepareDistanceJoint(b2JointSim* base, b2StepContext* context)
 	joint.indexB = bodyB.setIndex == b2_awakeSet ? localIndexB : B2_NULL_INDEX;
 
 	// initial anchors in world space
-	joint.anchorA = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
-	joint.anchorB = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
+	joint.anchorA = ( base.localFrameA.p - bodySimA.localCenter ).getRotated( bodySimA.transform.q );
+	joint.anchorB = ( base.localFrameB.p - bodySimB.localCenter ).getRotated( bodySimB.transform.q );
 	joint.deltaCenter = bodySimB.center - bodySimA.center;
 
 	b2Vec2 rA = joint.anchorA;
@@ -319,8 +319,8 @@ void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2BodyState* stateA = joint.indexA == B2_NULL_INDEX ? &dummyState : context.states + joint.indexA;
 	b2BodyState* stateB = joint.indexB == B2_NULL_INDEX ? &dummyState : context.states + joint.indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.anchorA );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.anchorB );
+	b2Vec2 rA = joint.anchorA.getRotated(stateA.deltaRotation );
+	b2Vec2 rB = joint.anchorB.getRotated( stateB.deltaRotation );
 
 	b2Vec2 ds = ( stateB.deltaPosition - stateA.deltaPosition ) + ( rB - rA );
 	b2Vec2 separation = joint.deltaCenter + ds;
@@ -357,8 +357,8 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	float wB = stateB.angularVelocity;
 
 	// current anchors
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.anchorA );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.anchorB );
+	b2Vec2 rA = joint.anchorA.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.anchorB.getRotated( stateB.deltaRotation );
 
 	// current separation
 	b2Vec2 ds = ( stateB.deltaPosition - stateA.deltaPosition ) + ( rB - rA );

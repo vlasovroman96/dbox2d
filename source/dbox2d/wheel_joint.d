@@ -155,8 +155,8 @@ b2Vec2 b2GetWheelJointForce(b2World* world, b2JointSim* base)
 	int idA = base.bodyIdA;
 	b2Transform transformA = b2GetBodyTransform( world, idA );
 
-	b2Vec2 localAxisA = b2RotateVector( base.localFrameA.q, b2Vec2( 1.0f, 0.0f ) );
-	b2Vec2 axisA = b2RotateVector( transformA.q, localAxisA );
+	b2Vec2 localAxisA = b2Vec2( 1.0f, 0.0f ).getRotated( base.localFrameA.q );
+	b2Vec2 axisA = localAxisA.getRotated( transformA.q );
 	b2Vec2 perpA = axisA.leftPerp();
 
 	b2WheelJoint* joint = &base.wheelJoint;
@@ -229,9 +229,9 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
+	joint.frameA.p = ( base.localFrameA.p - bodySimA.localCenter ).getRotated( bodySimA.transform.q );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
+	joint.frameB.p = ( base.localFrameB.p - bodySimB.localCenter ).getRotated( bodySimB.transform.q );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
 	joint.deltaCenter = bodySimB.center - bodySimA.center;
@@ -240,7 +240,7 @@ void b2PrepareWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 rB = joint.frameB.p;
 
 	b2Vec2 d = joint.deltaCenter + ( rB - rA );
-	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
+	b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated( joint.frameA.q );
 	b2Vec2 perpA = axisA.leftPerp();
 
 	// perpendicular constraint (keep wheel on line)
@@ -289,12 +289,12 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 	b2BodyState* stateA = joint.indexA == B2_NULL_INDEX ? &dummyState : context.states + joint.indexA;
 	b2BodyState* stateB = joint.indexB == B2_NULL_INDEX ? &dummyState : context.states + joint.indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	b2Vec2 d = ( ( stateB.deltaPosition - stateA.deltaPosition ) + joint.deltaCenter ) + ( rB - rA );
-	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
-	axisA = b2RotateVector( stateA.deltaRotation, axisA );
+	b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated( joint.frameA.q );
+	axisA = axisA.getRotated( stateA.deltaRotation );
 	b2Vec2 perpA = axisA.leftPerp();
 
 	float a1 = ( d + rA ).cross( axisA );
@@ -339,12 +339,12 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 	bool fixedRotation = ( iA + iB == 0.0f );
 
 	// current anchors
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	b2Vec2 d = ( ( stateB.deltaPosition - stateA.deltaPosition ) + joint.deltaCenter ) + ( rB - rA );
-	b2Vec2 axisA = b2RotateVector( joint.frameA.q, b2Vec2( 1.0f, 0.0f ) );
-	axisA = b2RotateVector( stateA.deltaRotation, axisA );
+	b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated( joint.frameA.q );
+	axisA = axisA.getRotated( stateA.deltaRotation );
 	float translation = axisA.dot( d );
 
 	float a1 = ( d + rA ).cross( axisA );
@@ -534,7 +534,7 @@ void b2DrawWheelJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transform
 
 	b2Transform frameA = b2MulTransforms( transformA, base.localFrameA );
 	b2Transform frameB = b2MulTransforms( transformB, base.localFrameB );
-	b2Vec2 axisA = b2RotateVector( frameA.q, b2Vec2( 1.0f, 0.0f ) );
+	b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated( frameA.q );
 
 	b2HexColor c1 = b2_colorGray;
 	b2HexColor c2 = b2_colorGreen;

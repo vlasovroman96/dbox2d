@@ -295,7 +295,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 
 			// compute current separation
 			// this is subject to round-off error if the anchor is far from the body center of mass
-			b2Vec2 ds = dp + b2RotateVector( dqB, rB ) - b2RotateVector( dqA, rA );
+			b2Vec2 ds = dp + rB.getRotated( dqB ) - rA.getRotated( dqA );
 			float s = cp.baseSeparation + ds.dot( normal );
 
 			float velocityBias = 0.0f;

@@ -3,6 +3,8 @@ module dbox2d.math.vector;
 import std.math;
 import std.algorithm;
 
+import dbox2d.math.rotation;
+
 /// 2D vector
 /// This can be used to represent a point or free vector
 struct b2Vec2 {
@@ -118,8 +120,12 @@ struct b2Vec2 {
     b2Vec2 crossSV(float s) {
         return b2Vec2( -s * this.y, s * this.x );
     }
-}
 
+    /// Rotate a vector
+    b2Vec2 getRotated( b2Rot q ) const {
+        return b2Vec2( q.c * this.x - q.s * this.y, q.s * this.x + q.c * this.y );
+    }
+}
 
 /// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
 b2Vec2 b2CrossVS( b2Vec2 v, float s )

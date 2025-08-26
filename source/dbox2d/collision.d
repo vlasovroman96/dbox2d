@@ -546,7 +546,7 @@ enum B2_TREE_STACK_SIZE = 1024;
 // A node in the dynamic tree.
 
 private b2TreeNode b2_defaultTreeNode = {
-	aabb: { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
+	aabb: b2AABB(),
 	categoryBits: B2_DEFAULT_CATEGORY_BITS,
 	children:
 		{

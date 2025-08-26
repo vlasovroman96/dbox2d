@@ -167,12 +167,6 @@ float b2UnwindAngle(float radians)
 	return remainder( radians, 2.0f * PI );
 }
 
-/// Rotate a vector
-b2Vec2 b2RotateVector( b2Rot q, b2Vec2 v )
-{
-	return b2Vec2( q.c * v.x - q.s * v.y, q.s * v.x + q.c * v.y );
-}
-
 /// Inverse rotate a vector
 b2Vec2 b2InvRotateVector( b2Rot q, b2Vec2 v )
 {

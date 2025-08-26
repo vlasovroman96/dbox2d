@@ -64,9 +64,9 @@ b2Manifold b2CollideCircles(const(b2Circle)* circleA, b2Transform xfA, const(b2C
 	b2Vec2 cB = b2MulAdd( pointB, -radiusB, normal );
 	b2Vec2 contactPointA = b2Lerp( cA, cB, 0.5f );
 
-	manifold.normal = b2RotateVector( xfA.q, normal );
+	manifold.normal = normal.getRotated(xfA.q );
 	b2ManifoldPoint* mp = manifold.points.ptr + 0;
-	mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+	mp.anchorA = contactPointA.getRotated(xfA.q);
 	mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 	mp.point = mp.anchorA + xfA.p;
 	mp.separation = separation;
@@ -129,9 +129,9 @@ b2Manifold b2CollideCapsuleAndCircle(const(b2Capsule)* capsuleA, b2Transform xfA
 	b2Vec2 cB = b2MulAdd( pB, -radiusB, normal );
 	b2Vec2 contactPointA = b2Lerp( cA, cB, 0.5f );
 
-	manifold.normal = b2RotateVector( xfA.q, normal );
+	manifold.normal = normal.getRotated(xfA.q);
 	b2ManifoldPoint* mp = manifold.points.ptr + 0;
-	mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+	mp.anchorA = contactPointA.getRotated(xfA.q);
 	mp.anchorB =  mp.anchorA + xfA.p - xfB.p;
 	mp.point =  xfA.p + mp.anchorA;
 	mp.separation = separation;
@@ -199,9 +199,9 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 		b2Vec2 cB = b2MulSub( center, radiusB, normal );
 		b2Vec2 contactPointA = b2Lerp( cA, cB, 0.5f );
 
-		manifold.normal = b2RotateVector( xfA.q, normal );
+		manifold.normal = normal.getRotated(xfA.q);
 		b2ManifoldPoint* mp = manifold.points.ptr + 0;
-		mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+		mp.anchorA = contactPointA.getRotated(xfA.q);
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
 		mp.separation = ( cB - cA ).dot( normal );
@@ -222,9 +222,9 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 		b2Vec2 cB = b2MulSub( center, radiusB, normal );
 		b2Vec2 contactPointA = b2Lerp( cA, cB, 0.5f );
 
-		manifold.normal = b2RotateVector( xfA.q, normal );
+		manifold.normal = normal.getRotated(xfA.q);
 		b2ManifoldPoint* mp = manifold.points.ptr + 0;
-		mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+		mp.anchorA = contactPointA.getRotated(xfA.q);
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
 		mp.separation = ( cB - cA ).dot( normal );
@@ -235,7 +235,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 	{
 		// Circle center is between v1 and v2. Center may be inside polygon
 		b2Vec2 normal = normals[normalIndex];
-		manifold.normal = b2RotateVector( xfA.q, normal );
+		manifold.normal = normal.getRotated(xfA.q);
 
 		// cA is the projection of the circle center onto to the reference edge
 		b2Vec2 cA = b2MulAdd( center, radiusA - ( center - v1 ).dot( normal ), normal );
@@ -247,7 +247,7 @@ b2Manifold b2CollidePolygonAndCircle(const(b2Polygon)* polygonA, b2Transform xfA
 
 		// The contact point is the midpoint in world space
 		b2ManifoldPoint* mp = manifold.points.ptr + 0;
-		mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+		mp.anchorA = contactPointA.getRotated(xfA.q);
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
 		mp.separation = separation - radius;
@@ -268,7 +268,7 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	// pw = q * pb + p
 	// pw = q * (pbs + origin) + p
 	// pw = q * pbs + (p + q * origin)
-	b2Transform sfA = { xfA.p + b2RotateVector( xfA.q, origin ), xfA.q };
+	b2Transform sfA = { xfA.p + origin.getRotated(xfA.q), xfA.q };
 	b2Transform xf = b2InvMulTransforms( sfA, xfB );
 
 	b2Vec2 p1 = b2Vec2.zero;
@@ -517,13 +517,13 @@ b2Manifold b2CollideCapsules(const(b2Capsule)* capsuleA, b2Transform xfA, const(
 	}
 
 	// Convert manifold to world space
-	manifold.normal = b2RotateVector( xfA.q, manifold.normal );
+	manifold.normal = manifold.normal.getRotated(xfA.q);
 	for ( int i = 0; i < manifold.pointCount; ++i )
 	{
 		b2ManifoldPoint* mp = manifold.points.ptr + i;
 
 		// anchor points relative to shape origin in world space
-		mp.anchorA = b2RotateVector( xfA.q, mp.anchorA + origin );
+		mp.anchorA = ( mp.anchorA + origin ).getRotated(xfA.q);
 		mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 		mp.point = xfA.p + mp.anchorA;
 	}
@@ -745,7 +745,7 @@ b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(
 	// pw = q * pb + p
 	// pw = q * (pbs + origin) + p
 	// pw = q * pbs + (p + q * origin)
-	b2Transform sfA = { xfA.p + b2RotateVector( xfA.q, origin ), xfA.q };
+	b2Transform sfA = { ( xfA.p + origin ).getRotated(xfA.q), xfA.q };
 	b2Transform xf = b2InvMulTransforms( sfA, xfB );
 
 	b2Polygon localPolyA = void;
@@ -766,7 +766,7 @@ b2Manifold b2CollidePolygons(const(b2Polygon)* polygonA, b2Transform xfA, const(
 	for ( int i = 0; i < localPolyB.count; ++i )
 	{
 		localPolyB.vertices[i] = b2TransformPoint( xf, polygonB.vertices[i] );
-		localPolyB.normals[i] = b2RotateVector( xf.q, polygonB.normals[i] );
+		localPolyB.normals[i] = polygonB.normals[i].getRotated( xf.q );
 	}
 
 	int edgeA = 0;
@@ -1061,13 +1061,13 @@ static if (1) {
 	// Convert manifold to world space
 	if ( manifold.pointCount > 0 )
 	{
-		manifold.normal = b2RotateVector( xfA.q, manifold.normal );
+		manifold.normal = manifold.normal.getRotated( xfA.q );
 		for ( int i = 0; i < manifold.pointCount; ++i )
 		{
 			b2ManifoldPoint* mp = manifold.points.ptr + i;
 
 			// anchor points relative to shape origin in world space
-			mp.anchorA = b2RotateVector( xfA.q, mp.anchorA + origin );
+			mp.anchorA = ( mp.anchorA + origin ).getRotated( xfA.q );
 			mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 			mp.point = xfA.p + mp.anchorA;
 		}
@@ -1163,10 +1163,10 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	b2Vec2 cB = b2MulAdd( pB, -radius, normal );
 	b2Vec2 contactPointA = b2Lerp( cA, cB, 0.5f );
 
-	manifold.normal = b2RotateVector( xfA.q, normal );
+	manifold.normal = normal.getRotated( xfA.q );
 
 	b2ManifoldPoint* mp = manifold.points.ptr + 0;
-	mp.anchorA = b2RotateVector( xfA.q, contactPointA );
+	mp.anchorA = contactPointA.getRotated( xfA.q );
 	mp.anchorB = mp.anchorA + xfA.p - xfB.p;
 	mp.point = xfA.p + mp.anchorA;
 	mp.separation = separation;
@@ -1373,7 +1373,7 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	for ( int i = 0; i < count; ++i )
 	{
 		vertices[i] = b2TransformPoint( xf, polygonB.vertices[i] );
-		normals[i] = b2RotateVector( xf.q, polygonB.normals[i] );
+		normals[i] = polygonB.normals[i].getRotated( xf.q );
 	}
 
 	// Distance doesn't work correctly with partial polygons
@@ -1420,9 +1420,9 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 
 			if ( type == b2_normalAdmit )
 			{
-				manifold.normal = b2RotateVector( xfA.q, normal );
+				manifold.normal = normal.getRotated( xfA.q );
 				b2ManifoldPoint* cp = manifold.points.ptr + 0;
-				cp.anchorA = b2RotateVector( xfA.q, pA );
+				cp.anchorA = pA.getRotated( xfA.q );
 				cp.anchorB = cp.anchorA + xfA.p - xfB.p;
 				cp.point = xfA.p + cp.anchorA;
 				cp.separation = output.distance - radiusB;
@@ -1501,9 +1501,9 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 					B2_ASSERT( manifold.pointCount == 0 || manifold.pointCount == 2 );
 					if ( manifold.pointCount == 2 )
 					{
-						manifold.normal = b2RotateVector( xfA.q, -normalB );
-						manifold.points[0].anchorA = b2RotateVector( xfA.q, manifold.points[0].anchorA );
-						manifold.points[1].anchorA = b2RotateVector( xfA.q, manifold.points[1].anchorA );
+						manifold.normal = (-normalB).getRotated( xfA.q );
+						manifold.points[0].anchorA = manifold.points[0].anchorA.getRotated( xfA.q );
+						manifold.points[1].anchorA = manifold.points[1].anchorA.getRotated( xfA.q );
 						b2Vec2 pAB = xfA.p - xfB.p;
 						manifold.points[0].anchorB = manifold.points[0].anchorA + pAB;
 						manifold.points[1].anchorB = manifold.points[1].anchorA + pAB;
@@ -1651,9 +1651,9 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 			if ( manifold.pointCount == 2 )
 			{
 
-				manifold.normal = b2RotateVector( xfA.q, -normals[ia1]);
-				manifold.points[0].anchorA = b2RotateVector( xfA.q, manifold.points[0].anchorA );
-				manifold.points[1].anchorA = b2RotateVector( xfA.q, manifold.points[1].anchorA );
+				manifold.normal = (-normals[ia1]).getRotated( xfA.q );
+				manifold.points[0].anchorA = manifold.points[0].anchorA.getRotated( xfA.q );
+				manifold.points[1].anchorA = manifold.points[1].anchorA.getRotated( xfA.q );
 				b2Vec2 pAB = xfA.p - xfB.p;
 				manifold.points[0].anchorB = manifold.points[0].anchorA + pAB;
 				manifold.points[1].anchorB = manifold.points[1].anchorA + pAB;
@@ -1714,9 +1714,9 @@ b2Manifold b2CollideChainSegmentAndPolygon(const(b2ChainSegment)* segmentA, b2Tr
 	if ( manifold.pointCount == 2 )
 	{
 		// There may be no points c
-		manifold.normal = b2RotateVector( xfA.q, manifold.normal );
-		manifold.points[0].anchorA = b2RotateVector( xfA.q, manifold.points[0].anchorA );
-		manifold.points[1].anchorA = b2RotateVector( xfA.q, manifold.points[1].anchorA );
+		manifold.normal = manifold.normal.getRotated( xfA.q );
+		manifold.points[0].anchorA = manifold.points[0].anchorA.getRotated( xfA.q );
+		manifold.points[1].anchorA = manifold.points[1].anchorA.getRotated( xfA.q );
 		b2Vec2 pAB = xfA.p - xfB.p;
 		manifold.points[0].anchorB = manifold.points[0].anchorA + pAB;
 		manifold.points[1].anchorB = manifold.points[1].anchorA + pAB;

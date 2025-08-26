@@ -1418,7 +1418,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 		case b2_prismaticJoint:
 		{
 			b2PrismaticJoint* prismaticJoint = &base.prismaticJoint;
-			b2Vec2 axisA = b2RotateVector( xfA.q, b2Vec2( 1.0f, 0.0f ) );
+			b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated( xfA.q );
 			b2Vec2 perpA = axisA.leftPerp();
 			float perpendicularSeparation = abs( perpA.dot( dp ) );
 			float limitSeparation = 0.0f;
@@ -1457,7 +1457,7 @@ float b2Joint_GetLinearSeparation(b2JointId jointId)
 		case b2_wheelJoint:
 		{
 			b2WheelJoint* wheelJoint = &base.wheelJoint;
-			b2Vec2 axisA = b2RotateVector( xfA.q, b2Vec2( 1.0f, 0.0f ) );
+			b2Vec2 axisA = b2Vec2( 1.0f, 0.0f ).getRotated(xfA.q);
 			b2Vec2 perpA = axisA.leftPerp();
 			float perpendicularSeparation = abs( perpA.dot( dp ) );
 			float limitSeparation = 0.0f;

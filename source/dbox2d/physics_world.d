@@ -610,8 +610,8 @@ void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context
 			b2Transform transformA = bodySimA.transform;
 			b2Transform transformB = bodySimB.transform;
 
-			b2Vec2 centerOffsetA = b2RotateVector( transformA.q, bodySimA.localCenter );
-			b2Vec2 centerOffsetB = b2RotateVector( transformB.q, bodySimB.localCenter );
+			b2Vec2 centerOffsetA = bodySimA.localCenter.getRotated( transformA.q );
+			b2Vec2 centerOffsetB = bodySimB.localCenter.getRotated( transformB.q );
 
 			// This updates solid contacts
 			bool touching = b2UpdateContact( world, contactSim, shapeA, transformA, centerOffsetA, shapeB, transformB, centerOffsetB );

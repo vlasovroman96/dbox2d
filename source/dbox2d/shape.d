@@ -927,7 +927,7 @@ b2CastOutput b2RayCastShape(const(b2RayCastInput)* input, const(b2Shape)* shape,
 	}
 
 	output.point = b2TransformPoint( transform, output.point );
-	output.normal = b2RotateVector( transform.q, output.normal );
+	output.normal = output.normal.getRotated( transform.q );
 	return output;
 }
 
@@ -991,7 +991,7 @@ b2CastOutput b2ShapeCastShape(const(b2ShapeCastInput)* input, const(b2Shape)* sh
 	}
 
 	output.point = b2TransformPoint( transform, output.point );
-	output.normal = b2RotateVector( transform.q, output.normal );
+	output.normal = output.normal.getRotated( transform.q );
 	return output;
 }
 
@@ -1029,7 +1029,7 @@ b2PlaneResult b2CollideMover(const(b2Capsule)* mover, const(b2Shape)* shape, b2T
 		return result;
 	}
 
-	result.plane.normal = b2RotateVector( transform.q, result.plane.normal );
+	result.plane.normal = result.plane.normal.getRotated( transform.q );
 	return result;
 }
 
@@ -1180,7 +1180,7 @@ b2CastOutput b2Shape_RayCast(b2ShapeId shapeId, const(b2RayCastInput)* input)
 	if ( output.hit )
 	{
 		// convert to world coordinates
-		output.normal = b2RotateVector( transform.q, output.normal );
+		output.normal = output.normal.getRotated( transform.q );
 		output.point = b2TransformPoint( transform, output.point );
 	}
 

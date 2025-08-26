@@ -42,7 +42,7 @@ b2Transform b2MulTransforms(b2Transform A, b2Transform B)
 {
 	b2Transform C = void;
 	C.q = b2MulRot( A.q, B.q );
-	C.p = b2RotateVector( A.q, B.p ) + A.p;
+	C.p = B.p.getRotated( A.q ) + A.p;
 	return C;
 }
 

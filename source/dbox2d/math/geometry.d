@@ -174,10 +174,10 @@ b2Polygon b2MakeOffsetBox(float halfWidth, float halfHeight, b2Vec2 center, b2Ro
 	shape.vertices[1] = b2TransformPoint( xf, b2Vec2( halfWidth, -halfHeight ) );
 	shape.vertices[2] = b2TransformPoint( xf, b2Vec2( halfWidth, halfHeight ) );
 	shape.vertices[3] = b2TransformPoint( xf, b2Vec2( -halfWidth, halfHeight ) );
-	shape.normals[0] = b2RotateVector( xf.q, b2Vec2( 0.0f, -1.0f ) );
-	shape.normals[1] = b2RotateVector( xf.q, b2Vec2( 1.0f, 0.0f ) );
-	shape.normals[2] = b2RotateVector( xf.q, b2Vec2( 0.0f, 1.0f ) );
-	shape.normals[3] = b2RotateVector( xf.q, b2Vec2( -1.0f, 0.0f ) );
+	shape.normals[0] = b2Vec2( 0.0f, -1.0f ).getRotated( xf.q );
+	shape.normals[1] = b2Vec2( 1.0f, 0.0f ).getRotated( xf.q );
+	shape.normals[2] = b2Vec2( 0.0f, 1.0f ).getRotated( xf.q );
+	shape.normals[3] = b2Vec2( -1.0f, 0.0f ).getRotated( xf.q );
 	shape.radius = 0.0f;
 	shape.centroid = xf.p;
 	return shape;
@@ -194,10 +194,10 @@ b2Polygon b2MakeOffsetRoundedBox(float halfWidth, float halfHeight, b2Vec2 cente
 	shape.vertices[1] = b2TransformPoint( xf, b2Vec2( halfWidth, -halfHeight ) );
 	shape.vertices[2] = b2TransformPoint( xf, b2Vec2( halfWidth, halfHeight ) );
 	shape.vertices[3] = b2TransformPoint( xf, b2Vec2( -halfWidth, halfHeight ) );
-	shape.normals[0] = b2RotateVector( xf.q, b2Vec2( 0.0f, -1.0f ) );
-	shape.normals[1] = b2RotateVector( xf.q, b2Vec2( 1.0f, 0.0f ) );
-	shape.normals[2] = b2RotateVector( xf.q, b2Vec2( 0.0f, 1.0f ) );
-	shape.normals[3] = b2RotateVector( xf.q, b2Vec2( -1.0f, 0.0f ) );
+	shape.normals[0] = b2Vec2( 0.0f, -1.0f ).getRotated( xf.q );
+	shape.normals[1] = b2Vec2( 1.0f, 0.0f ).getRotated( xf.q );
+	shape.normals[2] = b2Vec2( 0.0f, 1.0f ).getRotated( xf.q );
+	shape.normals[3] = b2Vec2( -1.0f, 0.0f ).getRotated( xf.q );
 	shape.radius = radius;
 	shape.centroid = xf.p;
 	return shape;
@@ -210,7 +210,7 @@ b2Polygon b2TransformPolygon(b2Transform transform, const(b2Polygon)* polygon)
 	for ( int i = 0; i < p.count; ++i )
 	{
 		p.vertices[i] = b2TransformPoint( transform, p.vertices[i] );
-		p.normals[i] = b2RotateVector( transform.q, p.normals[i] );
+		p.normals[i] = p.normals[i].getRotated( transform.q );
 	}
 
 	p.centroid = b2TransformPoint( transform, p.centroid );

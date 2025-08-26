@@ -663,11 +663,11 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 
 	b2Transform xf1 = void;
 	xf1.q = sweep.q1;
-	xf1.p = sweep.c1 - b2RotateVector( sweep.q1, sweep.localCenter );
+	xf1.p = sweep.c1 - sweep.localCenter.getRotated( sweep.q1 );
 
 	b2Transform xf2 = void;
 	xf2.q = sweep.q2;
-	xf2.p = sweep.c2 - b2RotateVector( sweep.q2, sweep.localCenter );
+	xf2.p = sweep.c2 - sweep.localCenter.getRotated( sweep.q2 );
 
 	b2DynamicTree* staticTree = world.broadPhase.trees.ptr + b2_staticBody;
 	b2DynamicTree* kinematicTree = world.broadPhase.trees.ptr + b2_kinematicBody;
@@ -723,7 +723,7 @@ private void b2SolveContinuous(b2World* world, int bodySimIndex, b2TaskContext* 
 		// Handle time of impact event
 		b2Rot q = b2NLerp( sweep.q1, sweep.q2, context.fraction );
 		b2Vec2 c = b2Lerp( sweep.c1, sweep.c2, context.fraction );
-		b2Vec2 origin = c - b2RotateVector( q, sweep.localCenter );
+		b2Vec2 origin = c - sweep.localCenter.getRotated( q );
 
 		// Advance body
 		b2Transform transform = { origin, q };
@@ -884,7 +884,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		state.deltaPosition = b2Vec2.zero();
 		state.deltaRotation = b2Rot.identity();
 
-		sim.transform.p = sim.center - b2RotateVector( sim.transform.q, sim.localCenter );
+		sim.transform.p = sim.center - sim.localCenter.getRotated( sim.transform.q );
 
 		// cache miss here, however I need the shape list below
 		b2Body* body = bodies + sim.bodyId;

@@ -256,9 +256,9 @@ void b2PrepareRevoluteJoint(b2JointSim* base, b2StepContext* context)
 	// pf = xf.p - (xf.p + rot(xf.q, lc)) + rot(xf.q, f.p)
 	// pf = rot(xf.q, f.p - lc)
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
+	joint.frameA.p = ( base.localFrameA.p - bodySimA.localCenter ).getRotated( bodySimA.transform.q );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
+	joint.frameB.p = ( base.localFrameB.p - bodySimB.localCenter ).getRotated( bodySimB.transform.q );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
 	joint.deltaCenter = bodySimB.center - bodySimA.center;
@@ -294,8 +294,8 @@ void b2WarmStartRevoluteJoint(b2JointSim* base, b2StepContext* context)
 	b2BodyState* stateA = joint.indexA == B2_NULL_INDEX ? &dummyState : context.states + joint.indexA;
 	b2BodyState* stateB = joint.indexB == B2_NULL_INDEX ? &dummyState : context.states + joint.indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	float axialImpulse = joint.springImpulse + joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse;
 
@@ -440,8 +440,8 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		//     [  -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB]
 
 		// current anchors
-		b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-		b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 		b2Vec2 Cdot = (vB + b2CrossSV( wB, rB )) - (vA + b2CrossSV( wA, rA));
 
@@ -520,10 +520,10 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	draw.DrawCircleFcn( frameB.p, radius, b2_colorGray, draw.context );
 
 	b2Vec2 rx = { radius, 0.0f };
-	b2Vec2 r = b2RotateVector( frameA.q, rx );
+	b2Vec2 r = rx.getRotated(frameA.q);
 	draw.DrawSegmentFcn( frameA.p, frameA.p + r, b2_colorGray, draw.context );
 
-	r = b2RotateVector( frameB.q, rx );
+	r = rx.getRotated(frameB.q);
 	draw.DrawSegmentFcn( frameB.p, frameB.p + r, b2_colorBlue, draw.context );
 
 	if ( draw.drawJointExtras )
@@ -540,10 +540,10 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	if ( joint.enableLimit )
 	{
 		b2Rot rotLo = b2MulRot( frameA.q, b2Rot( lowerAngle ) );
-		b2Vec2 rlo = b2RotateVector( rotLo, rx );
+		b2Vec2 rlo = rx.getRotated( rotLo );
 
 		b2Rot rotHi = b2MulRot( frameA.q, b2Rot( upperAngle ) );
-		b2Vec2 rhi = b2RotateVector( rotHi, rx );
+		b2Vec2 rhi = rx.getRotated( rotHi );
 
 		draw.DrawSegmentFcn( frameB.p, frameB.p + rlo, b2_colorGreen, draw.context );
 		draw.DrawSegmentFcn( frameB.p, frameB.p + rhi, b2_colorRed, draw.context );
@@ -552,7 +552,7 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	if ( joint.enableSpring )
 	{
 		b2Rot q = b2MulRot( frameA.q, b2Rot( joint.targetAngle ) );
-		b2Vec2 v = b2RotateVector( q, rx );
+		b2Vec2 v = rx.getRotated( q );
 		draw.DrawSegmentFcn( frameB.p, frameB.p + v, b2_colorViolet, draw.context );
 	}
 

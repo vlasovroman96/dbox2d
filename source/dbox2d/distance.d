@@ -21,7 +21,7 @@ b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 	xf.q = q.getNormalized();
 
 	// Shift to origin
-	xf.p = xf.p - b2RotateVector( xf.q, sweep.localCenter );
+	xf.p = xf.p - sweep.localCenter.getRotated( xf.q );
 	return xf;
 }
 
@@ -571,7 +571,7 @@ version (NDEBUG) {} else {
 	// Prepare output
 	b2Vec2 normal = nonUnitNormal.normalized;
 	B2_ASSERT( b2IsNormalized( normal ) );
-	normal = b2RotateVector( input.transformA.q, normal );
+	normal = normal.getRotated( input.transformA.q );
 
 	b2Vec2 localPointA = void, localPointB = void;
 	b2ComputeSimplexWitnessPoints( &localPointA, &localPointB, &simplex );
@@ -898,7 +898,7 @@ version (NDEBUG) {} else {
 	b2Vec2 point = { pointA.x + proxyA.radius * n.x, pointA.y + proxyA.radius * n.y };
 
 	output.point = b2TransformPoint( input.transformA, point );
-	output.normal = b2RotateVector( input.transformA.q, n );
+	output.normal = n.getRotated( input.transformA.q );
 	output.fraction = lambda;
 	output.iterations = iteration;
 	output.hit = true;
@@ -972,7 +972,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 
 		f.axis = ( localPointB2 - localPointB1).crossVS( 1.0f );
 		f.axis = f.axis.normalized;
-		b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
+		b2Vec2 normal = f.axis.getRotated( xfB.q );
 
 		f.localPoint = b2Vec2( 0.5f * ( localPointB1.x + localPointB2.x ), 0.5f * ( localPointB1.y + localPointB2.y ) );
 		b2Vec2 pointB = b2TransformPoint( xfB, f.localPoint );
@@ -995,7 +995,7 @@ private b2SeparationFunction b2MakeSeparationFunction(const(b2SimplexCache)* cac
 
 	f.axis = ( localPointA2 - localPointA1).crossVS( 1.0f );
 	f.axis = f.axis.normalized;
-	b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
+	b2Vec2 normal = f.axis.getRotated( xfA.q );
 
 	f.localPoint = b2Vec2( 0.5f * ( localPointA1.x + localPointA2.x ), 0.5f * ( localPointA1.y + localPointA2.y ) );
 	b2Vec2 pointA = b2TransformPoint( xfA, f.localPoint );
@@ -1038,7 +1038,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 
 		case b2_faceAType:
 		{
-			b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
+			b2Vec2 normal = f.axis.getRotated( xfA.q );
 			b2Vec2 pointA = b2TransformPoint( xfA, f.localPoint );
 
 			b2Vec2 axisB = b2InvRotateVector( xfB.q, -normal );
@@ -1055,7 +1055,7 @@ private float b2FindMinSeparation(const(b2SeparationFunction)* f, int* indexA, i
 
 		case b2_faceBType:
 		{
-			b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
+			b2Vec2 normal = f.axis.getRotated( xfB.q );
 			b2Vec2 pointB = b2TransformPoint( xfB, f.localPoint );
 
 			b2Vec2 axisA = b2InvRotateVector( xfA.q, -normal );
@@ -1100,7 +1100,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 
 		case b2_faceAType:
 		{
-			b2Vec2 normal = b2RotateVector( xfA.q, f.axis );
+			b2Vec2 normal = f.axis.getRotated( xfA.q );
 			b2Vec2 pointA = b2TransformPoint( xfA, f.localPoint );
 
 			b2Vec2 localPointB = f.proxyB.points[indexB];
@@ -1112,7 +1112,7 @@ private float b2EvaluateSeparation(const(b2SeparationFunction)* f, int indexA, i
 
 		case b2_faceBType:
 		{
-			b2Vec2 normal = b2RotateVector( xfB.q, f.axis );
+			b2Vec2 normal = f.axis.getRotated( xfB.q );
 			b2Vec2 pointB = b2TransformPoint( xfB, f.localPoint );
 
 			b2Vec2 localPointA = f.proxyA.points[indexA];

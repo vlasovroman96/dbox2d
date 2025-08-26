@@ -134,9 +134,9 @@ void b2PrepareWeldJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
+	joint.frameA.p = ( base.localFrameA.p - bodySimA.localCenter ).getRotated( bodySimA.transform.q );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
+	joint.frameB.p = ( base.localFrameB.p - bodySimB.localCenter ).getRotated( bodySimB.transform.q );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
 	joint.deltaCenter = bodySimB.center - bodySimA.center;
@@ -184,8 +184,8 @@ void b2WarmStartWeldJoint(b2JointSim* base, b2StepContext* context)
 	b2BodyState* stateA = joint.indexA == B2_NULL_INDEX ? &dummyState : context.states + joint.indexA;
 	b2BodyState* stateB = joint.indexB == B2_NULL_INDEX ? &dummyState : context.states + joint.indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, joint.linearImpulse );
 	stateA.angularVelocity -= iA * ( rA.cross( joint.linearImpulse ) + joint.angularImpulse );
@@ -244,8 +244,8 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 
 	// linear constraint
 	{
-		b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-		b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+		b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+		b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 		b2Vec2 bias = b2Vec2.zero();
 		float massScale = 1.0f;

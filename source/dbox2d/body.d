@@ -920,7 +920,7 @@ b2Vec2 b2Body_GetWorldVector(b2BodyId bodyId, b2Vec2 localVector)
 	b2World* world = b2GetWorld( bodyId.world0 );
 	b2Body* body = b2GetBodyFullId( world, bodyId );
 	b2Transform transform = b2GetBodyTransformQuick( world, body );
-	return b2RotateVector( transform.q, localVector );
+	return localVector.getRotated( transform.q );
 }
 
 void b2Body_SetTransform(b2BodyId bodyId, b2Vec2 position, b2Rot rotation)
@@ -1114,7 +1114,7 @@ b2Vec2 b2Body_GetLocalPointVelocity(b2BodyId bodyId, b2Vec2 localPoint)
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, body.setIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( set.bodySims, body.localIndex );
 
-	b2Vec2 r = b2RotateVector( bodySim.transform.q, localPoint - bodySim.localCenter );
+	b2Vec2 r = ( localPoint - bodySim.localCenter ).getRotated( bodySim.transform.q );
 	b2Vec2 v = state.linearVelocity + b2CrossSV( state.angularVelocity, r ) ;
 	return v;
 }

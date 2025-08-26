@@ -206,9 +206,9 @@ void b2PrepareMotorJoint(b2JointSim* base, b2StepContext* context)
 
 	// Compute joint anchor frames with world space rotation, relative to center of mass
 	joint.frameA.q = b2MulRot( bodySimA.transform.q, base.localFrameA.q );
-	joint.frameA.p = b2RotateVector( bodySimA.transform.q, base.localFrameA.p - bodySimA.localCenter );
+	joint.frameA.p = ( base.localFrameA.p - bodySimA.localCenter ).getRotated( bodySimA.transform.q );
 	joint.frameB.q = b2MulRot( bodySimB.transform.q, base.localFrameB.q );
-	joint.frameB.p = b2RotateVector( bodySimB.transform.q, base.localFrameB.p - bodySimB.localCenter );
+	joint.frameB.p = ( base.localFrameB.p - bodySimB.localCenter ).getRotated( bodySimB.transform.q );
 
 	// Compute the initial center delta. Incremental position updates are relative to this.
 	joint.deltaCenter = bodySimB.center - bodySimA.center;
@@ -255,8 +255,8 @@ void b2WarmStartMotorJoint(b2JointSim* base, b2StepContext* context)
 	b2BodyState* stateA = joint.indexA == B2_NULL_INDEX ? &dummyState : context.states + joint.indexA;
 	b2BodyState* stateB = joint.indexB == B2_NULL_INDEX ? &dummyState : context.states + joint.indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	b2Vec2 linearImpulse = joint.linearVelocityImpulse + joint.linearSpringImpulse;
 	float angularImpulse = joint.angularVelocityImpulse + joint.angularSpringImpulse;
@@ -327,8 +327,8 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		wB += iB * impulse;
 	}
 
-	b2Vec2 rA = b2RotateVector( stateA.deltaRotation, joint.frameA.p );
-	b2Vec2 rB = b2RotateVector( stateB.deltaRotation, joint.frameB.p );
+	b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
+	b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
 	// linear spring
 	if ( joint.maxSpringForce > 0.0f && joint.linearHertz > 0.0f )
