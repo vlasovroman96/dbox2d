@@ -65,5 +65,5 @@ bool b2IsValidTransform(b2Transform t)
 		return false;
 	}
 
-	return b2IsValidRotation( t.q );
+	return t.q.isValid();
 }

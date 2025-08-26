@@ -384,7 +384,7 @@ b2BodyId b2CreateBody(b2WorldId worldId, const(b2BodyDef)* def)
 {
 	B2_CHECK_DEF(def);
 	assert( b2IsValidVec2( def.position ) );
-	assert( b2IsValidRotation( def.rotation ) );
+	assert( def.rotation.isValid() );
 	assert( b2IsValidVec2( def.linearVelocity ) );
 	assert( b2IsValidFloat( def.angularVelocity ) );
 	assert( b2IsValidFloat( def.linearDamping ) && def.linearDamping >= 0.0f );
@@ -926,7 +926,7 @@ b2Vec2 b2Body_GetWorldVector(b2BodyId bodyId, b2Vec2 localVector)
 void b2Body_SetTransform(b2BodyId bodyId, b2Vec2 position, b2Rot rotation)
 {
 	assert( b2IsValidVec2( position ) );
-	assert( b2IsValidRotation( rotation ) );
+	assert( rotation.isValid() );
 	assert( b2Body_IsValid( bodyId ) );
 	b2World* world = b2GetWorld( bodyId.world0 );
 	assert( world.locked == false );

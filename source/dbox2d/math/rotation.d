@@ -50,7 +50,7 @@ struct b2Rot {
 	}
 
 	/// Is this rotation normalized?
-	bool isNormalized() {
+	bool isNormalized() const {
 		// larger tolerance due to failure on mingw 32-bit
 		float qq = this.s * this.s + this.c * this.c;
 		return 1.0f - 0.0006f < qq && qq < 1.0f + 0.0006f;
@@ -71,6 +71,18 @@ struct b2Rot {
 	b2Vec2 getYAxis() {
 		b2Vec2 v = { -this.s, this.c };
 		return v;
+	}
+
+	bool isValid() const {
+		if ( isNaN( this.s ) || isNaN( this.c ) ) {
+			return false;
+		}
+
+		if ( isInfinity( this.s ) || isInfinity( this.c ) ) {
+			return false;
+		}
+
+		return this.isNormalized();
 	}
 }
 
@@ -166,23 +178,6 @@ b2Vec2 b2InvRotateVector( b2Rot q, b2Vec2 v )
 {
 	return b2Vec2( q.c * v.x + q.s * v.y, -q.s * v.x + q.c * v.y );
 }
-
-
-bool b2IsValidRotation(b2Rot q)
-{
-	if ( isNaN( q.s ) || isNaN( q.c ) )
-	{
-		return false;
-	}
-
-	if ( isInfinity( q.s ) || isInfinity( q.c ) )
-	{
-		return false;
-	}
-
-	return q.isNormalized();
-}
-
 
 b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2)
 {
