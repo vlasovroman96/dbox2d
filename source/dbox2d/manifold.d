@@ -23,7 +23,7 @@ private b2Polygon b2MakeCapsule(b2Vec2 p1, b2Vec2 p2, float radius)
 	shape.centroid = b2Lerp( p1, p2, 0.5f );
 
 	b2Vec2 d = p2 - p1;
-	B2_ASSERT( b2LengthSquared( d ) > float.epsilon );
+	B2_ASSERT( d.lengthSquared() > float.epsilon );
 	b2Vec2 axis = d.normalized;
 	b2Vec2 normal = axis.rightPerp();
 

@@ -233,7 +233,7 @@ pragma(inline, true) b2Sweep b2MakeSweep(const(b2BodySim)* bodySim)
 
 void b2LimitVelocity(b2BodyState* state, float maxLinearSpeed)
 {
-	float v2 = b2LengthSquared( state.linearVelocity );
+	float v2 = state.linearVelocity.lengthSquared();
 	if ( v2 > maxLinearSpeed * maxLinearSpeed )
 	{
 		state.linearVelocity = b2MulSV( maxLinearSpeed / sqrt( v2 ), state.linearVelocity );
@@ -1012,7 +1012,7 @@ void b2Body_SetLinearVelocity(b2BodyId bodyId, b2Vec2 linearVelocity)
 		return;
 	}
 
-	if ( b2LengthSquared( linearVelocity ) > 0.0f )
+	if ( linearVelocity.lengthSquared() > 0.0f )
 	{
 		b2WakeBody( world, body );
 	}

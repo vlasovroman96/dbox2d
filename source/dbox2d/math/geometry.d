@@ -525,7 +525,7 @@ b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* inpu
 	{
 		// zero length ray
 
-		if ( b2LengthSquared( s ) < rr )
+		if ( s.lengthSquared() < rr )
 		{
 			// initial overlap
 			output.point = input.origin;
@@ -560,7 +560,7 @@ b2CastOutput b2RayCastCircle(const(b2Circle)* shape, const(b2RayCastInput)* inpu
 	{
 		// intersection is point outside the range of the ray segment
 
-		if ( b2LengthSquared( s ) < rr )
+		if ( s.lengthSquared() < rr )
 		{
 			// initial overlap
 			output.point = input.origin;

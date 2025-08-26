@@ -125,6 +125,11 @@ struct b2Vec2 {
     b2Vec2 getRotated( b2Rot q ) const {
         return b2Vec2( q.c * this.x - q.s * this.y, q.s * this.x + q.c * this.y );
     }
+
+    /// Get the length squared of this vector
+    float lengthSquared() {
+        return this.x * this.x + this.y * this.y;
+    }
 }
 
 /// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
@@ -217,12 +222,6 @@ b2Vec2 b2GetLengthAndNormalize( float* length, b2Vec2 v )
 	float invLength = 1.0f / *length;
 	b2Vec2 n = { invLength * v.x, invLength * v.y };
 	return n;
-}
-
-/// Get the length squared of this vector
-float b2LengthSquared(b2Vec2 v)
-{
-	return v.x * v.x + v.y * v.y;
 }
 
 /// Get the distance squared between points

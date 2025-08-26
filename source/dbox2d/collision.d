@@ -755,8 +755,8 @@ private int b2FindBestSibling(const(b2DynamicTree)* tree, b2AABB boxD)
 			// children fully contain D. Fall back to node distance.
 			b2Vec2 d1 = box1.center() - centerD;
 			b2Vec2 d2 = box2.center() - centerD;
-			lowerCost1 = b2LengthSquared( d1 );
-			lowerCost2 = b2LengthSquared( d2 );
+			lowerCost1 = d1.lengthSquared();
+			lowerCost2 = d2.lengthSquared();
 		}
 
 		// Descend
