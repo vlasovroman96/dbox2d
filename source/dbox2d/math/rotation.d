@@ -42,13 +42,13 @@ struct b2Rot {
 		b2Rot qn = { q2.c * invMag, q2.s * invMag };
 		return qn;
 	} 
-}
 
-/// Make a rotation using a unit vector
-b2Rot b2MakeRotFromUnitVector( b2Vec2 unitVector )
-{
-	B2_ASSERT( b2IsNormalized( unitVector ) );
-	return b2Rot( unitVector.x, unitVector.y );
+	/// Make a rotation using a unit vector
+	b2Rot makeFromUnitVector( b2Vec2 unitVector )
+	{
+		B2_ASSERT( b2IsNormalized( unitVector ) );
+		return b2Rot( unitVector.x, unitVector.y );
+	}
 }
 
 /// Compute the rotation between two unit vectors
