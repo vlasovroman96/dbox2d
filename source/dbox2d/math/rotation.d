@@ -46,7 +46,7 @@ b2Rot b2IntegrateRotation(b2Rot q1, float deltaAngle)
 /// Make a rotation using an angle in radians
 b2Rot b2MakeRot( float radians )
 {
-	b2CosSin cs = b2ComputeCosSin( radians );
+	auto cs = b2CosSin( radians );
 	return b2Rot( cs.cosine, cs.sine );
 }
 
