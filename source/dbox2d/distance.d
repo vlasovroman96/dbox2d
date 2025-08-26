@@ -18,7 +18,7 @@ b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 		( 1.0f - time ) * sweep.q1.s + time * sweep.q2.s,
 	};
 
-	xf.q = b2NormalizeRot( q );
+	xf.q = q.getNormalized();
 
 	// Shift to origin
 	xf.p = xf.p - b2RotateVector( xf.q, sweep.localCenter );

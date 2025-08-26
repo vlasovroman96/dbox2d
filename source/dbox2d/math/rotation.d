@@ -16,15 +16,15 @@ struct b2Rot {
 	static b2Rot identity() {
 		return b2Rot(1.0f, 0.0f);
 	}
-}
 
-/// Normalize rotation
-b2Rot b2NormalizeRot(b2Rot q)
-{
-	float mag = sqrt( q.s * q.s + q.c * q.c );
-	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
-	b2Rot qn = { q.c * invMag, q.s * invMag };
-	return qn;
+	/// Normalize rotation
+	b2Rot getNormalized()
+	{
+		float mag = sqrt( this.s * this.s + this.c * this.c );
+		float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
+		b2Rot qn = { this.c * invMag, this.s * invMag };
+		return qn;
+	} 
 }
 
 /// Integrate rotation from angular velocity
@@ -206,5 +206,5 @@ b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2)
 	b2Rot rot = void;
 	rot.c = v1.dot( v2 );
 	rot.s = v1.cross( v2 );
-	return b2NormalizeRot( rot );
+	return rot.getNormalized();
 }

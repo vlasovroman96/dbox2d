@@ -867,7 +867,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		B2_ASSERT( b2IsValidFloat( w ) );
 
 		sim.center = sim.center + state.deltaPosition;
-		sim.transform.q = b2NormalizeRot( b2MulRot( state.deltaRotation, sim.transform.q ) );
+		sim.transform.q = b2MulRot( state.deltaRotation, sim.transform.q ).getNormalized();
 
 		// Use the velocity of the farthest point on the body to account for rotation.
 		float maxVelocity = v.length() + abs( w ) * sim.maxExtent;
