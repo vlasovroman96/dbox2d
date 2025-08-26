@@ -60,6 +60,18 @@ struct b2Rot {
 	float getAngle() {
 		return b2Atan2( this.s, this.c );
 	}
+
+	/// Get the x-axis
+	b2Vec2 getXAxis() {
+		b2Vec2 v = { this.c, this.s };
+		return v;
+	}
+
+	/// Get the y-axis
+	b2Vec2 getYAxis() {
+		b2Vec2 v = { -this.s, this.c };
+		return v;
+	}
 }
 
 /// Normalized linear interpolation
@@ -97,20 +109,6 @@ float b2ComputeAngularVelocity(b2Rot q1, b2Rot q2, float inv_h)
 	// omega * h = s2 * c1 - c2 * s1 = sin(a2 - a1) ~= a2 - a1 for small delta
 	float omega = inv_h * ( q2.s * q1.c - q2.c * q1.s );
 	return omega;
-}
-
-/// Get the x-axis
-b2Vec2 b2Rot_GetXAxis(b2Rot q)
-{
-	b2Vec2 v = { q.c, q.s };
-	return v;
-}
-
-/// Get the y-axis
-b2Vec2 b2Rot_GetYAxis(b2Rot q)
-{
-	b2Vec2 v = { -q.s, q.c };
-	return v;
 }
 
 /// Multiply two rotations: q * r
