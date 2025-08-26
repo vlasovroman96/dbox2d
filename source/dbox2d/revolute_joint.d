@@ -539,10 +539,10 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 
 	if ( joint.enableLimit )
 	{
-		b2Rot rotLo = b2MulRot( frameA.q, b2MakeRot( lowerAngle ) );
+		b2Rot rotLo = b2MulRot( frameA.q, b2Rot( lowerAngle ) );
 		b2Vec2 rlo = b2RotateVector( rotLo, rx );
 
-		b2Rot rotHi = b2MulRot( frameA.q, b2MakeRot( upperAngle ) );
+		b2Rot rotHi = b2MulRot( frameA.q, b2Rot( upperAngle ) );
 		b2Vec2 rhi = b2RotateVector( rotHi, rx );
 
 		draw.DrawSegmentFcn( frameB.p, frameB.p + rlo, b2_colorGreen, draw.context );
@@ -551,7 +551,7 @@ void b2DrawRevoluteJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 
 	if ( joint.enableSpring )
 	{
-		b2Rot q = b2MulRot( frameA.q, b2MakeRot( joint.targetAngle ) );
+		b2Rot q = b2MulRot( frameA.q, b2Rot( joint.targetAngle ) );
 		b2Vec2 v = b2RotateVector( q, rx );
 		draw.DrawSegmentFcn( frameB.p, frameB.p + v, b2_colorViolet, draw.context );
 	}

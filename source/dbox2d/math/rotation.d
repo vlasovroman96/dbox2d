@@ -13,6 +13,12 @@ struct b2Rot {
 	/// cosine and sine
 	float c = 0, s = 0;
 
+	/// Make a rotation using an angle in radians
+	b2Rot make( float radians ) {
+		auto cs = b2CosSin( radians );
+		return b2Rot( cs.cosine, cs.sine );
+	}
+
 	static b2Rot identity() {
 		return b2Rot(1.0f, 0.0f);
 	}
@@ -36,13 +42,6 @@ struct b2Rot {
 		b2Rot qn = { q2.c * invMag, q2.s * invMag };
 		return qn;
 	} 
-}
-
-/// Make a rotation using an angle in radians
-b2Rot b2MakeRot( float radians )
-{
-	auto cs = b2CosSin( radians );
-	return b2Rot( cs.cosine, cs.sine );
 }
 
 /// Make a rotation using a unit vector
