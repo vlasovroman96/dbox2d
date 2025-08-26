@@ -295,7 +295,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		b2Rot qB = b2MulRot( stateB.deltaRotation, joint.frameB.q );
 		b2Rot relQ = b2InvMulRot( qA, qB );
 
-		float c = b2Rot_GetAngle( relQ );
+		float c = relQ.getAngle;
 		float bias = joint.angularSpring.biasRate * c;
 		float massScale = joint.angularSpring.massScale;
 		float impulseScale = joint.angularSpring.impulseScale;

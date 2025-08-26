@@ -596,7 +596,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 		{
 			b2Vec2 C = void;
 			C.x = perpA.dot( d );
-			C.y = b2Rot_GetAngle( relQ );
+			C.y = relQ.getAngle();
 
 			bias = b2MulSV( base.constraintSoftness.biasRate, C );
 			massScale = base.constraintSoftness.massScale;

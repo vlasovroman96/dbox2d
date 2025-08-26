@@ -337,7 +337,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 	// Solve spring.
 	if ( joint.enableSpring && fixedRotation == false )
 	{
-		float jointAngle = b2Rot_GetAngle( relQ );
+		float jointAngle = relQ.getAngle();
 		float jointAngleDelta = b2UnwindAngle( jointAngle - joint.targetAngle );
 
 		float C = jointAngleDelta;
@@ -369,7 +369,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 
 	if ( joint.enableLimit && fixedRotation == false )
 	{
-		float jointAngle = b2Rot_GetAngle( relQ );
+		float jointAngle = relQ.getAngle();
 
 		// Lower limit
 		{

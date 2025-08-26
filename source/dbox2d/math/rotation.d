@@ -55,6 +55,11 @@ struct b2Rot {
 		float qq = this.s * this.s + this.c * this.c;
 		return 1.0f - 0.0006f < qq && qq < 1.0f + 0.0006f;
 	}
+
+	/// Get the angle in radians in the range [-pi, pi]
+	float getAngle() {
+		return b2Atan2( this.s, this.c );
+	}
 }
 
 /// Normalized linear interpolation
@@ -92,12 +97,6 @@ float b2ComputeAngularVelocity(b2Rot q1, b2Rot q2, float inv_h)
 	// omega * h = s2 * c1 - c2 * s1 = sin(a2 - a1) ~= a2 - a1 for small delta
 	float omega = inv_h * ( q2.s * q1.c - q2.c * q1.s );
 	return omega;
-}
-
-/// Get the angle in radians in the range [-pi, pi]
-float b2Rot_GetAngle(b2Rot q)
-{
-	return b2Atan2( q.s, q.c );
 }
 
 /// Get the x-axis

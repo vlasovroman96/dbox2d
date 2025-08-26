@@ -221,7 +221,7 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		b2Rot qA = b2MulRot( stateA.deltaRotation, joint.frameA.q );
 		b2Rot qB = b2MulRot( stateB.deltaRotation, joint.frameB.q );
 		b2Rot relQ = b2InvMulRot( qA, qB );
-		float jointAngle = b2Rot_GetAngle( relQ );
+		float jointAngle = relQ.getAngle();
 
 		float bias = 0.0f;
 		float massScale = 1.0f;
