@@ -18,29 +18,24 @@ struct b2Rot {
 	}
 
 	/// Normalize rotation
-	b2Rot getNormalized()
-	{
+	b2Rot getNormalized() {
 		float mag = sqrt( this.s * this.s + this.c * this.c );
 		float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 		b2Rot qn = { this.c * invMag, this.s * invMag };
 		return qn;
-	} 
-}
+	}
 
-/// Integrate rotation from angular velocity
-/// @param q1 initial rotation
-/// @param deltaAngle the angular displacement in radians
-b2Rot b2IntegrateRotation(b2Rot q1, float deltaAngle)
-{
-	// dc/dt = -omega * sin(t)
-	// ds/dt = omega * cos(t)
-	// c2 = c1 - omega * h * s1
-	// s2 = s1 + omega * h * c1
-	b2Rot q2 = { q1.c - deltaAngle * q1.s, q1.s + deltaAngle * q1.c };
-	float mag = sqrt( q2.s * q2.s + q2.c * q2.c );
-	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
-	b2Rot qn = { q2.c * invMag, q2.s * invMag };
-	return qn;
+	b2Rot integrateRotation(float deltaAngle) {
+		// dc/dt = -omega * sin(t)
+		// ds/dt = omega * cos(t)
+		// c2 = c1 - omega * h * s1
+		// s2 = s1 + omega * h * c1
+		b2Rot q2 = { this.c - deltaAngle * this.s, this.s + deltaAngle * this.c };
+		float mag = sqrt( q2.s * q2.s + q2.c * q2.c );
+		float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
+		b2Rot qn = { q2.c * invMag, q2.s * invMag };
+		return qn;
+	} 
 }
 
 /// Make a rotation using an angle in radians

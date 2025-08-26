@@ -430,7 +430,7 @@ private void b2IntegratePositionsTask(int startIndex, int endIndex, b2StepContex
 		}
 
 		state.deltaPosition = b2MulAdd( state.deltaPosition, h, state.linearVelocity );
-		state.deltaRotation = b2IntegrateRotation( state.deltaRotation, h * state.angularVelocity );
+		state.deltaRotation = state.deltaRotation.integrateRotation( h * state.angularVelocity );
 	}
 }
 
