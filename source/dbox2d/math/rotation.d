@@ -44,22 +44,17 @@ struct b2Rot {
 	} 
 
 	/// Make a rotation using a unit vector
-	b2Rot makeFromUnitVector( b2Vec2 unitVector )
-	{
+	b2Rot makeFromUnitVector( b2Vec2 unitVector ) {
 		B2_ASSERT( b2IsNormalized( unitVector ) );
 		return b2Rot( unitVector.x, unitVector.y );
 	}
-}
 
-/// Compute the rotation between two unit vectors
-b2Rot b2ComputeRotationBetweenUnitVectors(b2Vec2 v1, b2Vec2 v2);
-
-/// Is this rotation normalized?
-bool b2IsNormalizedRot(b2Rot q)
-{
-	// larger tolerance due to failure on mingw 32-bit
-	float qq = q.s * q.s + q.c * q.c;
-	return 1.0f - 0.0006f < qq && qq < 1.0f + 0.0006f;
+	/// Is this rotation normalized?
+	bool isNormalized() {
+		// larger tolerance due to failure on mingw 32-bit
+		float qq = this.s * this.s + this.c * this.c;
+		return 1.0f - 0.0006f < qq && qq < 1.0f + 0.0006f;
+	}
 }
 
 /// Normalized linear interpolation
@@ -188,7 +183,7 @@ bool b2IsValidRotation(b2Rot q)
 		return false;
 	}
 
-	return b2IsNormalizedRot( q );
+	return q.isNormalized();
 }
 
 

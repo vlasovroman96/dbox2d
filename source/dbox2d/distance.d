@@ -1143,8 +1143,8 @@ static if (B2_SNOOP_TOI_COUNTERS) {
 
 	b2Sweep sweepA = input.sweepA;
 	b2Sweep sweepB = input.sweepB;
-	B2_ASSERT( b2IsNormalizedRot( sweepA.q1 ) && b2IsNormalizedRot( sweepA.q2 ) );
-	B2_ASSERT( b2IsNormalizedRot( sweepB.q1 ) && b2IsNormalizedRot( sweepB.q2 ) );
+	B2_ASSERT( sweepA.q1.isNormalized() && sweepA.q2.isNormalized() );
+	B2_ASSERT( sweepB.q1.isNormalized() && sweepB.q2.isNormalized() );
 
 	// todo_erin
 	// c1 can be at the origin yet the points are far away
