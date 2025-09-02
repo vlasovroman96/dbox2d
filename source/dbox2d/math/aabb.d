@@ -1,11 +1,8 @@
 module dbox2d.math.aabb;
 
-import dbox2d.types;
 import dbox2d.math.vector;
 import dbox2d.math.funcs;
 import dbox2d.collision;
-import dbox2d.core;
-import dbox2d.base;
 
 /// Axis-aligned bounding box
 struct b2AABB {
@@ -194,8 +191,7 @@ struct b2AABB {
 	}
 
 	/// Compute the bounding box of an array of circles
-	static b2AABB make(const b2Vec2[] points, float radius)
-	{
+	static b2AABB make(const b2Vec2[] points, float radius) {
 		assert(points.length > 0);
 
 		b2AABB a = { points[0], points[0] };
