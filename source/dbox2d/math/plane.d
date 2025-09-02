@@ -7,11 +7,10 @@ import dbox2d.math.funcs;
 struct b2Plane {
 	b2Vec2 normal;
 	float offset = 0;
-}
 
-bool b2IsValidPlane(b2Plane a)
-{
-	return a.normal.isValid() && a.normal.isNormalized() && b2IsValidFloat( a.offset );
+	bool isValid() {
+		return this.normal.isValid() && this.normal.isNormalized() && this.offset.b2IsValidFloat();
+	}
 }
 
 /// Signed separation of a point from a plane
