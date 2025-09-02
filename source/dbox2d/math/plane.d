@@ -11,7 +11,7 @@ struct b2Plane {
 
 bool b2IsValidPlane(b2Plane a)
 {
-	return b2IsValidVec2( a.normal ) && a.normal.isNormalized() && b2IsValidFloat( a.offset );
+	return a.normal.isValid() && a.normal.isNormalized() && b2IsValidFloat( a.offset );
 }
 
 /// Signed separation of a point from a plane

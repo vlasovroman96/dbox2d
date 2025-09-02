@@ -2151,8 +2151,8 @@ b2TreeStats b2World_CastRay(b2WorldId worldId, b2Vec2 origin, b2Vec2 translation
 		return treeStats;
 	}
 
-	assert( b2IsValidVec2( origin ) );
-	assert( b2IsValidVec2( translation ) );
+	assert( origin.isValid() );
+	assert( translation.isValid() );
 
 	b2RayCastInput input = { origin, translation, 1.0f };
 
@@ -2204,8 +2204,8 @@ b2RayResult b2World_CastRayClosest(b2WorldId worldId, b2Vec2 origin, b2Vec2 tran
 		return result;
 	}
 
-	assert( b2IsValidVec2( origin ) );
-	assert( b2IsValidVec2( translation ) );
+	assert( origin.isValid() );
+	assert( translation.isValid() );
 
 	b2RayCastInput input = { origin, translation, 1.0f };
 	WorldRayCastContext worldContext = { world, &b2RayCastClosestFcn, filter, 1.0f, &result };
@@ -2276,7 +2276,7 @@ b2TreeStats b2World_CastShape(b2WorldId worldId, const(b2ShapeProxy)* proxy, b2V
 		return treeStats;
 	}
 
-	assert( b2IsValidVec2( translation ) );
+	assert( translation.isValid() );
 
 	b2ShapeCastInput input;
 	input.proxy = *proxy;
@@ -2350,7 +2350,7 @@ float MoverCastCallback(const(b2ShapeCastInput)* input, int proxyId, ulong userD
 
 float b2World_CastMover(b2WorldId worldId, const(b2Capsule)* mover, b2Vec2 translation, b2QueryFilter filter)
 {
-	assert( b2IsValidVec2( translation ) );
+	assert( translation.isValid() );
 	assert( mover.radius > 2.0f * B2_LINEAR_SLOP );
 
 	b2World* world = b2GetWorldFromId( worldId );
@@ -2639,7 +2639,7 @@ void b2World_Explode(b2WorldId worldId, const(b2ExplosionDef)* explosionDef)
 	float falloff = explosionDef.falloff;
 	float impulsePerLength = explosionDef.impulsePerLength;
 
-	assert( b2IsValidVec2( position ) );
+	assert( position.isValid() );
 	assert( b2IsValidFloat( radius ) && radius >= 0.0f );
 	assert( b2IsValidFloat( falloff ) && falloff >= 0.0f );
 	assert( b2IsValidFloat( impulsePerLength ) );

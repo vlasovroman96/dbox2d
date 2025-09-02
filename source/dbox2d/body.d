@@ -383,9 +383,9 @@ void b2DestroyBodyContacts(b2World* world, b2Body* body, bool wakeBodies)
 b2BodyId b2CreateBody(b2WorldId worldId, const(b2BodyDef)* def)
 {
 	B2_CHECK_DEF(def);
-	assert( b2IsValidVec2( def.position ) );
+	assert( def.position.isValid() );
 	assert( def.rotation.isValid() );
-	assert( b2IsValidVec2( def.linearVelocity ) );
+	assert( def.linearVelocity.isValid() );
 	assert( b2IsValidFloat( def.angularVelocity ) );
 	assert( b2IsValidFloat( def.linearDamping ) && def.linearDamping >= 0.0f );
 	assert( b2IsValidFloat( def.angularDamping ) && def.angularDamping >= 0.0f );
@@ -925,7 +925,7 @@ b2Vec2 b2Body_GetWorldVector(b2BodyId bodyId, b2Vec2 localVector)
 
 void b2Body_SetTransform(b2BodyId bodyId, b2Vec2 position, b2Rot rotation)
 {
-	assert( b2IsValidVec2( position ) );
+	assert( position.isValid() );
 	assert( rotation.isValid() );
 	assert( b2Body_IsValid( bodyId ) );
 	b2World* world = b2GetWorld( bodyId.world0 );
@@ -1559,7 +1559,7 @@ void b2Body_SetMassData(b2BodyId bodyId, b2MassData massData)
 {
 	assert( b2IsValidFloat( massData.mass ) && massData.mass >= 0.0f );
 	assert( b2IsValidFloat( massData.rotationalInertia ) && massData.rotationalInertia >= 0.0f );
-	assert( b2IsValidVec2( massData.center ) );
+	assert( massData.center.isValid() );
 
 	b2World* world = b2GetWorldLocked( bodyId.world0 );
 	if ( world == null )

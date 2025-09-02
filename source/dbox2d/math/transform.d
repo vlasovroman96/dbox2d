@@ -60,7 +60,7 @@ b2Transform b2InvMulTransforms(b2Transform A, b2Transform B)
 
 bool b2IsValidTransform(b2Transform t)
 {
-	if (b2IsValidVec2(t.p) == false)
+	if (t.p.isValid() == false)
 	{
 		return false;
 	}

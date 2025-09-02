@@ -15,7 +15,7 @@ static assert( B2_MAX_POLYGON_VERTICES > 2, "must be 3 or more" );
 
 bool b2IsValidRay(const(b2RayCastInput)* input)
 {
-	bool isValid = b2IsValidVec2( input.origin ) && b2IsValidVec2( input.translation ) &&
+	bool isValid = input.origin.isValid() && input.translation.isValid() &&
 				   b2IsValidFloat( input.maxFraction ) && 0.0f <= input.maxFraction && input.maxFraction < B2_HUGE;
 	return isValid;
 }

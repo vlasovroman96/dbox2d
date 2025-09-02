@@ -863,7 +863,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		b2Vec2 v = state.linearVelocity;
 		float w = state.angularVelocity;
 
-		B2_ASSERT( b2IsValidVec2( v ) );
+		B2_ASSERT( v.isValid() );
 		B2_ASSERT( b2IsValidFloat( w ) );
 
 		sim.center = sim.center + state.deltaPosition;

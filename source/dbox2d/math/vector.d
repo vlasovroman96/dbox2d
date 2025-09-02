@@ -136,6 +136,18 @@ struct b2Vec2 {
         float aa = this.dot( this );
         return .abs( 1.0f - aa ) < 100.0f * float.epsilon;
     }
+
+    bool isValid() const {
+        if ( isNaN( this.x ) || isNaN( this.y ) ) {
+            return false;
+        }
+
+        if ( isInfinity( this.x ) || isInfinity( this.y ) ) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 /// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
@@ -190,21 +202,6 @@ b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
 	c.x = max( a.x, b.x );
 	c.y = max( a.y, b.y );
 	return c;
-}
-
-bool b2IsValidVec2(b2Vec2 v)
-{
-	if ( isNaN( v.x ) || isNaN( v.y ) )
-	{
-		return false;
-	}
-
-	if ( isInfinity( v.x ) || isInfinity( v.y ) )
-	{
-		return false;
-	}
-
-	return true;
 }
 
 /// Convert a vector into a unit vector if possible, otherwise returns the zero vector. Also

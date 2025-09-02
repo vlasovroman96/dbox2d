@@ -46,7 +46,7 @@ struct b2AABB {
 	bool isValid()	{
 		b2Vec2 d = this.upperBound - this.lowerBound;
 		bool valid = d.x >= 0.0f && d.y >= 0.0f;
-		valid = valid && b2IsValidVec2( this.lowerBound ) && b2IsValidVec2( this.upperBound );
+		valid = valid && this.lowerBound.isValid() && this.upperBound.isValid();
 		return valid;
 	}
 
