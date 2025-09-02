@@ -11,12 +11,12 @@ struct b2Vec2 {
 	/// coordinates
 	float x = 0, y = 0;
 
-    auto opUnary(string op : "+")(b2Vec2 b) {
+    void opUnary(string op : "+")(b2Vec2 b) {
         this.x += b.x;
         this.y += b.y;
     }
 
-    auto opUnary(string op : "-")(b2Vec2 b) {
+    void opUnary(string op : "-")(b2Vec2 b) {
         this.x -= b.x;
         this.y -= b.y;
     }
@@ -25,7 +25,7 @@ struct b2Vec2 {
         return b2Vec2(-this.x, -this.y);
     }
 
-    auto opOpAssign(string op : "*")(float b) {
+    void opOpAssign(string op : "*")(float b) {
         this.x *= b;
         this.y *= b;
     }
@@ -105,8 +105,8 @@ struct b2Vec2 {
     /// todo MSVC is not inlining this function in several places per warning 4710
     auto normalized() {
         float length = sqrt( this.x * this.x + this.y * this.y );
-        if ( length < float.epsilon )
-        {
+        
+        if ( length < float.epsilon ) {
             return b2Vec2( 0.0f, 0.0f );
         }
 

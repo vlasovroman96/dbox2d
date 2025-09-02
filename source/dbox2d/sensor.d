@@ -298,7 +298,7 @@ void b2OverlapSensors(b2World* world)
 
 	// Iterate sensors bits and publish events
 	// Process sensor state changes. Iterate over set bits
-	ulong* bits = bitSet.bits;
+	ulong[] bits = bitSet.bits;
 	uint blockCount = bitSet.blockCount;
 
 	for ( uint k = 0; k < blockCount; ++k )

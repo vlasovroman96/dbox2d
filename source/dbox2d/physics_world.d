@@ -1192,7 +1192,7 @@ void b2DrawWithBounds(b2World* world, b2DebugDraw* draw)
 	}
 
 	uint wordCount = world.debugBodySet.blockCount;
-	ulong* bits = world.debugBodySet.bits;
+	ulong[] bits = world.debugBodySet.bits;
 	for ( uint k = 0; k < wordCount; ++k )
 	{
 		ulong word = bits[k];

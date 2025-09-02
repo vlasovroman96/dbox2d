@@ -2010,7 +2010,7 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 
 		{
 			uint wordCount = jointStateBitSet.blockCount;
-			ulong* bits = jointStateBitSet.bits;
+			ulong[] bits = jointStateBitSet.bits;
 
 			b2Joint* jointArray = world.joints.ptr;
 			ushort worldIndex0 = world.worldId;
@@ -2138,7 +2138,7 @@ void b2Solve(b2World* world, b2StepContext* stepContext)
 		{
 			b2BroadPhase* broadPhase = &world.broadPhase;
 			uint wordCount = enlargedBodyBitSet.blockCount;
-			ulong* bits = enlargedBodyBitSet.bits;
+			ulong[] bits = enlargedBodyBitSet.bits;
 
 			// Fast array access is important here
 			b2Body* bodyArray = world.bodies.ptr;

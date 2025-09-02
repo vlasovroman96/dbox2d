@@ -6,7 +6,7 @@ import dbox2d.core;
 
 // Bit set provides fast operations on large arrays of bits.
 struct b2BitSet {
-	ulong* bits;
+	ulong[] bits;
 	uint blockCapacity;
 	uint blockCount;
 }
@@ -60,17 +60,17 @@ b2BitSet b2CreateBitSet(uint bitCapacity)
 
 	bitSet.blockCapacity = ( bitCapacity + (ulong.sizeof * 8 - 1) ) / ( ulong.sizeof * 8 );
 	bitSet.blockCount = 0;
-	bitSet.bits = cast(ulong*)b2Alloc( cast(int)(bitSet.blockCapacity * ulong.sizeof) );
+	bitSet.bits.length = bitCapacity / 64;
 	bitSet.bits[0..bitSet.blockCapacity * ulong.sizeof] = 0;
 	return bitSet;
 }
 
 void b2DestroyBitSet(b2BitSet* bitSet)
 {
-	b2Free( bitSet.bits, cast(int)(bitSet.blockCapacity * ulong.sizeof) );
+	// b2Free( bitSet.bits, cast(int)(bitSet.blockCapacity * ulong.sizeof) );
 	bitSet.blockCapacity = 0;
 	bitSet.blockCount = 0;
-	bitSet.bits = null;
+	bitSet.bits = bitSet.bits.init;
 }
 
 void b2SetBitCountAndClear(b2BitSet* bitSet, uint bitCount)
@@ -94,13 +94,14 @@ void b2GrowBitSet(b2BitSet* bitSet, uint blockCount)
 	{
 		uint oldCapacity = bitSet.blockCapacity;
 		bitSet.blockCapacity = blockCount + blockCount / 2;
-		ulong* newBits = cast(ulong*)b2Alloc( cast(int)(bitSet.blockCapacity * ulong.sizeof) );
+		// ulong* newBits = cast(ulong*)b2Alloc( cast(int)(bitSet.blockCapacity * ulong.sizeof) );
 		// newBits = new ulong[bitSet.blockCapacity];
 		// assert( bitSet.bits != null );
 		// memcpy( newBits, bitSet.bits, oldCapacity * ulong.sizeof );
-		*newBits = *(bitSet.bits);
-		b2Free( bitSet.bits, cast(int)(oldCapacity * ulong.sizeof) );
-		bitSet.bits = newBits;
+		// *newBits = *(bitSet.bits);
+		bitSet.bits.length = blockCount;
+		// b2Free( bitSet.bits, cast(int)(oldCapacity * ulong.sizeof) );
+		// bitSet.bits = newBits;
 	}
 
 	bitSet.blockCount = blockCount;
