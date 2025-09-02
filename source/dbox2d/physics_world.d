@@ -2415,7 +2415,7 @@ bool TreeCollideCallback(int proxyId, ulong userData, void* context)
 	b2PlaneResult result = b2CollideMover( &worldContext.mover, shape, transform );
 
 	// todo handle deep overlap
-	if ( result.hit && b2IsNormalized( result.plane.normal ) )
+	if ( result.hit && result.plane.normal.isNormalized() )
 	{
 		b2ShapeId id = { shape.id + 1, world.worldId, shape.generation };
 		return worldContext.fcn( id, &result, worldContext.userContext );

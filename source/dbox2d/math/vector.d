@@ -130,6 +130,12 @@ struct b2Vec2 {
     float lengthSquared() {
         return this.x * this.x + this.y * this.y;
     }
+
+    /// Determines if the provided vector is normalized (norm(a) == 1).
+    bool isNormalized() {
+        float aa = this.dot( this );
+        return .abs( 1.0f - aa ) < 100.0f * float.epsilon;
+    }
 }
 
 /// Perform the cross product on a vector and a scalar. In 2D this produces a vector.
@@ -185,14 +191,6 @@ b2Vec2 b2Max(b2Vec2 a, b2Vec2 b)
 	c.y = max( a.y, b.y );
 	return c;
 }
-
-/// Determines if the provided vector is normalized (norm(a) == 1).
-bool b2IsNormalized(b2Vec2 a)
-{
-	float aa = a.dot( a );
-	return abs( 1.0f - aa ) < 100.0f * float.epsilon;
-}
-
 
 bool b2IsValidVec2(b2Vec2 v)
 {

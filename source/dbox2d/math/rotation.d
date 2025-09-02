@@ -45,7 +45,7 @@ struct b2Rot {
 
 	/// Make a rotation using a unit vector
 	b2Rot makeFromUnitVector( b2Vec2 unitVector ) {
-		B2_ASSERT( b2IsNormalized( unitVector ) );
+		B2_ASSERT( unitVector.isNormalized() );
 		return b2Rot( unitVector.x, unitVector.y );
 	}
 

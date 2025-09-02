@@ -570,7 +570,7 @@ version (NDEBUG) {} else {
 
 	// Prepare output
 	b2Vec2 normal = nonUnitNormal.normalized;
-	B2_ASSERT( b2IsNormalized( normal ) );
+	B2_ASSERT( normal.isNormalized() );
 	normal = normal.getRotated( input.transformA.q );
 
 	b2Vec2 localPointA = void, localPointB = void;
@@ -658,7 +658,7 @@ b2CastOutput b2ShapeCast(const(b2ShapeCastPairInput)* input)
 			else
 			{
 				// Regular hit
-				B2_ASSERT( distanceOutput.distance > 0.0f && b2IsNormalized( distanceOutput.normal ) );
+				B2_ASSERT( distanceOutput.distance > 0.0f && distanceOutput.normal.isNormalized() );
 				output.fraction = fraction;
 				output.point = b2MulAdd( distanceOutput.pointA, input.proxyA.radius, distanceOutput.normal );
 				output.normal = distanceOutput.normal;
@@ -668,7 +668,7 @@ b2CastOutput b2ShapeCast(const(b2ShapeCastPairInput)* input)
 		}
 
 		B2_ASSERT( distanceOutput.distance > 0.0f );
-		B2_ASSERT( b2IsNormalized( distanceOutput.normal ) );
+		B2_ASSERT( distanceOutput.normal.isNormalized() );
 
 		// Check if shapes are approaching each other
 		float denominator = delta2.dot( distanceOutput.normal );
