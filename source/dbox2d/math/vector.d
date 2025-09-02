@@ -17,8 +17,8 @@ struct b2Vec2 {
     }
 
     auto opUnary(string op : "-")(b2Vec2 b) {
-        this.x += b.x;
-        this.y += b.y;
+        this.x -= b.x;
+        this.y -= b.y;
     }
 
     auto opUnary(string op : "-")() const {
