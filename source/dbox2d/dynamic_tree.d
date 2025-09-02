@@ -976,7 +976,7 @@ b2AABB b2DynamicTree_GetRootBounds(const(b2DynamicTree)* tree)
 		return tree.nodes[tree.root].aabb;
 	}
 
-	b2AABB empty = { b2Vec2.zero(), b2Vec2.zero() };
+	b2AABB empty = { b2Vec2.init, b2Vec2.init };
 	return empty;
 }
 

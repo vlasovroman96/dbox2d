@@ -225,8 +225,8 @@ b2Shape* b2CreateShapeInternal(b2World* world, b2Body* body, b2Transform transfo
 	shape.enablePreSolveEvents = def.enablePreSolveEvents;
 	shape.proxyKey = B2_NULL_INDEX;
 	shape.localCentroid = b2GetShapeCentroid( shape );
-	shape.aabb = b2AABB( b2Vec2.zero(), b2Vec2.zero() );
-	shape.fatAABB = b2AABB( b2Vec2.zero(), b2Vec2.zero() );
+	shape.aabb = b2AABB( b2Vec2.init, b2Vec2.init );
+	shape.fatAABB = b2AABB( b2Vec2.init, b2Vec2.init );
 	shape.generation += 1;
 
 	if ( body.setIndex != b2_disabledSet )
@@ -722,7 +722,7 @@ b2Vec2 b2GetShapeCentroid(const(b2Shape)* shape)
 		case b2_chainSegmentShape:
 			return b2Lerp( shape.chainSegment.segment.point1, shape.chainSegment.segment.point2, 0.5f );
 		default:
-			return b2Vec2.zero();
+			return b2Vec2.init;
 	}
 }
 

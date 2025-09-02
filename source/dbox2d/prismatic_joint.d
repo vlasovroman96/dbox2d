@@ -219,8 +219,8 @@ float b2PrismaticJoint_GetSpeed(b2JointId jointId)
 
 	b2Vec2 d = ( cB - cA ) + ( rB - rA );
 
-	b2Vec2 vA = bodyStateA ? bodyStateA.linearVelocity : b2Vec2.zero();
-	b2Vec2 vB = bodyStateB ? bodyStateB.linearVelocity : b2Vec2.zero();
+	b2Vec2 vA = bodyStateA ? bodyStateA.linearVelocity : b2Vec2.init;
+	b2Vec2 vB = bodyStateB ? bodyStateB.linearVelocity : b2Vec2.init;
 	float wA = bodyStateA ? bodyStateA.angularVelocity : 0.0f;
 	float wB = bodyStateB ? bodyStateB.angularVelocity : 0.0f;
 
@@ -361,7 +361,7 @@ void b2PreparePrismaticJoint(b2JointSim* base, b2StepContext* context)
 
 	if ( context.enableWarmStarting == false )
 	{
-		joint.impulse = b2Vec2.zero();
+		joint.impulse = b2Vec2.init;
 		joint.springImpulse = 0.0f;
 		joint.motorImpulse = 0.0f;
 		joint.lowerImpulse = 0.0f;
@@ -589,7 +589,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 		Cdot.x = perpA.dot( vB - vA ) + s2 * wB - s1 * wA;
 		Cdot.y = wB - wA;
 
-		b2Vec2 bias = b2Vec2.zero();
+		b2Vec2 bias = b2Vec2.init;
 		float massScale = 1.0f;
 		float impulseScale = 0.0f;
 		if ( useBias )

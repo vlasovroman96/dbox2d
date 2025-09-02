@@ -62,7 +62,7 @@ struct b2AABB {
 		b2Vec2 d = p2 - p1 ;
 		b2Vec2 absD = d.abs();
 
-		b2Vec2 normal = b2Vec2.zero();
+		b2Vec2 normal = b2Vec2.init;
 
 		// x-coordinate
 		if ( absD.x < float.epsilon ) {

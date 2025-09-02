@@ -164,7 +164,7 @@ void b2PrepareWeldJoint(b2JointSim* base, b2StepContext* context)
 
 	if ( context.enableWarmStarting == false )
 	{
-		joint.linearImpulse = b2Vec2.zero();
+		joint.linearImpulse = b2Vec2.init;
 		joint.angularImpulse = 0.0f;
 	}
 }
@@ -247,7 +247,7 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		b2Vec2 rA = joint.frameA.p.getRotated( stateA.deltaRotation );
 		b2Vec2 rB = joint.frameB.p.getRotated( stateB.deltaRotation );
 
-		b2Vec2 bias = b2Vec2.zero();
+		b2Vec2 bias = b2Vec2.init;
 		float massScale = 1.0f;
 		float impulseScale = 0.0f;
 		if ( useBias || joint.linearHertz > 0.0f )

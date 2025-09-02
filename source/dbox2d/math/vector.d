@@ -42,7 +42,7 @@ struct b2Vec2 {
         return this.x == b.x && this.y == b.y;
     }
 
-	static b2Vec2 zero() {
+	static b2Vec2 init() {
 		return b2Vec2(0, 0);
 	}
 

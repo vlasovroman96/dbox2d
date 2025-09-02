@@ -10,7 +10,7 @@ struct b2Transform {
 	b2Rot q;
 
 	static b2Transform identity() {
-		auto _p = b2Vec2.zero;
+		auto _p = b2Vec2.init;
 		auto _q = b2Rot.identity;
 
 		return b2Transform(_p, _q);
