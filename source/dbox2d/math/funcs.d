@@ -25,15 +25,12 @@ float b2SpringDamper(float hertz, float dampingRatio, float position, float velo
 	return ( velocity - omega * omegaH * position ) / ( 1.0f + 2.0f * dampingRatio * omegaH + omegaH * omegaH );
 }
 
-bool b2IsValidFloat(float a)
-{
-	if ( isNaN( a ) )
-	{
+bool b2IsValidFloat(float a) {
+	if ( isNaN( a ) ) {
 		return false;
 	}
 
-	if ( isInfinity( a ) )
-	{
+	if ( isInfinity( a ) ) {
 		return false;
 	}
 
@@ -41,11 +38,9 @@ bool b2IsValidFloat(float a)
 }
 
 // https://stackoverflow.com/questions/46210708/atan2-approximation-with-11bits-in-mantissa-on-x86with-sse2-and-armwith-vfpv4
-float b2Atan2(float y, float x)
-{
+float b2Atan2(float y, float x) {
 	// Added check for (0,0) to match atan2f and avoid NaN
-	if (x == 0.0f && y == 0.0f)
-	{
+	if (x == 0.0f && y == 0.0f) {
 		return 0.0f;
 	}
 
@@ -65,18 +60,15 @@ float b2Atan2(float y, float x)
 	r = r * c + a;
 
 	// Map to full circle
-	if ( ay > ax )
-	{
+	if ( ay > ax ) {
 		r = 1.57079637f - r;
 	}
 
-	if ( x < 0 )
-	{
+	if ( x < 0 ) {
 		r = 3.14159274f - r;
 	}
 
-	if ( y < 0 )
-	{
+	if ( y < 0 ) {
 		r = -r;
 	}
 
