@@ -23,7 +23,7 @@ b2PlaneSolverResult b2SolvePlanes(b2Vec2 targetDelta, b2CollisionPlane* planes, 
 			b2CollisionPlane* plane = planes + planeIndex;
 
 			// Add slop to prevent jitter
-			float separation = b2PlaneSeparation( plane.plane, delta ) + B2_LINEAR_SLOP;
+			float separation = plane.plane.separation( delta ) + B2_LINEAR_SLOP;
 			// if (separation > 0.0f)
 			//{
 			//	continue;

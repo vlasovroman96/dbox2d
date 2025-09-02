@@ -11,11 +11,9 @@ struct b2Plane {
 	bool isValid() {
 		return this.normal.isValid() && this.normal.isNormalized() && this.offset.b2IsValidFloat();
 	}
-}
 
-/// Signed separation of a point from a plane
-float b2PlaneSeparation(b2Plane plane, b2Vec2 point)
-{
-	return plane.normal.dot( point ) - plane.offset;
+	/// Signed separation of a point from a plane
+	float separation(b2Vec2 point) {
+		return this.normal.dot( point ) - this.offset;
+	}
 }
-
