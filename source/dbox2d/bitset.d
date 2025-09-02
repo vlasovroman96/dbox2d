@@ -9,14 +9,20 @@ struct b2BitSet {
 	ulong[] bits;
 	uint blockCapacity;
 	uint blockCount;
+
+	auto setBit(uint bitIndex ) {
+		uint blockIndex = bitIndex / 64;
+		assert( blockIndex < blockCount );
+		bits[blockIndex] |= ( 1 << bitIndex % 64 );
+	}
 }
 
-pragma(inline, true) void b2SetBit(b2BitSet* bitSet, uint bitIndex)
-{
-	uint blockIndex = bitIndex / 64;
-	assert( blockIndex < bitSet.blockCount );
-	bitSet.bits[blockIndex] |= ( cast(ulong)1 << bitIndex % 64 );
-}
+// pragma(inline, true) void b2SetBit(b2BitSet* bitSet, uint bitIndex)
+// {
+// 	uint blockIndex = bitIndex / 64;
+// 	assert( blockIndex < bitSet.blockCount );
+// 	bitSet.bits[blockIndex] |= ( cast(ulong)1 << bitIndex % 64 );
+// }
 
 pragma(inline, true) void b2SetBitGrow(b2BitSet* bitSet, uint bitIndex)
 {

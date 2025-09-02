@@ -397,7 +397,7 @@ private void b2SolveJointsTask(int startIndex, int endIndex, b2StepContext* cont
 			if ( force >= joint.forceThreshold || torque >= joint.torqueThreshold )
 			{
 				// Flag this joint for processing.
-				b2SetBit( jointStateBitSet, joint.jointId );
+				jointStateBitSet.setBit( joint.jointId );
 			}
 		}
 	}
@@ -945,7 +945,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 		{
 			// keep island awake
 			int islandIndex = island.localIndex;
-			b2SetBit( awakeIslandBitSet, islandIndex );
+			awakeIslandBitSet.setBit( islandIndex );
 		}
 		else if ( island.constraintRemoveCount > 0 )
 		{
@@ -973,7 +973,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 
 				// Add to enlarged shapes regardless of AABB changes.
 				// Bit-set to keep the move array sorted
-				b2SetBit( enlargedSimBitSet, simIndex );
+				enlargedSimBitSet.setBit( simIndex );
 			}
 			else
 			{
@@ -998,7 +998,7 @@ private void b2FinalizeBodiesTask(int startIndex, int endIndex, uint threadIndex
 					shape.enlargedAABB = true;
 
 					// Bit-set to keep the move array sorted
-					b2SetBit( enlargedSimBitSet, simIndex );
+					enlargedSimBitSet.setBit( simIndex );
 				}
 			}
 

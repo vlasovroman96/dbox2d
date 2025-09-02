@@ -201,7 +201,7 @@ private void b2SensorTask(int startIndex, int endIndex, uint threadIndex, void* 
 			if ( sensor.overlaps1.count != 0 )
 			{
 				// This sensor is dropping all overlaps because it has been disabled.
-				b2SetBit( &taskContext.eventBits, sensorIndex );
+				taskContext.eventBits.setBit( sensorIndex );
 			}
 			continue;
 		}
@@ -246,7 +246,7 @@ private void b2SensorTask(int startIndex, int endIndex, uint threadIndex, void* 
 		if ( count1 != count2 )
 		{
 			// something changed
-			b2SetBit( &taskContext.eventBits, sensorIndex );
+			taskContext.eventBits.setBit( sensorIndex );
 		}
 		else
 		{
@@ -258,7 +258,7 @@ private void b2SensorTask(int startIndex, int endIndex, uint threadIndex, void* 
 				if ( s1.shapeId != s2.shapeId || s1.generation != s2.generation )
 				{
 					// something changed
-					b2SetBit( &taskContext.eventBits, sensorIndex );
+					taskContext.eventBits.setBit( sensorIndex );
 					break;
 				}
 			}

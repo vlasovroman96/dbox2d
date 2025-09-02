@@ -586,7 +586,7 @@ void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context
 		{
 			contactSim.simFlags |= b2_simDisjoint;
 			contactSim.simFlags &= ~b2_simTouchingFlag;
-			b2SetBit( &taskContext.contactStateBitSet, contactId );
+			taskContext.contactStateBitSet.setBit( contactId );
 		}
 		else
 		{
@@ -620,12 +620,12 @@ void b2CollideTask(int startIndex, int endIndex, uint threadIndex, void* context
 			if ( touching == true && wasTouching == false )
 			{
 				contactSim.simFlags |= b2_simStartedTouching;
-				b2SetBit( &taskContext.contactStateBitSet, contactId );
+				taskContext.contactStateBitSet.setBit( contactId );
 			}
 			else if ( touching == false && wasTouching == true )
 			{
 				contactSim.simFlags |= b2_simStoppedTouching;
-				b2SetBit( &taskContext.contactStateBitSet, contactId );
+				taskContext.contactStateBitSet.setBit( contactId );
 			}
 
 			// To make this work, the time of impact code needs to adjust the target
@@ -1075,7 +1075,7 @@ bool DrawQueryCallback(int proxyId, ulong userData, void* context)
 	b2Shape* shape = b2ShapeArray_Get( world.shapes, shapeId );
 	assert( shape.id == shapeId );
 
-	b2SetBit( &world.debugBodySet, shape.bodyId );
+	world.debugBodySet.setBit( shape.bodyId );
 
 	if ( draw.drawShapes )
 	{
@@ -1241,7 +1241,7 @@ void b2DrawWithBounds(b2World* world, b2DebugDraw* draw)
 					if ( b2GetBit( &world.debugJointSet, jointId ) == false )
 					{
 						b2DrawJoint( draw, world, joint );
-						b2SetBit( &world.debugJointSet, jointId );
+						world.debugJointSet.setBit( jointId );
 					}
 					else
 					{
@@ -1339,7 +1339,7 @@ void b2DrawWithBounds(b2World* world, b2DebugDraw* draw)
 							}
 						}
 
-						b2SetBit( &world.debugContactSet, contactId );
+						world.debugContactSet.setBit( contactId );
 					}
 					else
 					{
