@@ -201,7 +201,7 @@ float b2RevoluteJoint_GetMaxMotorTorque(b2JointId jointId)
 
 b2Vec2 b2GetRevoluteJointForce(b2World* world, b2JointSim* base)
 {
-	b2Vec2 force = b2MulSV( world.inv_h, base.revoluteJoint.linearImpulse );
+	b2Vec2 force = base.revoluteJoint.linearImpulse * world.inv_h;
 	return force;
 }
 
@@ -454,7 +454,7 @@ void b2SolveRevoluteJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			b2Vec2 dcB = stateB.deltaPosition;
 
 			b2Vec2 separation = (( dcB - dcA ) + ( rB - rA ) ) + joint.deltaCenter;
-			bias = b2MulSV( base.constraintSoftness.biasRate, separation );
+			bias = separation * base.constraintSoftness.biasRate;
 			massScale = base.constraintSoftness.massScale;
 			impulseScale = base.constraintSoftness.impulseScale;
 		}

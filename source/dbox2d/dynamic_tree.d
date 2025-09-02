@@ -1360,7 +1360,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 	float maxFraction = input.maxFraction;
 
 	// Build total box for the shape cast
-	b2Vec2 t = b2MulSV( maxFraction, input.translation );
+	b2Vec2 t = input.translation * maxFraction;
 	b2AABB totalAABB = {
 		b2Min( originAABB.lowerBound, originAABB.lowerBound + t ),
 		b2Max( originAABB.upperBound, originAABB.upperBound + t ),
@@ -1420,7 +1420,7 @@ b2TreeStats b2DynamicTree_ShapeCast(const(b2DynamicTree)* tree, const(b2ShapeCas
 			{
 				// Update segment bounding box.
 				maxFraction = value;
-				t = b2MulSV( maxFraction, input.translation );
+				t = input.translation * maxFraction;
 				totalAABB.lowerBound = b2Min( originAABB.lowerBound, originAABB.lowerBound + t );
 				totalAABB.upperBound = b2Max( originAABB.upperBound, originAABB.upperBound + t );
 			}

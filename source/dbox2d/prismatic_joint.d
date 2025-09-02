@@ -244,7 +244,7 @@ b2Vec2 b2GetPrismaticJointForce(b2World* world, b2JointSim* base)
 	float perpForce = inv_h * joint.impulse.x;
 	float axialForce = inv_h * ( joint.motorImpulse + joint.lowerImpulse - joint.upperImpulse );
 
-	b2Vec2 force = b2MulSV( perpForce, perpA ) + b2MulSV( axialForce, axisA);
+	b2Vec2 force = perpA * perpForce + axisA * axialForce;
 	return force;
 }
 
@@ -406,7 +406,7 @@ void b2WarmStartPrismaticJoint(b2JointSim* base, b2StepContext* context)
 	float perpImpulse = joint.impulse.x;
 	float angleImpulse = joint.impulse.y;
 
-	b2Vec2 P = b2MulSV( axialImpulse, axisA ) + b2MulSV( perpImpulse, perpA );
+	b2Vec2 P = axisA * axialImpulse + perpA * perpImpulse;
 	float LA = axialImpulse * a1 + perpImpulse * s1 + angleImpulse;
 	float LB = axialImpulse * a2 + perpImpulse * s2 + angleImpulse;
 
@@ -469,7 +469,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 		float deltaImpulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.springImpulse;
 		joint.springImpulse += deltaImpulse;
 
-		b2Vec2 P = b2MulSV( deltaImpulse, axisA );
+		b2Vec2 P = axisA * deltaImpulse;
 		float LA = deltaImpulse * a1;
 		float LB = deltaImpulse * a2;
 
@@ -489,7 +489,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 		joint.motorImpulse = clamp( joint.motorImpulse + impulse, -maxImpulse, maxImpulse );
 		impulse = joint.motorImpulse - oldImpulse;
 
-		b2Vec2 P = b2MulSV( impulse, axisA );
+		b2Vec2 P = axisA * impulse;
 		float LA = impulse * a1;
 		float LB = impulse * a2;
 
@@ -526,7 +526,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 			joint.lowerImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.lowerImpulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axisA );
+			b2Vec2 P = axisA * impulse;
 			float LA = impulse * a1;
 			float LB = impulse * a2;
 
@@ -565,7 +565,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 			joint.upperImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.upperImpulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axisA );
+			b2Vec2 P = axisA * impulse;
 			float LA = impulse * a1;
 			float LB = impulse * a2;
 
@@ -598,7 +598,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 			C.x = perpA.dot( d );
 			C.y = relQ.getAngle();
 
-			bias = b2MulSV( base.constraintSoftness.biasRate, C );
+			bias = C * base.constraintSoftness.biasRate;
 			massScale = base.constraintSoftness.massScale;
 			impulseScale = base.constraintSoftness.impulseScale;
 		}
@@ -622,7 +622,7 @@ void b2SolvePrismaticJoint(b2JointSim* base, b2StepContext* context, bool useBia
 		joint.impulse.x += impulse.x;
 		joint.impulse.y += impulse.y;
 
-		b2Vec2 P = b2MulSV( impulse.x, perpA );
+		b2Vec2 P = perpA * impulse.x;
 		float LA = impulse.x * s1 + impulse.y;
 		float LB = impulse.x * s2 + impulse.y;
 

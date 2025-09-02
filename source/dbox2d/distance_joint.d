@@ -220,7 +220,7 @@ b2Vec2 b2GetDistanceJointForce(b2World* world, b2JointSim* base)
 	b2Vec2 d = pB - pA;
 	b2Vec2 axis =  d.normalized;
 	float force = ( joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse ) * world.inv_h;
-	return b2MulSV( force, axis );
+	return axis * force;
 }
 
 // 1-D constrained system
@@ -327,7 +327,7 @@ void b2WarmStartDistanceJoint(b2JointSim* base, b2StepContext* context)
 	b2Vec2 axis = separation.normalized;
 
 	float axialImpulse = joint.impulse + joint.lowerImpulse - joint.upperImpulse + joint.motorImpulse;
-	b2Vec2 P = b2MulSV( axialImpulse, axis );
+	b2Vec2 P = axis * axialImpulse;
 
 	stateA.linearVelocity = b2MulSub( stateA.linearVelocity, mA, P );
 	stateA.angularVelocity -= iA * rA.cross( P );
@@ -389,7 +389,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			joint.impulse = clamp( joint.impulse + impulse, joint.lowerSpringForce * h, joint.upperSpringForce * h );
 			impulse = joint.impulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axis );
+			b2Vec2 P = axis * impulse;
 			vA = b2MulSub( vA, mA, P );
 			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
@@ -425,7 +425,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 				impulse = newImpulse - joint.lowerImpulse;
 				joint.lowerImpulse = newImpulse;
 
-				b2Vec2 P = b2MulSV( impulse, axis );
+				b2Vec2 P = axis * impulse;
 				vA = b2MulSub( vA, mA, P );
 				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );
@@ -459,7 +459,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 				impulse = newImpulse - joint.upperImpulse;
 				joint.upperImpulse = newImpulse;
 
-				b2Vec2 P = b2MulSV( -impulse, axis );
+				b2Vec2 P = axis * -impulse;
 				vA = b2MulSub( vA, mA, P );
 				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );
@@ -477,7 +477,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 			joint.motorImpulse = clamp( joint.motorImpulse + impulse, -maxImpulse, maxImpulse );
 			impulse = joint.motorImpulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axis );
+			b2Vec2 P = axis * impulse;
 			vA = b2MulSub( vA, mA, P );
 			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
@@ -505,7 +505,7 @@ void b2SolveDistanceJoint(b2JointSim* base, b2StepContext* context, bool useBias
 		float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.impulse;
 		joint.impulse += impulse;
 
-		b2Vec2 P = b2MulSV( impulse, axis );
+		b2Vec2 P = axis * impulse;
 		vA = b2MulSub( vA, mA, P );
 		wA -= iA * rA.cross( P );
 		vB = b2MulAdd( vB, mB, P );
@@ -555,7 +555,7 @@ void b2DrawDistanceJoint(b2DebugDraw* draw, b2JointSim* base, b2Transform transf
 	{
 		b2Vec2 pMin = b2MulAdd( pA, joint.minLength, axis );
 		b2Vec2 pMax = b2MulAdd( pA, joint.maxLength, axis );
-		b2Vec2 offset = b2MulSV( 0.05f * b2_lengthUnitsPerMeter, axis.rightPerp() );
+		b2Vec2 offset = axis.rightPerp() * ( 0.05f * b2_lengthUnitsPerMeter );
 
 		if ( joint.minLength > B2_LINEAR_SLOP )
 		{

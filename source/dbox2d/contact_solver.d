@@ -221,7 +221,7 @@ void b2WarmStartOverflowContacts(b2StepContext* context)
 			b2Vec2 rA = cp.anchorA;
 			b2Vec2 rB = cp.anchorB;
 
-			b2Vec2 P = b2MulSV( cp.normalImpulse, normal ) + b2MulSV( cp.tangentImpulse, tangent );
+			b2Vec2 P = normal * cp.normalImpulse + tangent * cp.tangentImpulse;
 			wA -= iA * rA.cross( P );
 			vA = b2MulAdd( vA, -mA, P );
 			wB += iB * rB.cross( P );
@@ -330,7 +330,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			totalNormalImpulse += newImpulse;
 
 			// apply normal impulse
-			b2Vec2 P = b2MulSV( impulse, normal );
+			b2Vec2 P = normal * impulse;
 			vA = b2MulSub( vA, mA, P );
 			wA -= iA * rA.cross( P );
 
@@ -366,7 +366,7 @@ void b2SolveOverflowContacts(b2StepContext* context, bool useBias)
 			cp.tangentImpulse = newImpulse;
 
 			// apply tangent impulse
-			b2Vec2 P = b2MulSV( impulse, tangent );
+			b2Vec2 P = tangent * impulse;
 			vA = b2MulSub( vA, mA, P );
 			wA -= iA * rA.cross( P );
 			vB = b2MulAdd( vB, mB, P );
@@ -471,7 +471,7 @@ void b2ApplyOverflowRestitution(b2StepContext* context)
 				cp.totalNormalImpulse += impulse;
 
 				// apply contact impulse
-				b2Vec2 P = b2MulSV( impulse, normal );
+				b2Vec2 P = normal * impulse;
 				vA = b2MulSub( vA, mA, P );
 				wA -= iA * rA.cross( P );
 				vB = b2MulAdd( vB, mB, P );

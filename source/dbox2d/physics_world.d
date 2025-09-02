@@ -2619,7 +2619,7 @@ bool ExplosionCallback(int proxyId, ulong userData, void* context)
 	}
 
 	float magnitude = explosionContext.impulsePerLength * perimeter * scale;
-	b2Vec2 impulse = b2MulSV( magnitude, direction );
+	b2Vec2 impulse = direction * magnitude;
 
 	int localIndex = body.localIndex;
 	b2SolverSet* set = b2SolverSetArray_Get( world.solverSets, b2_awakeSet );

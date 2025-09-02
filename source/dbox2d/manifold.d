@@ -1146,7 +1146,7 @@ b2Manifold b2CollideChainSegmentAndCircle(const(b2ChainSegment)* segmentA, b2Tra
 	{
 		float ee = e.dot( e );
 		pA = b2Vec2( u * p1.x + v * p2.x, u * p1.y + v * p2.y );
-		pA = ee > 0.0f ? b2MulSV( 1.0f / ee, pA ) : p1;
+		pA = ee > 0.0f ? pA * (1.0f / ee) : p1;
 	}
 
 	float distance = void;

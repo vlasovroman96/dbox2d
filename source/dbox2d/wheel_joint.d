@@ -164,7 +164,7 @@ b2Vec2 b2GetWheelJointForce(b2World* world, b2JointSim* base)
 	float perpForce = world.inv_h * joint.perpImpulse;
 	float axialForce = world.inv_h * ( joint.springImpulse + joint.lowerImpulse - joint.upperImpulse );
 
-	b2Vec2 force = b2MulSV( perpForce, perpA ) + b2MulSV( axialForce, axisA );
+	b2Vec2 force = perpA * perpForce + axisA * axialForce;
 	return force;
 }
 
@@ -304,7 +304,7 @@ void b2WarmStartWheelJoint(b2JointSim* base, b2StepContext* context)
 
 	float axialImpulse = joint.springImpulse + joint.lowerImpulse - joint.upperImpulse;
 
-	b2Vec2 P = b2MulSV( axialImpulse, axisA ) + b2MulSV( joint.perpImpulse, perpA );
+	b2Vec2 P = axisA * axialImpulse + perpA * joint.perpImpulse;
 	float LA = axialImpulse * a1 + joint.perpImpulse * s1 + joint.motorImpulse;
 	float LB = axialImpulse * a2 + joint.perpImpulse * s2 + joint.motorImpulse;
 
@@ -377,7 +377,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		float impulse = -massScale * joint.axialMass * ( Cdot + bias ) - impulseScale * joint.springImpulse;
 		joint.springImpulse += impulse;
 
-		b2Vec2 P = b2MulSV( impulse, axisA );
+		b2Vec2 P = axisA * impulse;
 		float LA = impulse * a1;
 		float LB = impulse * a2;
 
@@ -414,7 +414,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			joint.lowerImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.lowerImpulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axisA );
+			b2Vec2 P = axisA * impulse;
 			float LA = impulse * a1;
 			float LB = impulse * a2;
 
@@ -453,7 +453,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			joint.upperImpulse = max( oldImpulse + impulse, 0.0f );
 			impulse = joint.upperImpulse - oldImpulse;
 
-			b2Vec2 P = b2MulSV( impulse, axisA );
+			b2Vec2 P = axisA * impulse;
 			float LA = impulse * a1;
 			float LB = impulse * a2;
 
@@ -487,7 +487,7 @@ void b2SolveWheelJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 		float impulse = -massScale * joint.perpMass * ( Cdot + bias ) - impulseScale * joint.perpImpulse;
 		joint.perpImpulse += impulse;
 
-		b2Vec2 P = b2MulSV( impulse, perpA );
+		b2Vec2 P = perpA * impulse;
 		float LA = impulse * s1;
 		float LB = impulse * s2;
 

@@ -306,7 +306,7 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		float gravityScale = sim.invMass > 0.0f ? sim.gravityScale : 0.0f;
 
 		// lvd = h * im * f + h * g
-		b2Vec2 linearVelocityDelta = b2MulSV( h * sim.invMass, sim.force ) + b2MulSV( h * gravityScale, gravity );
+		b2Vec2 linearVelocityDelta = sim.force * ( h * sim.invMass ) + gravity * ( h * gravityScale );
 		float angularVelocityDelta = h * sim.invInertia * sim.torque;
 
 		v = b2MulAdd( linearVelocityDelta, linearDamping, v );
@@ -316,7 +316,7 @@ private void b2IntegrateVelocitiesTask(int startIndex, int endIndex, b2StepConte
 		if ( v.dot( v ) > maxLinearSpeedSquared )
 		{
 			float ratio = maxLinearSpeed / v.length();
-			v = b2MulSV( ratio, v );
+			v *= ratio;
 			sim.flags |= b2_isSpeedCapped;
 		}
 

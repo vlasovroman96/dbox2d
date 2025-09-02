@@ -709,7 +709,7 @@ b2CastOutput b2RayCastCapsule(const(b2Capsule)* shape, const(b2RayCastInput)* in
 	{
 		// ray hits capsule side
 		output.fraction = s2 / rayLength;
-		output.point = b2Lerp( v1, v2, s1 / capsuleLength ) + b2MulSV( shape.radius, n );
+		output.point = b2Lerp( v1, v2, s1 / capsuleLength ) + n * shape.radius;
 		output.normal = n;
 		output.hit = true;
 		return output;

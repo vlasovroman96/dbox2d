@@ -58,9 +58,8 @@ float b2MouseJoint_GetMaxForce(b2JointId jointId)
 	return base.mouseJoint.maxForce;
 }
 
-b2Vec2 b2GetMouseJointForce(b2World* world, b2JointSim* base)
-{
-	b2Vec2 force = b2MulSV( world.inv_h, base.mouseJoint.linearImpulse );
+b2Vec2 b2GetMouseJointForce(b2World* world, b2JointSim* base) {
+	b2Vec2 force = base.mouseJoint.linearImpulse * world.inv_h;
 	return force;
 }
 
@@ -215,7 +214,7 @@ void b2SolveMouseJoint(b2JointSim* base, b2StepContext* context)
 		b2Vec2 dcA = stateA.deltaPosition;
 		b2Vec2 dcB = stateB.deltaPosition;
 		b2Vec2 C = (( dcB - dcA ) + ( rB - rA )) + joint.deltaCenter;
-		b2Vec2 bias = b2MulSV( joint.linearSoftness.biasRate, C );
+		b2Vec2 bias = C * joint.linearSoftness.biasRate;
 
 		float massScale = joint.linearSoftness.massScale;
 		float impulseScale = joint.linearSoftness.impulseScale;
@@ -233,7 +232,7 @@ void b2SolveMouseJoint(b2JointSim* base, b2StepContext* context)
 		float lengthSquared = joint.linearImpulse.lengthSquared();
 		if ( lengthSquared > maxImpulse * maxImpulse )
 		{
-			joint.linearImpulse = b2MulSV( maxImpulse, joint.linearImpulse.normalized );
+			joint.linearImpulse = joint.linearImpulse.normalized * maxImpulse;
 		}
 
 		impulse.x = joint.linearImpulse.x - oldImpulse.x;

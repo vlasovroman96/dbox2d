@@ -25,9 +25,13 @@ struct b2Vec2 {
         return b2Vec2(-this.x, -this.y);
     }
 
-    auto opUnary(string op : "*")(float b) {
+    auto opOpAssign(string op : "*")(float b) {
         this.x *= b;
         this.y *= b;
+    }
+
+    auto opBinary(string op : "*")(const float b) const {
+        return b2Vec2(this.x * b, this.y * b);
     }
 
     auto opBinary(string op : "+")(b2Vec2 b) {
@@ -166,12 +170,6 @@ b2Vec2 b2CrossSV(float s, b2Vec2 v) {
 b2Vec2 b2Lerp(b2Vec2 a, b2Vec2 b, float t)
 {
 	return b2Vec2( ( 1.0f - t ) * a.x + t * b.x, ( 1.0f - t ) * a.y + t * b.y );
-}
-
-/// Multiply a scalar and vector
-b2Vec2 b2MulSV( float s, b2Vec2 v )
-{
-	return b2Vec2( s * v.x, s * v.y );
 }
 
 /// a + s * b

@@ -11,7 +11,7 @@ b2Transform b2GetSweepTransform(const(b2Sweep)* sweep, float time)
 {
 	// https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/
 	b2Transform xf = void;
-	xf.p = b2MulSV( 1.0f - time, sweep.c1 ) + b2MulSV( time, sweep.c2 );
+	xf.p = sweep.c1 * ( 1.0f - time ) + sweep.c2 * time;
 
 	b2Rot q = {
 		( 1.0f - time ) * sweep.q1.c + time * sweep.q2.c,

@@ -143,7 +143,7 @@ float b2MotorJoint_GetMaxSpringTorque(b2JointId jointId)
 
 b2Vec2 b2GetMotorJointForce(b2World* world, b2JointSim* base)
 {
-	b2Vec2 force = b2MulSV( world.inv_h, base.motorJoint.linearVelocityImpulse + base.motorJoint.linearSpringImpulse );
+	b2Vec2 force = (base.motorJoint.linearVelocityImpulse + base.motorJoint.linearSpringImpulse ) * world.inv_h;
 	return force;
 }
 
@@ -337,7 +337,7 @@ void b2SolveMotorJoint(b2JointSim* base, b2StepContext* context)
 		b2Vec2 dcB = stateB.deltaPosition;
 		b2Vec2 c = ((dcB - dcA ) + (rB - rA )) + joint.deltaCenter;
 
-		b2Vec2 bias = b2MulSV( joint.linearSpring.biasRate, c );
+		b2Vec2 bias = c * joint.linearSpring.biasRate;
 		float massScale = joint.linearSpring.massScale;
 		float impulseScale = joint.linearSpring.impulseScale;
 

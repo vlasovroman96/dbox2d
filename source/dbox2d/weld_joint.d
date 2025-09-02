@@ -72,7 +72,7 @@ float b2WeldJoint_GetAngularDampingRatio(b2JointId jointId)
 
 b2Vec2 b2GetWeldJointForce(b2World* world, b2JointSim* base)
 {
-	b2Vec2 force = b2MulSV( world.inv_h, base.weldJoint.linearImpulse );
+	b2Vec2 force = base.weldJoint.linearImpulse * world.inv_h;
 	return force;
 }
 
@@ -256,7 +256,7 @@ void b2SolveWeldJoint(b2JointSim* base, b2StepContext* context, bool useBias)
 			b2Vec2 dcB = stateB.deltaPosition;
 			b2Vec2 C = ( ( dcB - dcA ) + ( rB - rA ) ) + joint.deltaCenter;
 
-			bias = b2MulSV( joint.linearSpring.biasRate, C );
+			bias = C * joint.linearSpring.biasRate;
 			massScale = joint.linearSpring.massScale;
 			impulseScale = joint.linearSpring.impulseScale;
 		}

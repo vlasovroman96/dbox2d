@@ -236,7 +236,7 @@ void b2LimitVelocity(b2BodyState* state, float maxLinearSpeed)
 	float v2 = state.linearVelocity.lengthSquared();
 	if ( v2 > maxLinearSpeed * maxLinearSpeed )
 	{
-		state.linearVelocity = b2MulSV( maxLinearSpeed / sqrt( v2 ), state.linearVelocity );
+		state.linearVelocity = state.linearVelocity * ( maxLinearSpeed / sqrt( v2 ) );
 	}
 }
 
@@ -807,7 +807,7 @@ void b2UpdateBodyMassData(b2World* world, b2Body* body)
 	if ( body.mass > 0.0f )
 	{
 		bodySim.invMass = 1.0f / body.mass;
-		localCenter = b2MulSV( bodySim.invMass, localCenter );
+		localCenter = localCenter * bodySim.invMass;
 	}
 
 	// Second loop to accumulate the rotational inertia about the center of mass
@@ -1071,7 +1071,7 @@ void b2Body_SetTargetTransform(b2BodyId bodyId, b2Transform target, float timeSt
 	b2Vec2 center1 = sim.center;
 	b2Vec2 center2 = b2TransformPoint( target, sim.localCenter );
 	float invTimeStep = 1.0f / timeStep;
-	b2Vec2 linearVelocity = b2MulSV( invTimeStep, center2 - center1 );
+	b2Vec2 linearVelocity =  (center2 - center1 ) * invTimeStep;
 
 	// Compute angular velocity
 	b2Rot q1 = sim.transform.q;
