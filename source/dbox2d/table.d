@@ -4,6 +4,7 @@ import core.stdc.stdlib;
 import core.stdc.stdint;
 import core.stdc.string;
 
+import std.container.array;
 
 import dbox2d.core;
 import dbox2d.bitset;
@@ -19,11 +20,7 @@ struct b2SetItem {
 	uint hash;
 }
 
-struct b2HashSet {
-	b2SetItem* items;
-	uint capacity;
-	uint count;
-}
+alias b2HashSet = Array!b2SetItem;
 
 static if (B2_SNOOP_TABLE_COUNTERS) {
 b2AtomicInt b2_findCount;
@@ -53,18 +50,8 @@ b2HashSet b2CreateSet(int capacity)
 	return set;
 }
 
-void b2DestroySet(b2HashSet* set)
-{
-	b2Free( set.items, cast(int)(set.capacity * b2SetItem.sizeof) );
-	set.items = null;
-	set.count = 0;
-	set.capacity = 0;
-}
-
-void b2ClearSet(b2HashSet* set)
-{
-	set.count = 0;
-	memset( set.items, 0, set.capacity * b2SetItem.sizeof );
+void b2ClearSet(b2HashSet* set) {
+	set.clear();
 }
 
 // I need a good hash because the keys are built from pairs of increasing integers.
@@ -87,15 +74,15 @@ private uint b2KeyHash(ulong key)
 	return cast(uint)h;
 }
 
-private int b2FindSlot(const(b2HashSet)* set, ulong key, uint hash)
+private int b2FindSlot(b2HashSet* set, ulong key, uint hash)
 {
 static if (B2_SNOOP_TABLE_COUNTERS) {
 	b2AtomicFetchAddInt( &b2_findCount, 1 );
 }
 
-	uint capacity = set.capacity;
+	uint capacity = cast(uint)set.capacity;
 	int index = hash & ( capacity - 1 );
-	const(b2SetItem)* items = set.items;
+	const(b2SetItem)* items = set.data.ptr;
 	while ( items[index].hash != 0 && items[index].key != key )
 	{
 static if (B2_SNOOP_TABLE_COUNTERS) {
@@ -110,32 +97,32 @@ static if (B2_SNOOP_TABLE_COUNTERS) {
 private void b2AddKeyHaveCapacity(b2HashSet* set, ulong key, uint hash)
 {
 	int index = b2FindSlot( set, key, hash );
-	b2SetItem* items = set.items;
+	b2SetItem* items = set.data.ptr;
 	assert( items[index].hash == 0 );
 
 	items[index].key = key;
 	items[index].hash = hash;
-	set.count += 1;
+	set.insert(b2SetItem());
 }
 
 private void b2GrowTable(b2HashSet* set)
 {
-	uint oldCount = set.count;
+	uint oldCount = cast(uint)set.length;
 	// B2_UNUSED( oldCount );
 
-	uint oldCapacity = set.capacity;
-	b2SetItem* oldItems = set.items;
+	uint oldCapacity = cast(uint)set.capacity;
+	b2SetItem[] oldItems = set.data;
 
-	set.count = 0;
+	set.length = 0;
 	// Capacity must be a power of 2
-	set.capacity = 2 * oldCapacity;
-	set.items = cast(b2SetItem*)b2Alloc( cast(int)(set.capacity * b2SetItem.sizeof) );
-	memset( set.items, 0, set.capacity * b2SetItem.sizeof );
+	set.reserve( 2 * oldCapacity );
+	// set = cast(b2SetItem*)b2Alloc( cast(int)(set.capacity * b2SetItem.sizeof) );
+	// memset( set.items, 0, set.capacity * b2SetItem.sizeof );
 
 	// Transfer items into new array
 	for ( uint i = 0; i < oldCapacity; ++i )
 	{
-		b2SetItem* item = oldItems + i;
+		b2SetItem* item = &oldItems[i];
 		if ( item.hash == 0 )
 		{
 			// this item was empty
@@ -145,23 +132,23 @@ private void b2GrowTable(b2HashSet* set)
 		b2AddKeyHaveCapacity( set, item.key, item.hash );
 	}
 
-	assert( set.count == oldCount );
+	assert( set.length == oldCount );
 
-	b2Free( oldItems, cast(int)(oldCapacity * b2SetItem.sizeof) );
+	b2Free( oldItems.ptr, cast(int)(oldCapacity * b2SetItem.sizeof) );
 }
 
-bool b2ContainsKey(const(b2HashSet)* set, ulong key)
+bool b2ContainsKey(b2HashSet* set, ulong key)
 {
 	// key of zero is a sentinel
 	assert( key != 0 );
 	uint hash = b2KeyHash( key );
 	int index = b2FindSlot( set, key, hash );
-	return set.items[index].key == key;
+	return set.data[index].key == key;
 }
 
 int b2GetHashSetBytes(b2HashSet* set)
 {
-	return set.capacity * cast(int)b2SetItem.sizeof;
+	return cast(int)set.capacity * cast(int)b2SetItem.sizeof;
 }
 
 bool b2AddKey(b2HashSet* set, ulong key)
@@ -173,14 +160,14 @@ bool b2AddKey(b2HashSet* set, ulong key)
 	assert( hash != 0 );
 
 	int index = b2FindSlot( set, key, hash );
-	if ( set.items[index].hash != 0 )
+	if ( set.data[index].hash != 0 )
 	{
 		// Already in set
-		assert( set.items[index].hash == hash && set.items[index].key == key );
+		assert( set.data[index].hash == hash && set.data[index].key == key );
 		return true;
 	}
 
-	if ( 2 * set.count >= set.capacity )
+	if ( 2 * set.length >= set.capacity )
 	{
 		b2GrowTable( set );
 	}
@@ -194,7 +181,7 @@ bool b2RemoveKey(b2HashSet* set, ulong key)
 {
 	uint hash = b2KeyHash( key );
 	int i = b2FindSlot( set, key, hash );
-	b2SetItem* items = set.items;
+	b2SetItem* items = set.data.ptr;
 	if ( items[i].hash == 0 )
 	{
 		// Not in set
@@ -205,12 +192,12 @@ bool b2RemoveKey(b2HashSet* set, ulong key)
 	items[i].key = 0;
 	items[i].hash = 0;
 
-	assert( set.count > 0 );
-	set.count -= 1;
+	assert( set.length > 0 );
+	set.removeBack;
 
 	// Attempt to fill item i
 	int j = i;
-	uint capacity = set.capacity;
+	uint capacity = cast(uint)set.capacity;
 	for ( ;; )
 	{
 		j = ( j + 1 ) & ( capacity - 1 );
