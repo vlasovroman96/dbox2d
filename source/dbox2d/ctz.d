@@ -1,14 +1,13 @@
 module dbox2d.ctz;
 
-template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
 import core.stdc.config: c_long, c_ulong;
-
 import core.stdc.stdlib;
 import core.stdc.stdint;
+
 import core.builtins;
 import core.bitop;
+
+import dbox2d.ct.templates;
 
 static if (HasVersion!"_MSC_VER" && !HasVersion!"__clang__") {
 

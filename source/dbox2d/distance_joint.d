@@ -1,9 +1,5 @@
 module dbox2d.distance_joint;
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
-
 static if (HasVersion!"_MSC_VER" && !HasVersion!"_CRT_SECURE_NO_WARNINGS") {
 version = _CRT_SECURE_NO_WARNINGS;
 }
@@ -20,7 +16,7 @@ import dbox2d.math;
 import dbox2d.array;
 import dbox2d.constants;
 import dbox2d.base;
-
+import dbox2d.ct.templates;
 // needed for dll export
 // import dbox2d.box2d;
 

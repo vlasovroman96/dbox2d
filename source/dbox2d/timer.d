@@ -5,13 +5,9 @@ import dbox2d.base;
 import core.sys.posix.sched;
 import core.stdc.time;
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
-
 import dbox2d.core;
-
 import dbox2d.base;
+import dbox2d.ct.templates;
 
 import core.stdc.stddef;
 

@@ -2,9 +2,7 @@ module dbox2d.revolute_joint;
 
 import std.format;
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
+import dbox2d.ct.templates;
 
 static if (HasVersion!"_MSC_VER" && !HasVersion!"_CRT_SECURE_NO_WARNINGS") {
 version = _CRT_SECURE_NO_WARNINGS;

@@ -5,6 +5,7 @@ import core.atomic;
 import std.stdint;
 
 import dbox2d.core;
+import dbox2d.ct.templates;
 
 version (_MSC_VER) {
 	import intrin;
