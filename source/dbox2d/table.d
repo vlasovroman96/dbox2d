@@ -29,25 +29,8 @@ b2AtomicInt b2_probeCount;
 
 // todo compare with https://github.com/skeeto/scratch/blob/master/set32/set32.h
 
-b2HashSet b2CreateSet(int capacity)
-{
-	b2HashSet set;
-
-	// Capacity must be a power of 2
-	if ( capacity > 16 )
-	{
-		set.capacity = b2RoundUpPowerOf2( capacity );
-	}
-	else
-	{
-		set.capacity = 16;
-	}
-
-	set.count = 0;
-	set.items = cast(b2SetItem*)b2Alloc( cast(int)(capacity * b2SetItem.sizeof) );
-	memset( set.items, 0, capacity * b2SetItem.sizeof );
-
-	return set;
+void b2DestroySet(b2HashSet* set) {
+	set.clear();
 }
 
 void b2ClearSet(b2HashSet* set) {

@@ -90,13 +90,16 @@ void b2CreateBroadPhase(b2BroadPhase* bp)
 	//	fprintf(s_file, "============\n\n");
 	// }
 
-	bp.moveSet = b2CreateSet( 16 );
+	bp.moveSet = b2HashSet();
+	bp.moveSet.reserve(16);
 	bp.moveArray = b2IntArray_Create( 16 );
 	bp.moveResults = null;
 	bp.movePairs = null;
 	bp.movePairCapacity = 0;
 	b2AtomicStoreInt(&bp.movePairIndex, 0);
-	bp.pairSet = b2CreateSet( 32 );
+	bp.pairSet = b2HashSet();
+	bp.pairSet.reserve(32);
+
 
 	for ( int i = 0; i < b2_bodyTypeCount; ++i )
 	{
