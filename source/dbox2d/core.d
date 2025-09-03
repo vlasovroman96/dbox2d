@@ -11,9 +11,6 @@ import dbox2d.atomic;
 import core.stdc.string;
 import core.stdc.stdlib;
 
-template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
 enum B2_NULL_INDEX = -1 ;
 
 // for performance comparisons
