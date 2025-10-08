@@ -4,8 +4,15 @@ import core.atomic;
 
 import std.stdint;
 
-import dbox2d.core;
 import dbox2d.ct.templates;
+
+struct b2AtomicInt {
+	int value;
+}
+
+struct b2AtomicU32 {
+	uint value;
+}
 
 version (_MSC_VER) {
 	import intrin;

@@ -137,14 +137,6 @@ void B2_CHECK_DEF(T)(T def) {
 	assert(def.internalValue == B2_SECRET_COOKIE);
 }
 
-struct b2AtomicInt {
-	int value;
-}
-
-struct b2AtomicU32 {
-	uint value;
-}
-
 static float b2_lengthUnitsPerMeter = 1.0f;
 
 void b2SetLengthUnitsPerMeter( float lengthUnits )
